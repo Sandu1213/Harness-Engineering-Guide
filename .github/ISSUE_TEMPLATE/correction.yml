@@ -1,0 +1,31 @@
+name: Technical correction
+description: Report a factual, citation, code, diagram, or link issue.
+title: "correction: "
+labels: ["correction"]
+body:
+  - type: input
+    id: location
+    attributes:
+      label: Location
+      placeholder: "docs/part-XX/NN-topic.md#heading"
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: What is incorrect?
+      description: Quote only the minimum necessary text and explain the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Link the authoritative source or give a reproducible command and observed result.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed correction
+      description: Optional; distinguish a verified correction from a suggestion.

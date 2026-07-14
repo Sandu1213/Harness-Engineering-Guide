@@ -1,0 +1,47 @@
+name: Chapter task
+description: Propose or track one bounded chapter-stage task.
+title: "book: "
+labels: ["book", "chapter"]
+body:
+  - type: input
+    id: chapter
+    attributes:
+      label: Chapter
+      description: Use the planned chapter number and title.
+      placeholder: "01. 从 Prompt Engineering 到 Harness Engineering"
+    validations:
+      required: true
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Stage
+      options:
+        - Research Brief
+        - Chapter Outline
+        - First Draft
+        - Technical Review
+        - Example Implementation
+        - Diagram Review
+        - Fact Check
+        - Language Editing
+        - Validation
+        - Completion
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal and acceptance criteria
+      description: State one bounded outcome and how it can be checked.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources and evidence plan
+      description: List official or primary sources, and identify dynamic facts needing fresh verification.
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and risks
+      description: Name prerequisite chapters, examples, decisions, or blockers.

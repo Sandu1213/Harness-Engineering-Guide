@@ -1,0 +1,31 @@
+name: Book factory proposal
+description: Propose a bounded change to structure, workflow, template, example, or release process.
+title: "proposal: "
+labels: ["proposal"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What concrete reader, contributor, or maintenance problem exists?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Identify affected files and the smallest useful change.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives and trade-offs
+      description: Explain why the change is preferable and what it costs.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Include validation commands or observable outcomes.
+    validations:
+      required: true

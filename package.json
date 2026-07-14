@@ -1,0 +1,15 @@
+{
+  "name": "harness-engineering-guide",
+  "version": "0.1.0",
+  "private": true,
+  "description": "《Harness Engineering：构建可持续进化的 AI Agent》的书籍工程与 AI Technical Book Factory。",
+  "scripts": {
+    "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
+    "check:links": "find . -name '*.md' -not -path './node_modules/*' -not -path './.git/*' -print0 | xargs -0 -n 1 markdown-link-check -c .markdown-link-check.json",
+    "validate": "./scripts/validate.sh"
+  },
+  "devDependencies": {
+    "markdown-link-check": "3.14.2",
+    "markdownlint-cli2": "0.23.0"
+  }
+}
