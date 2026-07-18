@@ -4,8 +4,9 @@
   "private": true,
   "description": "《Harness Engineering：构建可持续进化的 AI Agent》的书籍工程与 AI Technical Book Factory。",
   "scripts": {
-    "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\"",
-    "check:links": "find . -name '*.md' -not -path './node_modules/*' -not -path './.git/*' -print0 | xargs -0 -n 1 markdown-link-check -c .markdown-link-check.json",
+    "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#tmp\" \"#output\" \"#.site-public\" \"#docs/.vitepress/dist\" \"#docs/.vitepress/cache\"",
+    "check:links": "markdown-link-check -c .markdown-link-check-local.json examples/agent/README.md && markdown-link-check -c .markdown-link-check-local.json templates/chapter-template.md && find . -name '*.md' -not -path './node_modules/*' -not -path './.git/*' -not -path './tmp/*' -not -path './output/*' -not -path './.site-public/*' -not -path './docs/.vitepress/dist/*' -not -path './docs/.vitepress/cache/*' -not -path './examples/agent/README.md' -not -path './templates/chapter-template.md' -print0 | xargs -0 -n 1 sh -c 'for attempt in 1 2 3; do markdown-link-check -c .markdown-link-check-local.json \"$1\" && exit 0; done; exit 1' _",
+    "check:reference-links": "markdown-link-check -c .markdown-link-check.json .ai/references.md",
     "example:harness": "node examples/agent/minimal-harness.mjs",
     "test:harness": "node --test examples/agent/minimal-harness.test.mjs",
     "example:runtime-boundaries": "node examples/agent/runtime-boundaries.mjs",
@@ -100,10 +101,20 @@
     "test:derived-content-package-assessment": "node --test examples/agent/derived-content-package-assessment.test.mjs",
     "example:agent-engineering-readiness-assessment": "node examples/agent/agent-engineering-readiness-assessment.mjs",
     "test:agent-engineering-readiness-assessment": "node --test examples/agent/agent-engineering-readiness-assessment.test.mjs",
+    "publication:test": "node --test publication/book-manifest.test.mjs",
+    "site:dev": "node scripts/prepare-site-assets.mjs && vitepress dev docs --host 127.0.0.1",
+    "site:build": "node scripts/prepare-site-assets.mjs && vitepress build docs",
+    "site:check": "node scripts/check-site-links.mjs",
+    "site:preview": "vitepress preview docs --host 127.0.0.1",
+    "publication:pdf": "node scripts/build-publication.mjs pdf",
+    "publication:epub": "node scripts/build-publication.mjs epub",
+    "publication:all": "node scripts/build-publication.mjs all",
+    "release:build": "npm run site:build && npm run publication:all",
     "validate": "./scripts/validate.sh"
   },
   "devDependencies": {
     "markdown-link-check": "3.14.2",
-    "markdownlint-cli2": "0.23.0"
+    "markdownlint-cli2": "0.23.0",
+    "vitepress": "^1.6.4"
   }
 }

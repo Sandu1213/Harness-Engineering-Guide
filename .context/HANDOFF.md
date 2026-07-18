@@ -2,6 +2,8 @@
 
 ## 当前交接点
 
+**本地出版工件交接（2026-07-18）：** 网站、PDF 与 EPUB 已从同一份 47 章 + 12 附录清单实现并在本地验证。复现入口为 `npm run release:build`；网站构建位于 `docs/.vitepress/dist/`，PDF 位于 `output/pdf/harness-engineering-guide.pdf`，EPUB 位于 `output/epub/harness-engineering-guide.epub`。PDF/EPUB 需要 Pandoc，PDF 另需 Typst；完整验收使用 Poppler 与 EPUBCheck。网站生产构建生成 308 个 HTML 页面并通过本地链接爬检，Playwright 完成首页主按钮与图示点击链，Impeccable 检查为 0 项；PDF 为 A4 497 页且字体已嵌入，抽页目检通过；EPUBCheck 为 0 错误/警告。构建产物未提交。正式部署、版本标签、发行页上传和书稿许可证决定均未执行。
+
 **最终内容完成交接（2026-07-17）：** 47 章全部章节阶段与 12 个附录的三组独立终审均已完成。正文、研究、提纲、局部引用、事实核验、示例计划、测试、Mermaid/SVG/PNG 和章节 Final Review 均达到 47 份；正文 front matter 已统一为 `status: "complete"`，图示/示例路径存在。最终 `npm run validate` 以退出码 0 完成：627 个 Markdown 文件、0 个 lint 错误，全部链接、47 组章节测试和 47/47 状态检查通过；421 项汇总断言全部通过。当前没有未完成的内容生产任务；只有用户明确授权后才进入网站、PDF、EPUB 或正式出版工作。
 
 **历史交接更新（2026-07-17）：** 第 1 至 38 章已完成全部九阶段。第 33 至 38 章的 Final Review 已并行完成：六章共 47 项专用 Node 测试通过、0 项失败，演示均保留 `executionPerformed: false`，正文 Mermaid 块与图源一致，PNG 已实际查看；全仓 `npm run validate` 以退出码 0 完成，检查 505 个 Markdown 文件、0 个 lint 错误，链接、38 组示例测试及 38 章完成／9 章未开始的状态均通过。第 39 至 42 章已完成 Research Brief 与 Chapter Outline；第 39、40、42 章已完成 First Draft并进入 Technical Review，第 41 章 First Draft 正在收口。新增 REF-116 至 REF-130 已由主线程登记。不要把纯内存测试、图示或文本记录误写成真实产品、价格、Benchmark、实验、文件、网络、权限、审批、同步或外部动作已执行。

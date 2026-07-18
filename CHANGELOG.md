@@ -6,6 +6,7 @@
 
 ### Added
 
+- 新增统一出版管线：以共享清单驱动 VitePress 网站、Typst PDF 与 EPUB 3；网站具备全文导航、本地搜索、读者首页和出版边界说明，PDF/EPUB 均包含 47 张章节主图。本地生产构建、浏览器点击链、PDF 渲染抽检和 EPUBCheck 已通过；尚未执行正式部署或版本发布。
 - 完成全书内容生产候选：第 1 至 47 章均具备 Research、Outline、原创正文、Technical Review、Example、Diagram、Fact Check、Language Editing 与 Final Review；新增附录 A 至 L 及三组独立终审，47 组 Node.js 教学示例、47 组 Mermaid/SVG/PNG 与共享导航已统一收口。所有示例、图示和模板仍只证明书稿与注入对象，不代表真实外部系统、权限、审批、发布或业务效果。
 - 完成第 24 至 28 章并行交付与主线程收口：新增 MCP 外部工具接入、浏览器 E2E 证据链、多 Agent 任务隔离、Git/worktree/代码审查与最小 Harness 的原创正文、研究/核验/审查工件、Mermaid 图与 47 项纯内存断言；登记 REF-086 至 REF-091，并复用 REF-001、REF-030、REF-036。所有示例、图示与质量门仍不代表真实 MCP、浏览器、Git、worktree、PR、CI、权限、工具或外部系统验证。
 - 完成第 21 至 23 章并行交付与主线程收口：新增跨工具项目 Harness、仓库级规则、Skills/Hooks/Automation 的原创正文、研究/核验/审查工件、Mermaid 图与 22 项纯内存断言；登记 REF-072 至 REF-079，统一产品资料的动态复核边界。所有示例、图示与质量门仍不代表真实 Codex、Claude Code、Hook、CI、权限、工具或外部系统验证。

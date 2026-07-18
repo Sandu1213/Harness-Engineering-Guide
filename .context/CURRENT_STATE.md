@@ -2,12 +2,21 @@
 
 ## 当前状态
 
+### 本地出版工件收口（2026-07-18）
+
+- VitePress 网站已实现，共生成 308 个 HTML 页面；主导航严格展示 47 章与 12 附录，研究、提纲、事实核验等支持页保留可访问但不进入主导航。`npm run site:build` 退出码 0，`npm run site:check` 检查全部生成页后得到 0 条缺失本地链接。
+- 浏览器 E2E 使用 `playwright-cli` 对 `http://127.0.0.1:5173/` 完成“首页快照 -> 点击开始阅读第一章 -> 第一章快照”，随后点击 PNG 图示并确认新页面包含 1 张自然宽度 784 px 的图片；`impeccable detect --json http://127.0.0.1:5173/` 最终返回空数组。
+- PDF 由 Pandoc 3.10 + Typst 0.15.1 生成到 `output/pdf/harness-engineering-guide.pdf`：A4、497 页、约 15 MB，中文与代码字体均已嵌入。已用 Poppler 抽检封面、目录、正文、宽表、代码、附录与末页，未见裁切、重叠或乱码。
+- EPUB 生成到 `output/epub/harness-engineering-guide.epub`，包含 47 张 PNG 主图；`unzip -t` 通过，EPUBCheck 5.3.0 按 EPUB 3.3 规则检查为 0 fatal、0 error、0 warning、0 info。
+- 出版管线收口后，`npm run validate` 以退出码 0 完成：628 个源 Markdown 文件 lint 0 错误，全仓本地链接、47 组章节示例测试与 47/47 状态检查通过；共享参考表的 132 个外部来源由 `npm run check:reference-links` 独立检查并通过，421 项示例断言汇总为 0 失败。
+- 三种发布形态共享 `publication/book-manifest.mjs` 的唯一内容顺序。构建产物已忽略，不纳入 Git。正式域名部署、版本标签、发行页上传与书稿发布许可证仍未执行。
+
 ### 最终内容收口（2026-07-17）
 
 - 第 1 至 47 章的 Research、Outline、Draft、Technical Review、Example Implementation、Diagram Review、Fact Check、Language Editing 与 Final Review 已全部完成；47 份正文、47 组研究/提纲/引用/事实核验/示例计划、47 个测试文件、47 组 Mermaid/SVG/PNG 与47份章节终审记录已经齐备。
 - 附录 A 至 L 已完成内容生产，并按 A–D、E–H、I–L 三组完成独立 Final Review。附录作为读者适配层，不复制 `.ai/glossary.md`、`.ai/references.md` 或项目模板形成第二事实源。
 - 47 章正文 front matter 的终态已统一为模板规定的 `status: "complete"`；正文声明的图示和示例路径已通过存在性检查。最终全仓 `npm run validate` 以退出码 0 完成：627 个 Markdown 文件、0 个 lint 错误，全部链接、47 组章节测试与 47/47 状态检查通过；另行汇总运行 421 项示例断言，全部通过。
-- 全书内容源完成审计见 `.memory/reviews/2026-07-17-full-book-content-completion-audit.md`。当前没有未完成的内容生产任务；所有示例与图示只证明书稿和注入的教学对象，不代表外部系统、审批、权限、发布或业务结果。网站、PDF、EPUB 与正式出版仍需另行授权和验证。
+- 全书内容源完成审计见 `.memory/reviews/2026-07-17-full-book-content-completion-audit.md`。当前没有未完成的内容生产任务；所有示例与图示只证明书稿和注入的教学对象，不代表外部系统、审批、权限、发布或业务结果。当时网站、PDF、EPUB 尚未实现，现已由上方 2026-07-18 出版工件记录接续。
 
 ### 历史记录
 

@@ -77,7 +77,7 @@ updated_at: "2026-07-17"
 
 | 顺序 | 路径或来源 | 读取状态 | 版本／日期 | 对本任务的作用 |
 | --- | --- | --- | --- | --- |
-| 1 | `<CLAUDE.md 与实际导入入口>` | `<read | missing | conflict>` | `<值>` | `<适配范围>` |
+| 1 | `<CLAUDE.md 与实际导入入口>` | `<read \| missing \| conflict>` | `<值>` | `<适配范围>` |
 | 2 | `<共享契约与规则>` | `<状态>` | `<值>` | `<目标、范围、DoD>` |
 | 3 | `<Current State / Next Task / Progress>` | `<状态>` | `<值>` | `<当前阶段>` |
 | 4 | `<决定与上一交接>` | `<状态>` | `<值>` | `<仍有效决定>` |
@@ -97,7 +97,7 @@ updated_at: "2026-07-17"
 
 | 能力 | 本次 Claude Code 状态 | 当前证据 | 目标工具状态 | 任务影响／替代路径 |
 | --- | --- | --- | --- | --- |
-| 文件读取／写入 | `<available_and_verified | unavailable | unknown | requires_authorization | alternative_required>` | `<实际观察>` | `<独立填写>` | `<影响>` |
+| 文件读取／写入 | `<available_and_verified \| unavailable \| unknown \| requires_authorization \| alternative_required>` | `<实际观察>` | `<独立填写>` | `<影响>` |
 | 命令执行 | `<状态>` | `<实际观察>` | `<独立填写>` | `<影响>` |
 | 网络／浏览器 | `<状态>` | `<实际观察>` | `<独立填写>` | `<影响>` |
 | 子代理／工作树 | `<状态>` | `<实际观察>` | `<独立填写>` | `<影响>` |
@@ -116,7 +116,7 @@ updated_at: "2026-07-17"
 
 | 路径 | 职责 | 状态 | 输入基线 | 集成注意事项 |
 | --- | --- | --- | --- | --- |
-| `<path>` | `<文件负责什么>` | `<created | changed | reviewed | blocked>` | `<版本>` | `<共享影响>` |
+| `<path>` | `<文件负责什么>` | `<created \| changed \| reviewed \| blocked>` | `<版本>` | `<共享影响>` |
 
 ## 实际证据
 
@@ -145,7 +145,7 @@ updated_at: "2026-07-17"
 
 | 共享工件 | 状态 | 当前证据或请求 | 更新责任者 |
 | --- | --- | --- | --- |
-| `.context/CURRENT_STATE.md` | `<updated | unchanged | requested | not_applicable | unknown>` | `<路径或说明>` | `<owner>` |
+| `.context/CURRENT_STATE.md` | `<updated \| unchanged \| requested \| not_applicable \| unknown>` | `<路径或说明>` | `<owner>` |
 | `.context/NEXT_TASK.md` | `<状态>` | `<路径或说明>` | `<owner>` |
 | `.ai/progress.md` | `<状态>` | `<路径或说明>` | `<owner>` |
 | `.ai/references.md` | `<状态>` | `<路径或说明>` | `<owner>` |

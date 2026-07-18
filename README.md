@@ -4,7 +4,9 @@
 
 ## 项目状态
 
-全书 47 章和 12 个附录的内容生产已经完成。每章均完成 Research、Outline、原创 Draft、Technical Review、Example Implementation、Diagram Review、Fact Check、Language Editing 与 Final Review，并具有可追溯的来源、示例、图示和审查记录；附录 A–L 已按三组完成独立终审。47 组 Node.js 示例和 47 组 Mermaid/SVG/PNG 图示均已接入工程。最终全仓 Validation 以退出码 0 完成：627 个 Markdown 文件、0 个 lint 错误，全部链接、47 组章节测试与 47/47 章节状态检查通过；另行汇总运行 421 项示例断言，全部通过。所有示例都是受限教学判断，不调用或证明真实 Tool、环境、知识库、审批、权限、CI、发布或外部系统。
+全书 47 章和 12 个附录的内容生产已经完成。每章均完成 Research、Outline、原创 Draft、Technical Review、Example Implementation、Diagram Review、Fact Check、Language Editing 与 Final Review，并具有可追溯的来源、示例、图示和审查记录；附录 A–L 已按三组完成独立终审。47 组 Node.js 示例和 47 组 Mermaid/SVG/PNG 图示均已接入工程。出版管线收口后的全仓 Validation 以退出码 0 完成：628 个源 Markdown 文件、0 个 lint 错误，全部本地链接、47 组章节测试与 47/47 章节状态检查通过；共享参考表的 132 个外部来源和另行汇总的 421 项示例断言也全部通过。
+
+网站、PDF 与 EPUB 的本地构建管线也已实现：VitePress 站点生成 308 个 HTML 页面并通过产物级本地链接检查；PDF 为 A4、497 页且中文字体嵌入，已由 Poppler 渲染抽检；EPUB 3.3 通过 EPUBCheck，0 个错误或警告。三种形态共享同一份 47 章 + 12 附录内容清单。当前没有执行正式域名部署、版本标签、发行页上传或对外发布。
 
 ## 为什么这是一个 Harness
 
@@ -22,6 +24,8 @@
 | `examples/` | 随章节演进的可运行示例 |
 | `diagrams/` | Mermaid 源码与导出图 |
 | `scripts/` | 创建章节和质量校验脚本 |
+| `publication/` | 网站、PDF 与 EPUB 共用的出版清单、样式和转换规则 |
+| `output/` | 本地生成的 PDF/EPUB（构建产物，不纳入 Git） |
 
 ## AI 如何加入
 
@@ -44,15 +48,38 @@ Codex 从 [AGENTS.md](AGENTS.md) 开始；Claude Code 从 [CLAUDE.md](CLAUDE.md)
 ```bash
 npm install
 npm run validate
+npm run check:reference-links
 node --test examples/agent/*.test.mjs
 ```
 
-`validate` 会执行 Markdown lint、全仓链接检查、47 组 Node.js 章节示例测试和章节任务状态检查。macOS 用户也可以直接运行 `./scripts/validate.sh`；`node --test examples/agent/*.test.mjs` 用于一次汇总全部示例断言。单组示例可使用 `npm run test:<名称>` 或 `npm run example:<名称>`，具体名称见 [`package.json`](package.json) 与[示例索引](examples/agent/README.md)。
+`validate` 会执行 Markdown lint、全仓本地链接检查、47 组 Node.js 章节示例测试和章节任务状态检查；不稳定的外部来源可达性由 `check:reference-links` 独立检查。macOS 用户也可以直接运行 `./scripts/validate.sh`；`node --test examples/agent/*.test.mjs` 用于一次汇总全部示例断言。单组示例可使用 `npm run test:<名称>` 或 `npm run example:<名称>`，具体名称见 [`package.json`](package.json) 与[示例索引](examples/agent/README.md)。
+
+## 构建网站、PDF 与 EPUB
+
+本机构建需要 Node.js；PDF/EPUB 另需 Pandoc，PDF 还需 Typst。macOS 可安装完整验收工具链：
+
+```bash
+brew install pandoc typst poppler epubcheck
+npm install
+npm run release:build
+```
+
+常用命令：
+
+```bash
+npm run site:dev          # 本地阅读网站，默认 http://127.0.0.1:5173/
+npm run site:build        # 生成 docs/.vitepress/dist/
+npm run site:check        # 检查生产站点的本地链接
+npm run publication:pdf  # 生成 output/pdf/harness-engineering-guide.pdf
+npm run publication:epub # 生成 output/epub/harness-engineering-guide.epub
+```
+
+`npm run publication:all` 同时生成 PDF 与 EPUB；`npm run release:build` 构建网站及两种离线版本。生成目录均已加入 `.gitignore`。
 
 ## 当前 Roadmap
 
-1. 47 章、12 个附录、共享状态、最终全仓 Validation 与完成审计已经完成。
-2. 网站、PDF、EPUB 和正式出版仍是独立、需授权的发布任务，不由内容校验自动触发。
+1. 47 章、12 个附录、共享状态、最终全仓 Validation、完成审计以及网站/PDF/EPUB 本地构建均已完成。
+2. 正式部署、版本化发行、书稿发布许可证与发行页上传仍是独立、需授权的发布任务。
 
 详见 [.context/ROADMAP.md](.context/ROADMAP.md)。
 
@@ -62,4 +89,4 @@ node --test examples/agent/*.test.mjs
 
 ## 后续发布目标
 
-Markdown 是唯一源文件，目标兼容 GitHub、Obsidian 与 VitePress；后续将从同一源生成网站、PDF 与 EPUB。
+Markdown 是唯一源文件；VitePress 网站、Typst PDF 与 EPUB 3 已从同一份 47 章 + 12 附录清单生成并在本地验证。后续发布目标是确定书稿许可证、版本号和部署渠道，并在获得授权后完成正式发行。

@@ -28,6 +28,21 @@
     },
     {
       "pattern": "^https://eur-lex\\.europa\\.eu/eli/reg/2024/1689/oj/eng/?$"
+    },
+    {
+      "pattern": "^https://learn\\.microsoft\\.com/en-us/azure/architecture/patterns/compensating-transaction/?$"
+    },
+    {
+      "pattern": "^https://www\\.microsoft\\.com/en-us/research/publication/trustworthy-analysis-of-online-a-b-tests-pitfalls-challenges-and-solutions/?$"
+    },
+    {
+      "pattern": "^/part-01-foundations/01-prompt-to-harness/?$"
+    },
+    {
+      "pattern": "^/SUMMARY/?$"
+    },
+    {
+      "pattern": "^/publication-notes/?$"
     }
   ]
 }

@@ -1,0 +1,71 @@
+@charset "UTF-8";
+
+:root {
+  color: #18231f;
+  background: #fffdf7;
+  font-family: "Songti SC", "Noto Serif CJK SC", serif;
+  line-height: 1.72;
+}
+
+body {
+  margin: 5%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: #173f35;
+  font-family: "Source Han Sans SC", "PingFang SC", sans-serif;
+  line-height: 1.25;
+  page-break-after: avoid;
+}
+
+h1 {
+  break-before: page;
+}
+
+a {
+  color: #17604d;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.25em auto;
+}
+
+pre {
+  padding: 0.85em;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  background: #f0ece3;
+  font-size: 0.82em;
+  line-height: 1.55;
+}
+
+code {
+  font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82em;
+}
+
+th,
+td {
+  padding: 0.45em;
+  border: 1px solid #cfc7b8;
+  overflow-wrap: anywhere;
+  vertical-align: top;
+}
+
+blockquote {
+  margin: 1em 0;
+  padding: 0.7em 1em;
+  border-left: 0.2em solid #17604d;
+  background: #eef5f1;
+}

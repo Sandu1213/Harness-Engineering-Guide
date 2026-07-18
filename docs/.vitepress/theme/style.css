@@ -1,0 +1,227 @@
+:root {
+  --vp-c-brand-1: #17604d;
+  --vp-c-brand-2: #1f735d;
+  --vp-c-brand-3: #155443;
+  --vp-c-brand-soft: rgba(23, 96, 77, 0.13);
+  --vp-c-bg: #f2f6f3;
+  --vp-c-bg-alt: #e5ece8;
+  --vp-c-bg-elv: #ffffff;
+  --vp-c-divider: #cbd7d0;
+  --vp-c-text-1: #18231f;
+  --vp-c-text-2: #45534d;
+  --vp-font-family-base: "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --vp-font-family-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+.dark {
+  --vp-c-brand-1: #79c9ad;
+  --vp-c-brand-2: #96d9c1;
+  --vp-c-brand-3: #60b595;
+  --vp-c-brand-soft: rgba(121, 201, 173, 0.16);
+  --vp-c-bg: #111815;
+  --vp-c-bg-alt: #19221e;
+  --vp-c-bg-elv: #202b26;
+  --vp-c-divider: #35443d;
+  --vp-c-text-1: #edf3ef;
+  --vp-c-text-2: #b7c5be;
+}
+
+body {
+  font-feature-settings: "kern", "liga", "clig";
+}
+
+.VPNavBarTitle .title,
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.book-hero h1,
+.book-home h2 {
+  font-family: "Songti SC", "Noto Serif CJK SC", Georgia, serif;
+}
+
+.VPNavBarTitle .logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.vp-doc {
+  max-width: 46rem;
+}
+
+.vp-doc p,
+.vp-doc li {
+  line-height: 1.82;
+}
+
+.vp-doc blockquote {
+  border-left-color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+  padding: 0.8rem 1rem;
+}
+
+.repository-only-link::after {
+  content: " ->";
+  font-size: 0.75em;
+  opacity: 0.72;
+}
+
+.book-home {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 4.5rem 1.5rem 5rem;
+}
+
+.book-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(16rem, 0.55fr);
+  gap: 3.5rem;
+  align-items: end;
+  padding: 3.5rem 0 4.5rem;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.book-hero::before {
+  position: absolute;
+  inset: 0 auto auto -5vw;
+  width: 12rem;
+  height: 12rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 50%;
+  content: "";
+  opacity: 0.6;
+  transform: translateY(-28%);
+}
+
+.book-hero h1 {
+  position: relative;
+  max-width: 12ch;
+  margin: 0 0 1.4rem;
+  font-size: clamp(2.7rem, 7vw, 5.9rem);
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+}
+
+.book-hero .lede {
+  max-width: 38rem;
+  margin: 0;
+  color: var(--vp-c-text-2);
+  font-size: clamp(1.05rem, 2vw, 1.28rem);
+  line-height: 1.75;
+}
+
+.book-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.book-actions a {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--vp-c-divider);
+  color: var(--vp-c-text-1);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.book-actions a.primary {
+  border-color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-1);
+  color: #fff;
+}
+
+.dark .book-actions a.primary {
+  color: #102019;
+}
+
+.book-actions a:hover,
+.book-actions a:focus-visible {
+  border-color: var(--vp-c-brand-1);
+  transform: translateY(-2px);
+}
+
+.reading-map {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.7fr) minmax(0, 1.3fr);
+  gap: 4rem;
+  padding-top: 4rem;
+}
+
+.reading-map > header {
+  position: sticky;
+  top: 7rem;
+  align-self: start;
+}
+
+.reading-map h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  line-height: 1.08;
+}
+
+.reading-map ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: reading-part;
+}
+
+.reading-map li {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1.4rem 0;
+  border-top: 1px solid var(--vp-c-divider);
+  counter-increment: reading-part;
+}
+
+.reading-map li::before {
+  color: var(--vp-c-brand-1);
+  content: counter(reading-part, decimal-leading-zero);
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.82rem;
+}
+
+.reading-map h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.08rem;
+}
+
+.reading-map p {
+  margin: 0;
+  color: var(--vp-c-text-2);
+}
+
+@media (max-width: 720px) {
+  .book-home {
+    padding-top: 2rem;
+  }
+
+  .book-hero,
+  .reading-map {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .book-hero h1 {
+    max-width: 11ch;
+    font-size: clamp(2.5rem, 14vw, 4.2rem);
+  }
+
+  .reading-map > header {
+    position: static;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .book-actions a {
+    transition: border-color 160ms ease, transform 160ms ease;
+  }
+}

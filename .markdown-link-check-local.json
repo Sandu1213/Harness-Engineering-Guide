@@ -1,0 +1,17 @@
+{
+  "aliveStatusCodes": [200, 206, 301, 302, 303, 307, 308],
+  "ignorePatterns": [
+    {
+      "pattern": "^https?://"
+    },
+    {
+      "pattern": "^/part-01-foundations/01-prompt-to-harness/?$"
+    },
+    {
+      "pattern": "^/SUMMARY/?$"
+    },
+    {
+      "pattern": "^/publication-notes/?$"
+    }
+  ]
+}

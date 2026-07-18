@@ -3,7 +3,13 @@ node_modules/
 *.log
 .vitepress/cache/
 .vitepress/dist/
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+.site-public/
+.playwright-cli/
 dist/
+output/
+tmp/pdfs/
 coverage/
 .env
 .env.*
