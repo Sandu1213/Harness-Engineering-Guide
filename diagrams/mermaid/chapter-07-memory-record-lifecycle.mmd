@@ -1,0 +1,26 @@
+%% 第 7 章：Memory Record 的候选、读取、复核与生命周期。
+%% 本图只表达本书工程模型，不表示供应商产品实现、自动写入、事实成立、授权、安全、完成或真实执行。
+flowchart TB
+    Observe[当前观察<br/>任务锚点、直接证据、未知项] --> Candidate[记忆候选<br/>事实、决策或经验]
+    Candidate --> Inspect[检查记录<br/>来源、主体、scope、时效、写入理由、撤销路径]
+    Inspect --> Eligible{来源、范围与<br/>生命周期可判断？}
+
+    Eligible -- 否或敏感 --> Hold[阻塞、补证或人工升级]
+    Eligible -- 是 --> Reuse{只服务当前任务<br/>或可能跨任务复用？}
+    Reuse -- 当前任务 --> Working[Working Memory<br/>当前目标、中间结果、待办、未知项]
+    Reuse -- 跨任务候选 --> LongTerm[Long-term Candidate<br/>带来源、范围与读取触发的记录]
+
+    Working --> Read[当前任务读取<br/>作为 Context Packet 的候选资料]
+    LongTerm --> Read
+    Read --> Compare[与当前直接证据复核]
+    Compare --> Conflict{仍匹配且<br/>处于有效范围？}
+
+    Conflict -- 是 --> Retain[保留记录<br/>保留来源与适用范围]
+    Conflict -- 需更新 --> Revise[修订记录<br/>关联新旧来源与理由]
+    Conflict -- 已过期 --> Expire[标记过期<br/>要求刷新，不当作当前事实]
+    Conflict -- 不再适用 --> Revoke[撤销记录<br/>保留撤销理由与来源指针]
+
+    Hold -. 补证或人工裁决后重新检查 .-> Inspect
+    Revise -. 下一次读取前再复核 .-> Read
+    Expire -. 获得当前证据后再判断 .-> Observe
+    Revoke -. 历史关系可追溯 .-> Candidate

@@ -1,0 +1,32 @@
+%% 第 8 章：Skill 生命周期与权限边界。
+%% 本图只表达本书工程模型，不表示任何产品的发现算法、内部调用链、安装状态、自动授权、真实执行、结果正确性或安全保证。
+flowchart TB
+    Contract[技能契约<br/>触发、输入、前置条件、输出、证据、版本] --> Registry[可发现目录或注册表<br/>候选索引]
+    Registry --> Match[任务匹配与排除条件]
+    Match --> Applicable{任务是否适用？}
+    Applicable -- 否 --> NotApplicable[not_applicable<br/>记录范围不匹配]
+    Applicable -- 是 --> Preconditions[检查输入、规则版本<br/>前置条件与选择证据]
+    Preconditions --> Ready{可选择且<br/>默认副作用可接受？}
+    Ready -- 否，资料或证据缺失 --> Blocked[blocked<br/>补充资料或停止]
+    Ready -- 否，效果超出默认边界 --> Approval[requires_approval<br/>交给批准流程]
+    Ready -- 是 --> ToolRequest[受控 Tool 请求<br/>只表达所需动作]
+
+    subgraph ExternalBoundary[运行环境与源系统：独立授权边界]
+        PermissionGate{身份、策略与源系统权限<br/>是否允许该请求？}
+        ExternalAction[外部 Tool 或动作<br/>仅在获准后发生]
+        PermissionGate -- 允许 --> ExternalAction
+    end
+
+    ToolRequest --> PermissionGate
+    PermissionGate -- 拒绝或不可用 --> Blocked
+    ExternalAction --> Observation[可观察结果与错误]
+    Observation --> Verify[独立验证与证据]
+    Verify --> Accepted{满足结果契约？}
+    Accepted -- 否 --> Blocked
+    Accepted -- 是 --> Record[结果状态与证据记录]
+    Record --> Feedback[反馈、版本、替代或弃用]
+    Feedback --> Contract
+
+    NotApplicable -. 理由与范围记录 .-> Registry
+    Blocked -. 补证、澄清或人工裁决 .-> Preconditions
+    Approval -. 获得批准后重新检查 .-> Preconditions

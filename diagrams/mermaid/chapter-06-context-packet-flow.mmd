@@ -1,0 +1,23 @@
+%% 第 6 章：为一次任务选择与刷新 Context Packet 的工程流程。
+%% 本图只表达本书的工程模型，不表示任何供应商的上下文 API、检索质量、安全控制或自动完成行为。
+flowchart TB
+    Anchor[任务锚点<br/>目标、停止条件、验证对象] --> Candidates[候选资料<br/>规则、直接证据、历史、引用]
+    Candidates --> Inspect[检查元数据<br/>来源、对象、时效、关联、敏感性]
+    Inspect --> Usable{来源明确且<br/>与当前任务相关？}
+    Usable -- 否或无法判断 --> Hold[排除、补证或人工升级]
+    Usable -- 是 --> Budget{预算内且<br/>当前需要全文？}
+
+    Budget -- 是 --> Packet[Context Packet<br/>任务锚点、约束、直接证据、未知项]
+    Budget -- 否，但可定位 --> Pointer[按需引用<br/>路径、查询、加载条件]
+    Budget -- 否，过期或重复 --> Exclude[记录排除理由]
+    Pointer -. 满足加载条件后返回 .-> Inspect
+
+    Packet --> Input[一次调用的模型可见输入<br/>不等于全部本地状态]
+    Input --> Observe[观察输出与验证证据]
+    Observe --> Refresh{任务变更、证据冲突、<br/>来源过期或预算超限？}
+    Refresh -- 否 --> Record[记录包的范围、版本与未知项]
+    Refresh -- 是 --> Rebuild[使摘要或条目失效<br/>记录刷新原因]
+    Rebuild --> Candidates
+
+    Hold -. 未决项与风险 .-> Record
+    Exclude -. 排除记录 .-> Record

@@ -1,0 +1,20 @@
+%% 第 15 章：观察与状态感知的教学反馈回路。
+%% 本图不表示真实浏览器、日志平台、追踪系统、权限、审批、外部效果、验收或重试。
+flowchart LR
+    Action[行动请求<br/>关联标识、目标与预期状态]
+    Target[受控目标<br/>状态可能变化或仍未知]
+    Point[观察点<br/>重新读取目标状态]
+    Snapshot[状态快照 Snapshot Contract<br/>来源、关联、目标、状态<br/>新鲜度、证据标签与指纹]
+    Check{关联、来源、新鲜度<br/>推进性与状态可解释？}
+    Observed[observed 或 not_observed<br/>只报告当前观察]
+    Gap[needs_evidence<br/>补充或重新观察]
+    Unknown[blocked<br/>效果未知、错配或未知状态]
+    Escalate[停止或升级<br/>记录未知范围<br/>交给恢复或人工节点]
+    Decision[下一轮决策
+    交给评估、反思或恢复]
+
+    Action --> Target
+    Target --> Point --> Snapshot --> Check
+    Check -->|可解释| Observed --> Decision
+    Check -->|字段缺失、陈旧或未推进| Gap -->|刷新证据或缩小范围| Point
+    Check -->|关联/目标错配或效果未知| Unknown --> Escalate

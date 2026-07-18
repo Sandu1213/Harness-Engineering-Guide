@@ -1,0 +1,25 @@
+%% 第 18 章：Retry、Recovery 与容错的教学状态机。
+%% 本图不表示真实 HTTP、Tool、队列、浏览器、数据库、补偿、审批或外部效果。
+stateDiagram-v2
+    [*] --> Classify: 失败信号与恢复契约
+    Classify --> NeedsSpec: 关键字段缺失
+    Classify --> NeedsObservation: 证据或效果未知
+    Classify --> Escalate: 不可逆、权限、格式
+    Classify --> Applied: 效果已知为 applied
+    Classify --> RetryCheck: 效果已知为 not_applied
+
+    Applied --> Compensate: 补偿与检查点齐全
+    Applied --> Escalate: 缺补偿或检查点
+
+    RetryCheck --> Retry: 可重试、可重复、未超限
+    RetryCheck --> Stop: 达到重试上限
+    RetryCheck --> Escalate: 不允许重试或不安全
+
+    Retry --> Observe: 下一次尝试后重新观察
+    Compensate --> Observe: 补偿后重新观察
+    NeedsObservation --> Observe: 补充受控证据
+    Observe --> Classify: 新快照
+
+    NeedsSpec --> [*]
+    Stop --> [*]
+    Escalate --> [*]

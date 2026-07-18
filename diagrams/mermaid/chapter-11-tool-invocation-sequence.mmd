@@ -1,0 +1,34 @@
+%% 第 11 章：工具调用的准入、关联、观察与验收边界。
+%% 本图只表达本书的教学模型；不表示真实 Tool、MCP、SDK、权限、批准、外部目标、回读、验收或任何外部效果已经发生。
+sequenceDiagram
+    participant Model as 模型
+    participant Harness as Harness
+    participant Gate as 准入门
+    participant Adapter as 工具适配器
+    participant Target as 外部目标
+    participant Observer as 独立观察
+    participant Validator as 验收者
+
+    Model->>Harness: 模型候选（工具名与参数）
+    Harness->>Gate: 解析、形状、语义、目标、环境与批准检查
+
+    alt 准入不通过
+        Gate-->>Harness: rejected 或 requires_approval（理由与缺口）
+        Harness-->>Model: 反馈或停止候选；不调用目标
+    else 准入在当前教学模型中通过
+        Gate-->>Harness: 可构造请求候选（不代表权限已授予）
+        Harness->>Adapter: Invocation Request（correlation_id、版本、期望观察）
+        Adapter->>Target: 仅在具体运行时获准后发送
+
+        alt 获得可关联的结果或错误
+            Target-->>Adapter: 结果、错误或限制
+            Adapter-->>Harness: Result Envelope 与原始观察
+            Harness->>Observer: 按关联标识重新观察目标
+            Observer-->>Harness: 目标状态、冲突或观察范围限制
+            Harness->>Validator: 观察加验收规则
+            Validator-->>Harness: 接受、拒绝或补证候选
+        else 超时且没有可用回读
+            Adapter-->>Harness: effect_unknown（不把超时当失败事实）
+            Harness-->>Gate: 补证、停止或升级候选；不自动重发
+        end
+    end

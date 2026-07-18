@@ -1,0 +1,30 @@
+%% 第 35 章：企业 Harness 的控制、执行、关联观察与保守出口。
+%% 本图只表达本书教学模型，不连接企业目录、身份、Kubernetes、OPA、OpenTelemetry、云账户、工单、审计、网络、凭证或外部系统。
+flowchart TB
+    Request[教学请求<br/>主体声明、租户候选、目标、能力]
+    Control[企业控制平面<br/>范围、预算、到期、停止条件]
+    Decision[策略决定记录<br/>allowed／denied／pending_approval<br/>限制与关联标识]
+    Candidate[受限执行候选<br/>能力、目标、预算、到期与停止条件]
+    Execution[执行平面<br/>只描述受限尝试<br/>不执行外部动作]
+    Observation[关联观察记录<br/>决定、任务、时间窗、来源与新鲜度]
+    Gate[人工升级门<br/>范围扩大、跨边界、超预算或证据不足]
+    Recheck[重新形成策略决定<br/>明确范围与新的限制]
+    Stop[保守停止<br/>拒绝、过期或补证]
+    Effect[业务效果结论<br/>需要独立验收材料（图外）]
+    Audit[审计充分性<br/>需要独立制度与证据（图外）]
+
+    Request --> Control
+    Control --> Decision
+    Decision -->|allowed_with_limits| Candidate
+    Candidate --> Execution
+    Decision -->|决定标识与限制| Observation
+    Execution -->|尝试、停止或未知的观察摘要| Observation
+    Decision -->|denied| Stop
+    Decision -->|pending_approval| Gate
+    Execution -->|跨边界、超预算或范围变化| Gate
+    Observation -->|关联缺失、过期或证据不足| Gate
+    Gate -->|拒绝、过期或待补证| Stop
+    Gate -->|明确的受限范围| Recheck
+    Recheck --> Decision
+    Decision -.策略允许不等于.-> Effect
+    Observation -.关联观察不等于.-> Audit

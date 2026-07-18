@@ -1,0 +1,81 @@
+%% 第 44 章：AI Technical Book Factory 的版本交接、双门、冲突回流与人工决定。
+%% 本图只表达本书工程模型，不运行 Agent、队列、返工、集成、批准或发布动作。
+flowchart TB
+    Contract[Chapter Contract<br/>目标、来源、交付物与非范围]
+    Roles[六类 Role Contract<br/>Research · Outline · Writing<br/>Review · Fact Check · Human]
+    AgentBoundary[more agents<br/>≠ independent evidence]
+    Queue[Versioned Queue Item<br/>输入版本 · invalidationCondition<br/>attempt · integrationOwner]
+    Version{输入版本仍适用<br/>且影响范围已知？}
+    Stale[stale_input<br/>旧结果隔离，不自动合并]
+    Research[Research<br/>Source Card · Claim Candidate<br/>来源冲突与未知项]
+    Outline[Outline<br/>论证顺序 · 来源路由<br/>示例与图示计划]
+    Writing[Writing<br/>受限 claim 的原创 Draft]
+    Frozen[Frozen Draft<br/>版本与 claim ledger 固定]
+    Review[Review<br/>结构 · 读者路径 · 工程边界]
+    Fact[Fact Check<br/>supported · narrow<br/>reject · unknown]
+    ReviewGate{Review Gate<br/>阻塞 finding 已关闭？}
+    FactGate{Fact Check Gate<br/>claim 判定可继续？}
+    NeedsRevision[needs_revision<br/>must_fix／should_fix]
+    NeedsFact[needs_fact_resolution<br/>reject／unknown]
+    ReviewBoundary[review passed<br/>≠ facts verified]
+    GatesClear[双硬门均无阻塞<br/>同一 Frozen Draft]
+    FactBoundary[facts verified<br/>≠ publication approved]
+    Package[Content Evidence Package<br/>输入／输出 · claim · evidence<br/>finding · verdict · conflict]
+    OutputBoundary[role output exists<br/>≠ role output accepted]
+    ReadyHuman[ready_for_human_review<br/>只请求具名人工决定]
+    Router[Conflict Router<br/>source -> Research · structure -> Outline<br/>scope -> Writing · stale -> 版本准入]
+    Envelope[Rework Envelope<br/>固定输入 · 允许范围 · 关闭证据<br/>剩余预算 · 升级对象]
+    Cycle{bounded reflow<br/>范围、次数、权限<br/>仍在预算内？}
+    Target{目标责任入口}
+    NeedsHuman[needs_human_decision<br/>循环耗尽、影响不明或争议未解]
+    Human{Human Decision<br/>接受集成 · 退回 · 延期 · 拒绝}
+    ReadyIntegration[ready_for_chapter_integration<br/>只提交给 Integration Gate]
+    AcceptedBoundary[accepted for integration<br/>≠ chapter integrated]
+    Integration[第 26 章 Integration Gate<br/>实际集成需另行验证]
+    PublishBoundary[chapter integration<br/>≠ publication approved]
+    Approval[publication_approval_required<br/>继续满足第 43 章 DoD 与出版决定]
+    Stop[blocked／external decision<br/>图外不执行 Agent、集成或发布]
+
+    Contract --> Roles
+    Roles --> AgentBoundary
+    AgentBoundary --> Queue
+    Queue --> Version
+    Version -->|否| Stale
+    Stale --> Router
+    Version -->|是| Research
+    Research --> Outline
+    Outline --> Writing
+    Writing --> Frozen
+    Frozen --> Review
+    Frozen --> Fact
+    Review --> ReviewGate
+    Fact --> FactGate
+    ReviewGate -->|未关闭| NeedsRevision
+    NeedsRevision --> Router
+    FactGate -->|阻塞| NeedsFact
+    NeedsFact --> Router
+    ReviewGate -->|通过| ReviewBoundary
+    ReviewBoundary --> GatesClear
+    FactGate -->|通过| GatesClear
+    GatesClear --> FactBoundary
+    FactBoundary --> Package
+    Package --> OutputBoundary
+    OutputBoundary --> ReadyHuman
+    ReadyHuman --> Human
+    Router --> Envelope
+    Envelope --> Cycle
+    Cycle -->|是| Target
+    Target -->|source_conflict| Research
+    Target -->|structure_conflict| Outline
+    Target -->|scope_overreach| Writing
+    Target -->|stale_input| Version
+    Cycle -->|否| NeedsHuman
+    NeedsHuman --> Human
+    Human -->|returned_for_rework| Router
+    Human -->|deferred／rejected| Stop
+    Human -->|accepted_for_integration| ReadyIntegration
+    ReadyIntegration --> AcceptedBoundary
+    AcceptedBoundary --> Integration
+    Integration --> PublishBoundary
+    PublishBoundary --> Approval
+    Approval --> Stop

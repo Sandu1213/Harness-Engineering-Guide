@@ -1,0 +1,12 @@
+flowchart TB
+    Task[任务与成功标准] --> Spec[Evaluation Spec]
+    Spec --> Checks[可执行检查]
+    Judge[模型评判：可选证据，需校准] --> Evidence[Evidence Record]
+    Checks --> Evidence
+    Evidence --> Gate{每项必需标准是否有可接受证据？}
+    Gate -- 否 --> More[补证、修订规格或人工复核]
+    Gate -- 是 --> Result{所有必需标准是否通过？}
+    Result -- 是 --> Accepted[接受：仅代表评估接受]
+    Result -- 否 --> Rejected[拒绝：记录失败标准]
+    Accepted --> Feedback[反馈给第 18 章]
+    Rejected --> Feedback

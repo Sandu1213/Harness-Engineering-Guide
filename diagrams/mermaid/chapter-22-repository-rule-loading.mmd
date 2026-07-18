@@ -1,0 +1,22 @@
+flowchart TB
+    Entry[工具适配入口] --> Stable[稳定规则]
+    Stable --> Context[项目上下文]
+    Context --> State[当前状态与进度]
+    State --> Task[当前任务与局部模板]
+    Task --> Packet[组装 Rule Packet]
+
+    State --> Fresh{状态新鲜度明确吗？}
+    Fresh -- 否或未知 --> Evidence[核对最近可复现证据]
+    Evidence --> State
+    Fresh -- 是 --> Packet
+
+    Packet --> Scope{规则范围匹配吗？}
+    Scope -- 否 --> Narrow[缩小任务或补充局部规则]
+    Narrow --> Task
+    Scope -- 是 --> Conflict{同层同范围冲突吗？}
+    Conflict -- 是 --> Human[维护者裁决并修订规则]
+    Human --> Stable
+    Conflict -- 否 --> Ready[可开始一个可验收任务]
+    Ready --> Verify[运行相关校验]
+    Verify --> Update[回写状态与交接]
+    Update --> Entry

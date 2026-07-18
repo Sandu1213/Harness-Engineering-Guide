@@ -1,0 +1,23 @@
+%% 第 10 章：可恢复工作流的状态与证据边界。
+%% 本图只表达本书教学模型，不表示真实工作流引擎、状态存储、重放、Tool 调用、权限授予、批准结果、外部效果或内容正确性。
+flowchart TB
+    Contract[Workflow Contract<br/>版本、合法状态、迁移证据<br/>停止与升级条件]
+    Record[State Record<br/>当前状态、关联尝试、观察<br/>未知项与下一步候选]
+    Checkpoint[Checkpoint<br/>可定位的恢复线索<br/>不证明记录正确或新鲜]
+
+    Contract -. 约束合法状态与迁移 .-> Ready[ready<br/>入口条件目前看起来齐备]
+    Contract -. 版本必须匹配 .-> Record
+    Checkpoint -. 用于恢复判断 .-> Record
+
+    Ready -->|关联输入与契约版本| InProgress[in_progress<br/>处理已定义动作并关联观察]
+    InProgress -->|观察待独立验收| ReadyForValidation[ready_for_validation<br/>已有待评估的观察]
+    ReadyForValidation -->|验收规则接受当前范围| Validated[validated<br/>当前范围被接受<br/>终态]
+
+    Record -->|记录冲突或缺少关联证据| Blocked[blocked<br/>补证、修正冲突或人工决策]
+    InProgress -->|未知写入效果或缺少恢复依据| Blocked
+    ReadyForValidation -->|验收拒绝：局部修订候选| InProgress
+    Blocked -. 补证或修正冲突后重新评估 .-> Ready
+    Blocked -->|当前范围不应继续制造新效果| Stopped[stopped<br/>记录停止理由与未覆盖范围<br/>终态]
+
+    InProgress -->|候选动作越出现有授权边界| RequiresApproval[requires_approval<br/>需要人类或环境层面的决定]
+    RequiresApproval -. 明确批准或调整范围后重新评估候选 .-> Ready

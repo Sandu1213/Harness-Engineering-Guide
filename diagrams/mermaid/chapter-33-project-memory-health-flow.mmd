@@ -1,0 +1,33 @@
+%% 第 33 章：虚构项目记忆网如何经过结构检查，保留补证、人工复核与同步停止出口。
+%% 本图只表达本书项目记忆层模型，不读取、写入或同步真实 vault、Obsidian、文件、网络、账户、插件、备份或外部系统。
+flowchart TB
+    Directory[目录归属<br/>章节、来源、审查或决策]
+    Tags[标签<br/>仅辅助发现]
+    Memory[Memory Node<br/>id、状态、责任、复核与下一步]
+    Link[Link Contract<br/>supports／covers／blocks／supersedes／next_step]
+    SyncRequest[协作或同步请求<br/>虚构教学输入]
+    Boundary[Synchronization Boundary<br/>范围、负责人、冲突出口、备份责任]
+    Check[Memory Health Check<br/>只检查注入结构]
+    EvidenceGap[缺来源<br/>stable 无来源指针]
+    ReviewGap[复核或关系缺口<br/>过期、悬空或无后继]
+    Ready[ready_for_followup<br/>仅可继续受限跟进]
+    NeedEvidence[needs_evidence<br/>补充受限证据]
+    NeedReview[needs_review<br/>人工复核]
+    Escalation[人工任务或 Escalation Record<br/>未知或冲突保留]
+    Stop[保守停止<br/>不得自动改写、删除或同步]
+
+    Directory -->|主要归属| Memory
+    Tags -->|辅助发现，不替代身份| Memory
+    Memory --> Check
+    Link --> Check
+    SyncRequest --> Boundary
+    Boundary -->|边界字段齐全；不执行同步| Check
+    Boundary -->|范围、责任或冲突出口未知| Escalation
+    Check -->|stable 缺来源| EvidenceGap
+    EvidenceGap --> NeedEvidence
+    Check -->|过期、悬空或关系不明| ReviewGap
+    ReviewGap --> NeedReview
+    Check -->|结构字段齐全| Ready
+    NeedEvidence --> Stop
+    NeedReview --> Stop
+    Escalation --> Stop

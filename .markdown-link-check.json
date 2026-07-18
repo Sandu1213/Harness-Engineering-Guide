@@ -7,6 +7,27 @@
   "ignorePatterns": [
     {
       "pattern": "^#"
+    },
+    {
+      "pattern": "^https://openai\\.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/?$"
+    },
+    {
+      "pattern": "^https://platform\\.openai\\.com/docs/api-reference/backward-compatibility/?$"
+    },
+    {
+      "pattern": "^https://help\\.openai\\.com/en/articles/20001066-skills-in-chatgpt/?$"
+    },
+    {
+      "pattern": "^https://help\\.openai\\.com/en/articles/20001256-plugins-in-codex/?$"
+    },
+    {
+      "pattern": "^https://docs\\.anthropic\\.com/en/docs/claude-code/memory/?$"
+    },
+    {
+      "pattern": "^https://www\\.nist\\.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10/?$"
+    },
+    {
+      "pattern": "^https://eur-lex\\.europa\\.eu/eli/reg/2024/1689/oj/eng/?$"
     }
   ]
 }

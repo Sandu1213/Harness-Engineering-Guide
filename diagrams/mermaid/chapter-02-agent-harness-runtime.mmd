@@ -1,0 +1,15 @@
+%% 第 2 章：模型、Agent、Harness 与运行环境的责任边界
+%% 本图是书籍的工作模型，不表示特定产品或来源文章的内部架构。
+flowchart TB
+    Goal[任务目标与约束] --> Agent[Agent：选择下一步]
+    Agent --> Model[模型：生成候选]
+    Agent --> Harness[Harness：编排、状态与验证]
+    Harness --> Runtime[运行环境：进程、文件、网络与权限]
+    Runtime --> Tool[工具与外部系统]
+    Tool --> Observation[环境结果与观察]
+    Observation --> Harness
+    Harness --> Evidence[验证结果与事件记录]
+    Evidence --> Agent
+
+    Model -. 候选而非完成 .-> Harness
+    Runtime -. 拒绝、错误或资源限制 .-> Harness

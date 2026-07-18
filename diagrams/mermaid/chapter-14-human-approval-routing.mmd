@@ -1,0 +1,30 @@
+%% 第 14 章：人类审批路由的教学模型。
+%% 本图不表示真实身份、权限、审批系统、Tool 调用、外部效果或结果验证。
+flowchart TD
+    Candidate[候选动作]
+    Card[行动卡 Action Card<br/>意图、范围、效果类别、证据<br/>未知项、成功标准与刷新条件]
+    Complete{行动卡与证据<br/>足以判断？}
+    Evidence[needs_evidence<br/>补充字段或重新观察]
+    Effect{已有外部效果<br/>是否未知？}
+    Blocked[blocked<br/>保留关联观察并升级<br/>不重试、不用批准覆盖]
+    Risk{影响窄且可逆<br/>策略允许且证据新鲜？}
+    Auto[自动候选<br/>记录路由理由]
+    Review[requires_approval<br/>人类审查范围、证据与条件]
+    Decision{审批记录}
+    Approved[批准<br/>范围、条件与刷新条件]
+    Rejected[拒绝或停止<br/>保留理由与未覆盖范围]
+    Changed{范围、证据或环境<br/>是否变化/过期？}
+    Reassess[重新路由<br/>旧决定不复用]
+    Preflight[允许进入后续执行前检查<br/>仍需权限与验证]
+
+    Candidate --> Card --> Complete
+    Complete -->|否| Evidence
+    Complete -->|是| Effect
+    Effect -->|是| Blocked
+    Effect -->|否| Risk
+    Risk -->|是| Auto --> Preflight
+    Risk -->|否| Review --> Decision
+    Decision -->|批准| Approved --> Changed
+    Decision -->|拒绝/补证| Rejected
+    Changed -->|是| Reassess --> Card
+    Changed -->|否| Preflight

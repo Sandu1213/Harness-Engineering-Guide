@@ -1,0 +1,12 @@
+flowchart TB
+    Evidence[失败记录与评估证据] --> Candidate[候选改进协议]
+    Candidate --> Validate{独立验证是否通过且范围匹配？}
+    Validate -- 否/未知 --> Research[补证、修订或拒绝]
+    Validate -- 是 --> Approve{批准是否覆盖候选范围？}
+    Approve -- 否 --> Human[等待人工批准或停止]
+    Approve -- 是 --> Ready{回滚与监控是否就绪？}
+    Ready -- 否 --> Prepare[补回滚演练或监控计划]
+    Ready -- 是 --> Release[可进入受控发布准备]
+    Release --> Monitor[监控具名信号与预算]
+    Monitor -- 异常/漂移 --> Rollback[停止、回滚或人工升级]
+    Monitor -- 符合退出标准 --> Record[记录版本、证据与下一次复核]

@@ -1,0 +1,16 @@
+%% 第 27 章：Git 变更准入的教学证据流。
+%% 本图只表达 Change Contract，不表示真实 Git、worktree、PR、CI、权限或 merge。
+flowchart TB
+    Intent[候选变更意图] --> Contract[Change Contract<br/>基线、范围、隔离声明]
+    Contract --> Scope{基线与路径范围完整？}
+    Scope -->|否| Stop[停止：补齐契约或缩小范围]
+    Scope -->|是| Workspace[Worktree 声明<br/>仅作为待核对的隔离工作区]
+    Workspace --> Evidence[Evidence Package<br/>diff、校验命令、未覆盖范围]
+    Evidence --> Check{diff、校验、冲突声明完整？}
+    Check -->|否| Stop
+    Check -->|是| Human[Human Review<br/>评论、批准或请求修改]
+    Human --> Decision{Integration Decision}
+    Decision -->|共享路径或范围变化| Integrator[集成者检查共享工件与全仓证据]
+    Decision -->|批准且范围明确| Integrator
+    Decision -->|请求修改、缺证或冲突| Stop
+    Integrator --> Outcome[接受、退回、补证或另行合并]

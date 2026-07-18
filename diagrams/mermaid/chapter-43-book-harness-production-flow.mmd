@@ -1,0 +1,57 @@
+%% 第 43 章：Book Harness 从路线图、章节阶段到出版候选的证据责任链。
+%% 本图只表达本书工程模型，不读取仓库，不运行写作、验证、构建、批准或发布动作。
+flowchart TB
+    Roadmap[书籍路线图<br/>Book Contract]
+    Contract[Chapter Contract<br/>目标、输入、交付物与非范围]
+    Research[Research Brief<br/>来源范围与未知项]
+    Outline[Chapter Outline<br/>论证、示例与图示计划]
+    Draft[First Draft<br/>原创正文候选]
+    Technical[Technical Review<br/>职责、来源与相邻边界]
+    Example[Example Implementation<br/>测试与无副作用演示]
+    Diagram[Diagram Review<br/>图源、导出与视觉检查]
+    Fact[Fact Check<br/>动态事实与外推边界]
+    Language[Language Editing<br/>术语、时态与读者路径]
+    Validation[Repository Validation<br/>当前目录、链接、示例与状态]
+    ArtifactBoundary[stage artifact exists<br/>≠ stage verified]
+    Evidence[Chapter Evidence Package<br/>正文、来源、示例、图示、审查与验证]
+    DoD{Chapter DoD<br/>所有硬性证据是否完整？}
+    Needs[needs_evidence<br/>回到责任阶段补证]
+    State[Production Board + State Sync<br/>工件、看板与交接反向核对]
+    Sync{共享状态是否一致？}
+    Drift[state_drift<br/>先修正状态漂移]
+    Completion[Completion Review<br/>检查当前证据包]
+    Complete[chapter_complete<br/>只表示章节完成]
+    ChapterBoundary[chapter complete<br/>≠ book releasable]
+    Candidate[Publication Candidate Manifest<br/>冻结书稿身份、目录与未覆盖项]
+    Build[Build Evidence<br/>来源、环境、指令与输出]
+    BuildBoundary[build succeeded<br/>≠ publication approved]
+    Approval[publication_approval_required<br/>版权、编辑与出版决定]
+    Stop[blocked<br/>图外不执行写作、构建、批准或发布]
+
+    Roadmap --> Contract
+    Contract --> Research
+    Research --> Outline
+    Outline --> Draft
+    Draft --> Technical
+    Technical --> Example
+    Example --> Diagram
+    Diagram --> Fact
+    Fact --> Language
+    Language --> Validation
+    Validation --> ArtifactBoundary
+    ArtifactBoundary --> Evidence
+    Evidence --> DoD
+    DoD -->|硬缺口| Needs
+    Needs --> Stop
+    DoD -->|证据完整| State
+    State --> Sync
+    Sync -->|否| Drift
+    Drift --> Stop
+    Sync -->|是| Completion
+    Completion --> Complete
+    Complete --> ChapterBoundary
+    ChapterBoundary --> Candidate
+    Candidate --> Build
+    Build --> BuildBoundary
+    BuildBoundary --> Approval
+    Approval --> Stop

@@ -1,0 +1,13 @@
+flowchart TB
+    Task[任务范围与预期状态] --> Contract[E2E Evidence Contract]
+    Contract --> Before[前快照：目标与当前状态]
+    Before --> Locator[定位与动作前条件]
+    Locator --> Click[主动作：点击已派发]
+    Click --> After[后快照：重新观察]
+    After --> Gate{证据链完整且状态匹配？}
+    Gate -->|是| Observed[仅报告：用户可见状态已观察]
+    Observed --> Evaluation[第 17 章：独立验收]
+    Gate -->|否| Hold[补证、停止或升级]
+    Hold --> Recovery[第 18 章：恢复决策]
+    Locator -->|定位或动作前条件不足| Hold
+    Click -->|效果未知| Hold

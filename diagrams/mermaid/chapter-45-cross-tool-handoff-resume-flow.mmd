@@ -1,0 +1,63 @@
+%% 第 45 章：跨工具接力从共享项目核心、局部交接到集成快照与恢复准入。
+%% 本图只表达本书工程模型，不恢复会话，不运行工具，不修改共享状态或外部系统。
+flowchart TB
+    Core[Shared Project Core<br/>目标、规则、状态、证据与责任]
+    RuntimeBoundary[same repository ≠ same capabilities<br/>subagent done ≠ integrated<br/>worktree isolated ≠ external state isolated]
+    Context[Context Read Protocol<br/>入口、契约、状态、决定、交接与新鲜检查]
+    Snapshot[Input Snapshot + Task Contract<br/>版本、专属路径、验收与停止条件]
+    Source[Source Tool Adapter Profile<br/>来源工具能力、权限与局部输入]
+    Target[Target Tool Adapter Profile<br/>目标工具能力、权限与当前复核]
+    Capability[Capability Difference Record<br/>目标能力独立验证，不复制来源声明]
+    Local[Local Work + Validation Evidence<br/>局部产物、命令结果与有限结论]
+    Handoff[Handoff Package<br/>draft / delivered / blocked / superseded]
+    HandoffBoundary[cross-tool handoff delivered<br/>≠ integrated or resumable]
+    Conflict[State Conflict Record<br/>主张、版本、证据、影响与决定责任]
+    Integration{Integration Gate<br/>输入、所有权、证据、冲突与共享写入}
+    Rework[needs_rework / repository_validation_required<br/>退回责任阶段补证]
+    Integrated[integrated_snapshot_ready<br/>共享写入与仓库验证的新基线]
+    Resume{Resume Gate<br/>已集成快照能否支持下一任务？}
+    NeedsContext[needs_context<br/>补齐契约、读取或下一任务]
+    NeedsCapability[capability_review_required<br/>重新核验目标工具能力]
+    NeedsConflict[state_conflict<br/>冻结受影响写入]
+    NeedsValidation[validation_required<br/>刷新输入或验证证据]
+    Human[human_decision_required<br/>交具名责任者决定]
+    Ready[ready_to_resume<br/>只允许领取下一项局部任务]
+    ResumeBoundary[ready_to_resume<br/>≠ execution_started]
+    Next[Next Task Contract<br/>由外部责任者决定是否领取]
+    Stop[stop<br/>图外不自动集成、执行、授权或发布]
+
+    Core --> RuntimeBoundary
+    RuntimeBoundary --> Context
+    Context --> Source
+    Context --> Target
+    Context --> Snapshot
+    Source --> Local
+    Snapshot --> Local
+    Target --> Capability
+    Capability --> Handoff
+    Local --> Handoff
+    Context --> Conflict
+    Handoff --> HandoffBoundary
+    HandoffBoundary --> Integration
+    Integration -->|输入或证据不足| Rework
+    Rework --> Stop
+    Integration -->|发现冲突| Conflict
+    Conflict -->|阻塞当前任务| NeedsConflict
+    Conflict -->|需要价值取舍| Human
+    NeedsConflict --> Stop
+    Human --> Stop
+    Integration -->|集中同步并验证| Integrated
+    Integrated --> Resume
+    Target --> Resume
+    Capability --> Resume
+    Resume -->|上下文缺口| NeedsContext
+    Resume -->|能力未知或待授权| NeedsCapability
+    Resume -->|冲突未解决| NeedsConflict
+    Resume -->|输入漂移或验证过期| NeedsValidation
+    Resume -->|风险或外部动作| Human
+    NeedsContext --> Stop
+    NeedsCapability --> Stop
+    NeedsValidation --> Stop
+    Resume -->|所有条件满足| Ready
+    Ready --> ResumeBoundary
+    ResumeBoundary --> Next

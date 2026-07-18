@@ -1,0 +1,49 @@
+%% 第 47 章：一次性脚本沿契约、状态、能力、观察、评估、交接和受限自治演进。
+%% 本图只表达本书工程模型，不运行模型、工具、权限、评估、批准、部署或发布。
+flowchart TB
+    Change[外部变化<br/>模型、Prompt、Tool、Skill、Policy 与数据]
+    Refresh[版本与失效检查<br/>重读契约、证据和评估范围]
+    Stage0[Stage 0<br/>固定输入、输出与可重复样例]
+    Stage1[Stage 1<br/>Task Contract 与停止条件]
+    Stage2[Stage 2<br/>显式状态与 Attempt Trace]
+    Stage3[Stage 3<br/>Capability Grant Record 与副作用边界]
+    ModelBoundary[模型能力提升<br/>≠ 权限自动扩大]
+    Stage4[Stage 4<br/>Tool Result、Observation 与验收分层]
+    Stage5[Stage 5<br/>Evaluation Spec、版本基线与硬门]
+    EvalBoundary[Eval 通过<br/>≠ 上线批准]
+    Stage6[Stage 6<br/>Handoff、Checkpoint 与 Conflict Record]
+    Stage7[Stage 7<br/>只为已测收益增加受限自治]
+    AutonomyBoundary[自治增加后仍须<br/>可停止、可回滚、可交给人类]
+    Pilot[ready_for_bounded_pilot_review<br/>只进入具名人工决定]
+    Decision[Human Responsibility Map<br/>批准、拒绝、缩小范围或停止]
+    Stop[图外停止<br/>不执行真实批准、部署或发布]
+
+    Protocol[协议与 Schema<br/>只先解决语法连接]
+    InteropBoundary[协议连接<br/>≠ 语义与治理互操作]
+    Security[安全与资产供应链<br/>不可信输入、最小能力、来源与撤销]
+    Organization[组织责任<br/>风险所有者、停止权、申诉与事件响应]
+    OpenQuestions[开放问题持续进入评估<br/>记忆、多 Agent、效度、安全与组织影响]
+
+    Change --> Refresh
+    Refresh --> Stage0
+    Stage0 --> Stage1
+    Stage1 --> Stage2
+    Stage2 --> Stage3
+    Stage3 --> ModelBoundary
+    ModelBoundary --> Stage4
+    Stage4 --> Stage5
+    Stage5 --> EvalBoundary
+    EvalBoundary --> Stage6
+    Stage6 --> Stage7
+    Stage7 --> AutonomyBoundary
+    AutonomyBoundary --> Pilot
+    Pilot --> Decision
+    Decision --> Stop
+
+    Protocol --> InteropBoundary
+    InteropBoundary -.约束契约、状态与证据.-> Stage3
+    Security -.跨阶段硬约束.-> Stage3
+    Security -.独立观察与事件证据.-> Stage4
+    Organization -.具名责任与停止权.-> Decision
+    OpenQuestions -.形成新场景与失效条件.-> Stage5
+    Stage4 -.新观察回流.-> Refresh

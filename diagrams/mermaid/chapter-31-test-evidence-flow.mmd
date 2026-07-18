@@ -1,0 +1,44 @@
+flowchart TB
+    Plan[Test Evidence Plan<br/>场景、API、UI、限制]
+    Api[API Contract Check<br/>前提、类别、恢复]
+    Fixture[fixture／替身边界<br/>作用域与恢复]
+    ApiObservation[API Observation<br/>受控契约观察]
+    Ui[UI Flow Evidence<br/>页面、动作、观察]
+    Context[Browser Context<br/>仅隔离浏览器状态]
+    Locator[locator<br/>当前 DOM 目标]
+    Action[Primary Action<br/>具名提交]
+    After[After Observation<br/>晚于主动作]
+    Observation[Observation Record<br/>场景、层级、限制]
+    Failure[Failure Record<br/>分类与下一步]
+    Gate[Report Gate<br/>关联、观察、限制]
+    Report[有限报告<br/>不越过证据]
+    Approval[`requires_approval`<br/>真实环境请求]
+    RuntimeObservation[获批后的实际观察<br/>本图不执行]
+    ApiGap[契约或恢复缺口]
+    LocatorGap[目标缺失]
+    ObservationGap[观察缺失或超时]
+    Stop[保守停止或补充计划]
+
+    Plan --> Api
+    Plan --> Ui
+    Plan -->|环境请求| Approval
+    Api --> Fixture
+    Fixture --> ApiGap
+    ApiGap --> Failure
+    Fixture --> ApiObservation
+    ApiObservation --> Observation
+    Ui --> Context
+    Context --> Locator
+    Locator --> Action
+    Action --> After
+    Locator --> LocatorGap
+    LocatorGap --> Failure
+    After --> ObservationGap
+    ObservationGap --> Failure
+    After --> Observation
+    Approval -->|批准后才可实际运行| RuntimeObservation
+    RuntimeObservation --> Observation
+    Observation --> Gate
+    Failure --> Gate
+    Gate -->|关联完整且结论受限| Report
+    Gate -->|缺场景、观察或限制| Stop

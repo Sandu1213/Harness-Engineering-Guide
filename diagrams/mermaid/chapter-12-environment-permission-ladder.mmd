@@ -1,0 +1,29 @@
+%% 第 12 章：Environment Contract 与权限阶梯。
+%% 本图只表达本书教学模型，不表示真实 Sandbox、文件系统、网络、凭证、源系统授权、部署、批准、审计或外部效果。
+flowchart TB
+    Candidate[Action Candidate<br/>效果类别、目标范围、所需 scope]
+    Contract[Environment Contract<br/>允许效果、目标范围、文件、网络、凭证与观察要求]
+    Candidate --> Contract
+
+    Contract --> DryRun[dry-run<br/>只读与预检查<br/>无真实外部目标]
+    Contract --> Test[test<br/>受限测试目标<br/>可定义受限写入]
+    Contract --> Production[production<br/>外部动作候选<br/>需精确目标与 scope]
+
+    DryRun --> DryCheck{effect、目标范围与<br/>边界匹配？}
+    Test --> TestCheck{effect、目标范围、边界与<br/>credential scope 匹配？}
+    Production --> ProdCheck{effect、目标范围、边界与<br/>credential scope 匹配？}
+
+    DryCheck -- 是 --> DryAllowed[allowed candidate<br/>仅表示预检查可继续]
+    TestCheck -- 是 --> TestAllowed[allowed candidate<br/>仍需独立观察与验收]
+    ProdCheck -- 否 --> Blocked[blocked<br/>记录缺失或不匹配边界]
+    DryCheck -- 否 --> Blocked
+    TestCheck -- 否 --> Blocked
+    ProdCheck -- 是 --> Approval{批准 snapshot<br/>是否匹配范围？}
+    Approval -- 否 --> NeedsApproval[requires_approval<br/>交给第 14 章的责任与确认]
+    Approval -- 是 --> ProductionCandidate[allowed candidate<br/>仍未调用 Tool 或改变目标]
+
+    DryAllowed -. 预检查结果 .-> Observation[后续观察与验收<br/>由第 17 章定义]
+    TestAllowed -. 测试目标观察 .-> Observation
+    ProductionCandidate -. 外部目标回读 .-> Observation
+    Blocked -.-> Contract
+    NeedsApproval -.-> Contract

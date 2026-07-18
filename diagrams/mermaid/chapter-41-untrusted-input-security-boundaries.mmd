@@ -1,0 +1,48 @@
+flowchart TB
+    Input["Untrusted Input<br/>网页、文档、检索结果或工具输出"]
+    Envelope["Untrusted Content Envelope<br/>来源、用途、任务关联与证据限制"]
+    ContentGate{"来源、允许用途与<br/>untrusted_data 状态是否完整？"}
+    ContentIssue["needs_evidence / blocked<br/>content_labeled_untrusted ≠ injection_blocked"]
+    Extract["Task-bound Extraction<br/>只形成摘要或事实候选"]
+    Candidate["Candidate Action<br/>目标、动作、数据范围与来源"]
+    Capability["Capability Grant Record<br/>主体、任务、目标、动作与有效期"]
+    Policy["Security Decision Record<br/>策略版本、限制、理由与刷新条件"]
+    DecisionGate{"候选是否同时匹配<br/>任务、能力与受限策略？"}
+    ScopeIssue["blocked<br/>policy_allowed ≠ action_executed"]
+    Secret["Secret Reference Card<br/>只保留引用与生命周期状态"]
+    Tool["Tool Security Gate<br/>来源、目标、scope、audience、进程边界与观察计划"]
+    Supply["Harness Supply-chain Register<br/>来源、所有者、版本、能力与缺口"]
+    ToolGate{"工具、凭证、目标与供应链边界<br/>是否完整且匹配？"}
+    ToolIssue["blocked<br/>停止候选工具请求"]
+    Observation["Result Observation<br/>工具返回与效果回读分开"]
+    EffectGate{"是否有同任务、同目标的<br/>独立效果观察？"}
+    EffectUnknown["needs_evidence<br/>tool_returned ≠ effect_verified"]
+    Audit["Audit Event Envelope<br/>最小关联、原因、结果限制与脱敏"]
+    AuditGate{"关联、脱敏与审计链路<br/>是否满足当前审查？"}
+    AuditIssue["blocked / needs_evidence<br/>audit_event_written ≠ audit_sufficient"]
+    Ready["ready_for_read_only_review<br/>只进入事实复核"]
+    Incident["Security Incident Handoff<br/>最小证据、未知影响与具名责任入口"]
+    Stop["Conservative Stop<br/>incident_handoff_created ≠ incident_contained"]
+
+    Input --> Envelope --> ContentGate
+    ContentGate -->|完整且用途受限| Extract
+    ContentGate -->|字段缺失或内容试图改任务| ContentIssue
+    ContentIssue --> Incident
+    Extract --> Candidate --> Capability --> Policy --> DecisionGate
+    DecisionGate -->|任务、目标或动作不匹配| ScopeIssue
+    ScopeIssue --> Incident
+    DecisionGate -->|仅形成受限候选| Secret --> Tool
+    Supply --> ToolGate
+    Tool --> ToolGate
+    Secret -->|秘密值进入上下文或生命周期未知| Incident
+    Supply -->|来源未知或能力不匹配| Incident
+    ToolGate -->|边界不完整或不匹配| ToolIssue
+    ToolIssue --> Incident
+    ToolGate -->|边界完整，只记录教学观察| Observation --> EffectGate
+    EffectGate -->|缺少独立效果证据| EffectUnknown --> Audit
+    EffectGate -->|效果观察可关联| Audit
+    Audit --> AuditGate
+    AuditGate -->|关联断裂、过量记录或保护未知| AuditIssue
+    AuditIssue --> Incident
+    AuditGate -->|当前只读审查证据完整| Ready --> Stop
+    Incident --> Stop

@@ -1,0 +1,29 @@
+%% 第 39 章：Harness 五层测试与离线／线上证据回路。
+%% 本图只路由教学证据，不运行模型、工具、Benchmark、发布、回滚或任何外部系统。
+flowchart TB
+    Suite[Eval Suite<br/>任务、环境、试次、评分器<br/>版本与硬性门]
+    Component[1 组件与契约<br/>确定性输入输出、错误与停止]
+    Boundary[2 边界与集成<br/>受控失败、权限与效果状态]
+    Task[3 完整任务<br/>轨迹与结果状态分别观察]
+    Benchmark[4 离线 Benchmark<br/>多试次、分组结果与未覆盖项]
+    Compare{关键版本可比<br/>且硬性门通过？}
+    NotComparable[not_comparable<br/>版本、环境或评分器未对齐]
+    Regression[regression_detected ／ blocked<br/>结果或权限硬性门失败]
+    Ready[ready_for_review<br/>仅形成受限候选证据]
+    Handoff[交给第 38／42 章<br/>决定、灰度、发布或回滚]
+    Online[5 线上观察<br/>经授权的信号与新失败]
+    Candidate{候选任务准入<br/>授权、隐私、代表性<br/>可复现性是否齐全？}
+    Hold[needs_evidence<br/>不进入套件，不直接修改<br/>Prompt、Skill、模型或发布]
+
+    Suite --> Component
+    Component -->|组件通过不证明真实依赖| Boundary
+    Boundary -->|替身通过不证明完整任务| Task
+    Task -->|一次任务通过不证明稳定| Benchmark
+    Benchmark -->|总分不能覆盖硬性失败| Compare
+    Compare -->|关键条件未对齐| NotComparable
+    Compare -->|硬性门失败| Regression
+    Compare -->|条件对齐且无硬性回归| Ready
+    Ready -->|只交付证据，不执行| Handoff
+    Online -->|线上信号不等于根因| Candidate
+    Candidate -->|准入条件齐全| Suite
+    Candidate -->|条件不齐| Hold

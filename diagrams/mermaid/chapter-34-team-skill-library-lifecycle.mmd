@@ -1,0 +1,43 @@
+%% 第 34 章：团队 Skill Library 的受限治理生命周期。
+%% 本图表达本书教学模型，不发现、安装、发布、选择或执行真实 Skill／plugin，也不访问网络、MCP、浏览器、文件、凭证或组织系统。
+flowchart TB
+    Author[作者<br/>提出候选与已知限制]
+    Proposal[Proposal<br/>用途与教学范围]
+    Registry[Skill Registry Record<br/>标识、所有者、依赖、生命周期]
+    Contract[Skill Contract<br/>触发／非触发条件、输出与副作用边界]
+    Admission[Admission Review<br/>结构、风险、共存、质量与责任]
+    Tier[Quality Tier<br/>proposal / limited / maintained]
+    Selection[Discover / Select<br/>仅记录教学选择，不执行]
+    Feedback[Feedback Record<br/>场景、观察、限制与复核触发]
+    Compatibility[Compatibility Declaration<br/>可观察契约差异与迁移]
+    Maintain[Maintain<br/>回到可定位的登记与复核]
+    Deprecation[Deprecation Record<br/>原因、替代项、期限与删除门]
+    Stop[stopped<br/>补齐登记或契约证据]
+    Approval[requires_approval<br/>副作用或风险未审]
+    Review[requires_review<br/>人工复核冲突、兼容性或弃用]
+    Reviewer[评审者<br/>维护准入证据]
+    Maintainer[维护者<br/>维护契约、依赖与退役决定]
+    User[使用者<br/>提交观察与缺口]
+
+    Author --> Proposal
+    Proposal --> Registry
+    Proposal --> Contract
+    Registry -->|所有者与依赖可定位| Admission
+    Registry -->|缺标识、所有者或依赖| Stop
+    Contract -->|边界可审查| Admission
+    Contract -->|缺非触发条件或效果边界| Stop
+    Reviewer --> Admission
+    Admission -->|证据范围足够| Tier
+    Admission -->|风险、共存或副作用未审| Approval
+    Tier -->|受限等级内的候选| Selection
+    Tier -->|证据过期或触发冲突| Review
+    Selection -->|记录场景与限制| Feedback
+    User --> Feedback
+    Feedback -->|依赖、评估或契约变化| Compatibility
+    Feedback -->|所有者缺席或替代项出现| Deprecation
+    Compatibility -->|差异与迁移可复核| Maintain
+    Compatibility -->|公共契约或迁移不明| Review
+    Maintainer --> Maintain
+    Maintainer --> Deprecation
+    Maintain -->|复核后继续维护| Registry
+    Deprecation -->|停止推荐，保留记录| Review

@@ -1,0 +1,20 @@
+%% 第 5 章：Instructions 与 Prompt 的装配流程。
+%% 本图只表达本书的工程模型，不表示任何产品的隐藏消息顺序、权限控制或自动执行行为。
+flowchart TB
+    ProjectRules[项目规则<br/>来源、范围、版本] --> Assemble[装配器：组件识别与记录]
+    TaskBrief[任务 Brief<br/>目标、范围、停止条件] --> Assemble
+    ContextData[数据上下文<br/>待处理数据，不提升为规则] -. 仅作为数据 .-> Assemble
+    OutputContract[输出契约<br/>字段、失败表示、证据] --> Assemble
+
+    Assemble --> Decide{来源与范围<br/>是否可裁决？}
+    Decide -- 可执行 --> Packet[组件清单<br/>冲突记录与待验证请求]
+    Decide -- 冲突、来源不明或超出范围 --> Escalate[拒绝、澄清或人工升级]
+
+    Packet --> Candidate[候选输出]
+    Candidate --> Verify[独立验证<br/>格式、证据与业务条件]
+    Verify --> Accepted{证据满足<br/>完成定义？}
+    Accepted -- 是 --> Deliver[交付并更新状态]
+    Accepted -- 否 --> Escalate
+
+    Escalate -. 裁决结果与风险 .-> Assemble
+    Verify -. 验证范围与失败证据 .-> Packet

@@ -1,0 +1,36 @@
+%% 第 38 章：反馈、评估与批准的教学责任路由。
+%% 本图只比较注入的教学记录，不访问或调用文件、网络、Git、CI、审批、回滚、凭证或任何外部系统。
+flowchart TB
+    Input[注入的教学输入<br/>Observation ／ Evaluation Evidence]
+    EvidenceGate{证据、范围、效果状态<br/>预算与停止条件是否齐全？}
+    MoreEvidence[needs_evidence<br/>collect_more_evidence：补齐来源、范围或观察]
+    Retry[retry_limited<br/>只重新比较注入材料]
+    Reflection[Reflection Record<br/>假设、反例、证据缺口<br/>可证伪检查]
+    Candidate[Candidate Change<br/>范围、验证计划与反例]
+    Evaluation[Separated Evaluation<br/>Evaluation Spec、证据版本<br/>未覆盖项与共享假设]
+    Approval[Approval Gate<br/>影响、可逆性、刷新条件<br/>请求的决定与拒绝出口]
+    Ready[ready_for_approval<br/>仅准备决定，不授予执行]
+    Rejected[rejected<br/>保留拒绝理由]
+    Escalated[escalated<br/>冲突、影响不清或责任缺失]
+    Package[Decision Package<br/>路由理由、未决项、责任入口<br/>刷新条件；只读回放]
+    Stop[blocked<br/>在外部行动前停止]
+
+    Input --> EvidenceGate
+    EvidenceGate -->|证据或范围缺失| MoreEvidence
+    MoreEvidence --> Package
+    EvidenceGate -->|可受限再比较| Retry
+    Retry -->|只回到证据，不跳到候选| Input
+    EvidenceGate -->|证据足以形成假设| Reflection
+    Reflection -->|缺反例或可证伪检查| MoreEvidence
+    Reflection -->|候选范围扩大或事实待重读| Escalated
+    Reflection -->|假设和检查计划明确| Candidate
+    Candidate --> Evaluation
+    Evaluation -->|规格不匹配、证据不足或共享假设| MoreEvidence
+    Evaluation -->|拒绝候选| Rejected
+    Evaluation -->|范围匹配；仍需决定| Approval
+    Approval -->|只记录请求的决定| Ready
+    Approval -->|拒绝、风险或责任缺失| Rejected
+    Ready -->|记录范围与刷新条件；不是执行| Package
+    Rejected --> Package
+    Escalated --> Package
+    Package -->|外部行动需要独立契约| Stop

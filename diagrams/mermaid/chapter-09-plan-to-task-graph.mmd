@@ -1,0 +1,29 @@
+%% 第 9 章：Plan Brief 到任务图的边界。
+%% 本图只表达本书教学模型，不表示真实 Planner、调度器、认证协议、API 测试、权限授予、外部执行或结果验证。
+flowchart TB
+    Need[模糊需求<br/>为虚构服务增加认证测试] --> Brief[Plan Brief<br/>目标、约束、完成证据、未知项<br/>风险、停止与升级条件]
+    Brief --> BriefReady{目标与完成证据<br/>是否可判断？}
+    BriefReady -- 否 --> Clarify[blocked<br/>澄清目标或补充证据]
+    BriefReady -- 是 --> Cards[任务卡<br/>问题、输入、输出、依赖<br/>效果与验收证据]
+
+    Cards --> ContractResearch[研究认证契约<br/>只读、可追溯资料]
+    Cards -. 仅当输出、资源与验收独立 .-> Documentation[整理文档草稿<br/>并行候选：不声明测试通过]
+    ContractResearch --> TestGoals[确认测试目标]
+    TestGoals --> Assertions[定义测试断言]
+    Assertions --> Draft[实现测试草稿<br/>计划中的写入请求]
+    Draft --> EffectCheck{写入与环境条件
+是否有独立批准证据？}
+    EffectCheck -- 否 --> Approval[requires_approval<br/>交给环境与人工批准]
+    EffectCheck -- 是 --> VerificationCandidate[运行验证候选<br/>仍须走后续 Tool 与 Workflow 设计]
+
+    ContractResearch -- 认证契约不可定位 --> MissingContract[blocked<br/>记录缺口并停止猜测]
+    Documentation -. 若要发布测试结论 .-> VerificationCandidate
+
+    ContractResearch -. 观察或缺口 .-> Observation[新观察或冲突<br/>不等于外部结果已验证]
+    Assertions -. 新证据冲突 .-> Observation
+    VerificationCandidate -. 未验证范围 .-> Observation
+    Observation --> ChangeRecord[记录关联任务、受影响字段<br/>保留依赖、未知项与理由]
+    ChangeRecord --> Recheck{补充研究、阻塞
+还是人工升级？}
+    Recheck -- 补充研究或局部重排 --> Cards
+    Recheck -- 无法在当前范围解决 --> Clarify

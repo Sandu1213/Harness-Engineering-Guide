@@ -1,0 +1,48 @@
+%% 第 42 章：Harness 版本、比较、有限暴露与回滚验证的教学责任链。
+%% 本图只路由注入记录，不调用模型、任务集、实验平台、流量、监控、发布、审批或回滚系统。
+flowchart TB
+    Input[注入的教学候选<br/>Harness Version Manifest]
+    Identity{候选、父版本、工件摘要<br/>模型与评估规格是否可定位？}
+    Evidence[needs_evidence<br/>补齐身份或动态依赖]
+    Compatibility[Compatibility Matrix<br/>消费方、允许变化、迁移与回退目标]
+    CompatibilityGate{破坏性变化是否有<br/>迁移与可用回退目标？}
+    CompatibilityReview[needs_compatibility_review<br/>复核消费方与迁移]
+    Offline[Offline Evaluation<br/>固定任务集、指标口径与共享状态隔离]
+    Comparable{基线与候选是否可比？}
+    NotComparable[not_comparable<br/>任务集、指标或隔离不一致]
+    Decision[Release Decision Record<br/>质量、安全、成本、延迟守护指标]
+    Guardrail{守护指标是否通过？}
+    Ready[ready_for_review<br/>只进入有限暴露审查]
+    Exposure[Exposure Plan<br/>范围、隔离、监控、停止与责任]
+    Approval[approval_required<br/>真实暴露需要独立批准与执行]
+    Rollback[rollback_requested<br/>只请求回到已知良好目标]
+    Applied[注入的 rollback_applied 记录]
+    Readback{已回读目标状态<br/>并登记残留效果？}
+    Verify[rollback_verification_required<br/>重新观察已知良好状态]
+    Verified[rollback_verified<br/>仅限注入证据范围]
+    Stop[blocked<br/>外部行动不在本图执行]
+
+    Input --> Identity
+    Identity -->|缺身份或依赖未解析| Evidence
+    Identity -->|身份完整；不等于兼容| Compatibility
+    Compatibility --> CompatibilityGate
+    CompatibilityGate -->|破坏性变化无迁移| CompatibilityReview
+    CompatibilityGate -->|声明范围内可继续| Offline
+    Offline --> Comparable
+    Comparable -->|任务集、指标或隔离不一致| NotComparable
+    Comparable -->|可比；不等于线上效果| Decision
+    Decision --> Guardrail
+    Guardrail -->|失败| Rollback
+    Guardrail -->|通过；不等于已发布| Ready
+    Ready --> Exposure
+    Exposure -->|只记录暴露请求| Approval
+    Approval --> Stop
+    Rollback -->|需要独立授权与实际操作| Stop
+    Applied --> Readback
+    Readback -->|回读或残留登记缺失| Verify
+    Readback -->|证据完整；不外推全局恢复| Verified
+    Verify --> Stop
+    Verified --> Stop
+    Evidence --> Stop
+    CompatibilityReview --> Stop
+    NotComparable --> Stop

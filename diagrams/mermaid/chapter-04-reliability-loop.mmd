@@ -1,0 +1,19 @@
+%% 第 4 章：可靠 Agent 的最小工程闭环。
+%% 本图是本书的工程模型；指令、状态或验证结果本身不强制权限，也不保证全部事实正确。
+flowchart TB
+    Goal[可观察目标与完成定义] --> Preflight[预检：范围、权限、<br/>前置证据]
+    Preflight --> Decision{动作风险与证据是否足够？}
+    Decision -->|是| Execute[受控执行：最小权限、受限范围]
+    Decision -->|否| Escalate[停止或请求人工升级]
+    Execute --> Verify[读取结果并运行验证]
+    Verify --> Accepted{目标状态是否满足？}
+    Accepted -->|是| Record[记录证据、状态与交接]
+    Accepted -->|否| Recover[记录失败、回滚或修复]
+    Recover --> Retry{可安全恢复且未超阈值？}
+    Retry -->|是| Preflight
+    Retry -->|否| Escalate
+    Escalate --> Record
+    Record --> Next[下一项可验收任务]
+
+    Policy[稳定规则与风险矩阵] -. 约束 .-> Preflight
+    Evidence[验证输出与审查记录] -. 支持判断 .-> Accepted

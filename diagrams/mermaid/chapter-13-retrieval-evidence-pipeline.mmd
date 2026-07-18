@@ -1,0 +1,25 @@
+%% 第 13 章：检索到引用输出的证据流水线。
+%% 本图只表达本书教学模型，不表示真实搜索、索引、网页访问、权限、来源可信度、内容正确性或任务验收。
+flowchart TB
+    Task[Task Scope<br/>问题、范围、新鲜度要求]
+    Policy[Retrieval Policy<br/>来源优先级、过滤与停止条件]
+    Candidates[Candidate Set<br/>可能相关的片段与元数据]
+    Gates[Evidence Gates<br/>范围、来源种类、新鲜度<br/>稳定位置与回链]
+    Card[Evidence Card<br/>主张范围、来源位置、日期与限制]
+    Context[Context Package<br/>受限证据与未知范围]
+    Output[Cited Output<br/>带回链的受限主张]
+
+    Task --> Policy
+    Policy --> Candidates
+    Candidates --> Gates
+    Gates -->|通过当前任务的证据门| Card
+    Card --> Context
+    Context --> Output
+
+    Gates -->|范围不匹配、过期、不可定位或缺回链| NeedsEvidence[needs_evidence<br/>补证或澄清范围]
+    NeedsEvidence -. 修订查询或策略后重新评估 .-> Policy
+    Gates -->|来源种类不允许或候选不存在| Blocked[blocked<br/>不把候选写成证据]
+    Blocked -->|无法补证时说明未知范围| Stop[stop / escalate<br/>保留检索记录与未覆盖范围]
+
+    Output -. 每项主张回链到 .-> Card
+    Card -. 不替代任务验收 .-> Evaluation[Evaluation<br/>第 17 章的独立判定]

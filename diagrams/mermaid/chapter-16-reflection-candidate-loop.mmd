@@ -1,0 +1,10 @@
+flowchart LR
+    Trace[受限执行轨迹] --> Eval[失败评估证据]
+    Eval -->|失败已确认| Record[Reflection Record<br/>症状、假设、反事实]
+    Eval -->|证据不足或过期| Refresh[刷新观察或补证]
+    Record --> Check[可证伪检查]
+    Check -->|失败| Reject[拒绝候选，保留轨迹]
+    Check -->|通过| Review[范围与冲突审查]
+    Review -->|接受| Candidate[版本化经验候选]
+    Review -->|拒绝或范围扩大| Escalate[缩小范围或人工升级]
+    Candidate -. 不自动执行 .-> Workflow[后续工作流]

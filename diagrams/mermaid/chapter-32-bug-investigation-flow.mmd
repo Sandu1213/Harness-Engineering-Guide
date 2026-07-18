@@ -1,0 +1,32 @@
+%% 第 32 章：从症状到受限结论或升级。
+%% 本图只表达本书的调查模型，不执行 Bug 修复、测试、Git、浏览器、API、环境或发布。
+flowchart TB
+    Symptom[症状记录<br/>预期、实际、限制]
+    Investigation[Bug Investigation<br/>范围、症状、证据缺口]
+    Reproduction[Reproduction Contract<br/>失败判定、输入、前置状态]
+    Minimize[最小化<br/>保持同一失败判定]
+    Hypothesis[Hypothesis Record<br/>机制、预测、反事实]
+    Check[Falsifiable Check<br/>区分竞争解释]
+    Candidate[Fix Candidate<br/>最小变化、范围、预期影响]
+    Gate[Regression Gate<br/>原失败分支＋预期行为分支]
+    Ready[`ready`<br/>仅可进入隔离实现]
+    Approval[`requires_approval`<br/>真实环境请求]
+    Observation[获批后才可能有的<br/>实际观察；本图不执行]
+    Stop[保守停止<br/>补规格或补证]
+    Escalation[Escalation Record<br/>不稳定、风险或人工决定]
+
+    Symptom --> Investigation
+    Investigation --> Reproduction
+    Reproduction -->|失败判定完整| Minimize
+    Reproduction -->|输入或判定缺失| Stop
+    Minimize -->|仍是同一症状| Hypothesis
+    Minimize -->|不稳定或需共享环境| Escalation
+    Hypothesis --> Check
+    Check -->|获得有限支持| Candidate
+    Check -->|推翻或未决| Escalation
+    Candidate --> Gate
+    Candidate -->|真实环境请求| Approval
+    Approval -->|获批后才可能观察| Observation
+    Observation --> Gate
+    Gate -->|双分支完整且结论受限| Ready
+    Gate -->|原失败或预期观察缺失| Stop

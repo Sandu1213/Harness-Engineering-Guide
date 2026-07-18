@@ -1,0 +1,19 @@
+flowchart TB
+    Trace[原始轨迹<br/>消息、观察、工具结果] --> Classify[分类与范围确认]
+    Classify --> Anchors[稳定事实锚点<br/>目标、范围、契约、未知项]
+    Classify --> Pointers[证据指针<br/>位置、用途、版本线索]
+    Classify --> Decisions[保留/丢弃决策<br/>类别、理由、可恢复性]
+    Anchors --> Record[Compaction Record]
+    Pointers --> Record
+    Decisions --> Record
+    Record --> Summary[压缩摘要<br/>不是证据替代物]
+    Summary --> Rehydrate[再水化前检查]
+    Record --> Rehydrate
+    Rehydrate --> Identity{运行、范围、契约匹配？}
+    Identity -- 否 --> Stop[停止或升级<br/>不错误接续]
+    Identity -- 是 --> Loss{锚点与指针完整？}
+    Loss -- 否 --> Evidence[补证或重新装配<br/>不以摘要补齐]
+    Loss -- 是 --> Refresh[重新读取必须刷新项]
+    Refresh --> Packet[下一轮 Context Packet]
+    Evidence --> Rehydrate
+    Stop --> Handoff[交给第 18 章或人工]

@@ -1,0 +1,40 @@
+%% 第 36 章：同一虚构只读请求的模式卡比较与保守出口。
+%% 本图只表达本书的控制流选择模型，不启动 Agent、模型、工作者、队列、事件总线、调度器、工作流、并发、工具、Git、浏览器、CI、网络或外部系统。
+flowchart TB
+    Request[虚构只读请求<br/>注入诊断摘要与写入需人工批准]
+    Card[Pattern Card<br/>触发、控制权、工作契约、状态／证据<br/>停止／升级、副作用边界、演进触发]
+    ContractCheck[契约检查<br/>只比较教学字段]
+    Stop[conservative_stop<br/>补齐契约、证据或责任]
+    Approval[requires_approval<br/>外部效果候选仅请求人工决定]
+    Owner[Result Owner<br/>整合受限输出、选择下一步并记录停止]
+    Ready[ready<br/>仅可进入隔离教学实现]
+    Escalation[Escalation Record<br/>冲突、风险或不可解释状态]
+
+    Single[受控单循环模式卡<br/>当前观察决定下一步]
+    Plan[计划-执行模式卡<br/>计划版本与重新规划门<br/>计划 ≠ 执行许可]
+    Supervisor[监督者-工作者模式卡<br/>委派契约、合并与冲突责任]
+    Pipeline[流水线模式卡<br/>阶段产物、质量门与回退]
+    Event[事件驱动模式卡<br/>发生事实、消费者范围与失败责任<br/>事件 ≠ 已处理]
+
+    Request --> Card
+    Card --> ContractCheck
+    ContractCheck -->|控制权、证据或停止缺失| Stop
+    ContractCheck -->|请求外部效果| Approval
+    ContractCheck -->|当前观察足够| Single
+    ContractCheck -->|子任务、依赖和质量门可审查| Plan
+    ContractCheck -->|问题独立且输出可合并| Supervisor
+    ContractCheck -->|顺序稳定且前段可验收| Pipeline
+    ContractCheck -->|发生事实、消费者与失败责任可定义| Event
+
+    Single -->|候选只读下一步| Owner
+    Plan -->|计划版本与重新规划结论| Owner
+    Supervisor -->|受限输出与冲突记录| Owner
+    Pipeline -->|阶段状态与质量门记录| Owner
+    Event -->|事件卡；不表示投递| Owner
+    Event -->|消费者、顺序或去重不明| Escalation
+    Supervisor -->|共享状态或合并责任不明| Escalation
+    Pipeline -->|阶段失败或回退不明| Escalation
+    Owner -->|结论仍限教学范围| Ready
+    Owner -->|证据矛盾、风险或预算耗尽| Escalation
+    Escalation --> Stop
+    Approval --> Stop

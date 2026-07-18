@@ -4,7 +4,7 @@
 
 ## 项目状态
 
-项目骨架、治理规则、详细大纲和最小校验链路已经建立；书籍正文尚未开始。下一阶段是审查大纲，并为第一章建立 research brief。进度的唯一事实来源是 [.ai/progress.md](.ai/progress.md)。
+全书 47 章和 12 个附录的内容生产已经完成。每章均完成 Research、Outline、原创 Draft、Technical Review、Example Implementation、Diagram Review、Fact Check、Language Editing 与 Final Review，并具有可追溯的来源、示例、图示和审查记录；附录 A–L 已按三组完成独立终审。47 组 Node.js 示例和 47 组 Mermaid/SVG/PNG 图示均已接入工程。最终全仓 Validation 以退出码 0 完成：627 个 Markdown 文件、0 个 lint 错误，全部链接、47 组章节测试与 47/47 章节状态检查通过；另行汇总运行 421 项示例断言，全部通过。所有示例都是受限教学判断，不调用或证明真实 Tool、环境、知识库、审批、权限、CI、发布或外部系统。
 
 ## 为什么这是一个 Harness
 
@@ -34,7 +34,7 @@ Codex 从 [AGENTS.md](AGENTS.md) 开始；Claude Code 从 [CLAUDE.md](CLAUDE.md)
 ## 创建章节
 
 ```bash
-./scripts/create-chapter.sh 01 从-prompt-到-harness docs/part-01-foundations
+./scripts/create-chapter.sh 02 agent-harness-runtime docs/part-01-foundations
 ```
 
 该命令复制章节模板、生成带编号的 Markdown 文件。创建后需更新 `docs/SUMMARY.md`、`.ai/outline.md` 和 `.ai/progress.md`。
@@ -43,19 +43,16 @@ Codex 从 [AGENTS.md](AGENTS.md) 开始；Claude Code 从 [CLAUDE.md](CLAUDE.md)
 
 ```bash
 npm install
-npm run lint:md
-npm run check:links
 npm run validate
+node --test examples/agent/*.test.mjs
 ```
 
-`validate` 会执行所有已配置的 Markdown 校验。macOS 用户也可以直接运行 `./scripts/validate.sh`。
+`validate` 会执行 Markdown lint、全仓链接检查、47 组 Node.js 章节示例测试和章节任务状态检查。macOS 用户也可以直接运行 `./scripts/validate.sh`；`node --test examples/agent/*.test.mjs` 用于一次汇总全部示例断言。单组示例可使用 `npm run test:<名称>` 或 `npm run example:<名称>`，具体名称见 [`package.json`](package.json) 与[示例索引](examples/agent/README.md)。
 
 ## 当前 Roadmap
 
-1. 审查 47 章大纲、去除重复并确认依赖。
-2. 为第一章完成 research brief 与章节 outline。
-3. 建立首个可运行的最小 Harness 示例。
-4. 以章节工作流逐步生产、审查、发布书稿。
+1. 47 章、12 个附录、共享状态、最终全仓 Validation 与完成审计已经完成。
+2. 网站、PDF、EPUB 和正式出版仍是独立、需授权的发布任务，不由内容校验自动触发。
 
 详见 [.context/ROADMAP.md](.context/ROADMAP.md)。
 

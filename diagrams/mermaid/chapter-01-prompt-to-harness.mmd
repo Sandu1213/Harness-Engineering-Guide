@@ -1,0 +1,19 @@
+%% 第 1 章计划图：Prompt 是任务表达层；Harness 组织行动、状态、验证和证据。
+flowchart LR
+    Task[任务目标与约束] --> Prompt[Prompt：表达任务]
+    Prompt --> Proposal[模型提议]
+
+    subgraph Harness[Harness：组织可验证闭环]
+        State[状态与事件]
+        Tool[受控工具]
+        Validator[验证器]
+        Evidence[证据记录]
+    end
+
+    Proposal --> Tool
+    State --> Tool
+    Tool --> Observation[工具结果与目标状态]
+    Observation --> Validator
+    Validator -->|接受| Evidence
+    Validator -->|拒绝| Evidence
+    Evidence --> State

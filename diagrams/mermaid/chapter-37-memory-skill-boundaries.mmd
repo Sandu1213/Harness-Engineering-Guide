@@ -1,0 +1,42 @@
+%% 第 37 章：记忆候选与 Skill 契约的责任断点。
+%% 本图只表达本书会话／任务／项目／事件记录、只读／提议写入 Skill、审查与生命周期的教学模型；不读取、写入、检索、同步、授权、执行或调用真实 Session、数据库、文件、网络、模型、账户、凭证、审批或外部系统。
+flowchart TB
+    Session[Session History<br/>本轮连续性<br/>不等于项目记忆]
+    Task[Task Anchor<br/>对象、范围、问题、预算与停止条件]
+    Event[Event Record<br/>观察、拒绝或决定关联<br/>不等于根因或长期规则]
+    Adapter[Project Adapter<br/>只提供符合契约的注入材料<br/>不代表路径、存储或权限]
+    Card[Candidate Evidence Card<br/>来源、范围、新鲜度、限制、审查状态]
+    ReadOnly[Read-Only Skill<br/>只比较候选与契约<br/>禁止写入与外部动作]
+    Evidence[evidence_candidate<br/>候选不等于事实已核验]
+    WriteContract[提议写入契约<br/>目标类别、变更理由、审查状态<br/>不写入项目记忆]
+    Proposed[proposed_write<br/>可审查候选<br/>不等于 memory_updated]
+    Review[独立／人工审查<br/>检查来源、范围、限制与替代]
+    Project[Project Memory<br/>本书记录状态：stable／superseded<br/>不代表自动加载、授权或外部效果]
+    Lifecycle[Lifecycle Record<br/>版本、替代、弃用与维护终点]
+
+    NeedEvidence[needs_evidence<br/>来源不可定位]
+    Refresh[needs_refresh<br/>新鲜度不足]
+    ScopeReview[needs_review<br/>范围冲突或跨项目]
+    Deprecated[not_applicable／needs_human_review<br/>弃用或替代不明]
+    Stop[conservative_stop<br/>补证、刷新、复核或定位替代<br/>不得自动写入、同步或执行]
+
+    Session -->|限定本轮上下文| Task
+    Task -->|声明当前问题| Card
+    Event -->|关联候选；不等于可复用结论| Card
+    Adapter -->|受限注入；不表示实际读取| ReadOnly
+    Card -->|候选材料| ReadOnly
+    ReadOnly -->|来源、范围与新鲜度可审查| Evidence
+    ReadOnly -->|来源缺失| NeedEvidence
+    ReadOnly -->|资料过期| Refresh
+    ReadOnly -->|范围冲突或跨项目| ScopeReview
+    Evidence -->|符合提议写入契约| Proposed
+    WriteContract -->|限定目标与审查状态| Proposed
+    Proposed -->|仅提交审查，不直接更新| Review
+    Review -->|教学记录可进入声明范围| Project
+    Project -->|版本、替代与弃用信息| Lifecycle
+    Lifecycle -->|弃用、替代或维护不明| Deprecated
+    Lifecycle -->|下次任务重新成为候选| Card
+    NeedEvidence --> Stop
+    Refresh --> Stop
+    ScopeReview --> Stop
+    Deprecated --> Stop

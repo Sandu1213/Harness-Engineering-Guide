@@ -1,0 +1,35 @@
+%% 第 26 章：多 Agent 任务所有权与集中集成的教学模型。
+%% 本图不表示真实 Agent、进程、文件锁、worktree、消息、Git、权限或外部效果。
+flowchart TB
+    subgraph Lead[协调者：任务与集成责任]
+        Snapshot[共享输入快照<br/>规则、状态、依赖与验收]
+        Contract[Task Contract<br/>owner、专属路径、验收与停止条件]
+        Gate[Integration Gate<br/>依赖、交付包、冲突与全局校验]
+        Shared[共享工件<br/>引用、词表、目录与状态]
+    end
+
+    subgraph AgentA[Agent A：专属局部工作]
+        APaths[专属路径 A]
+        AVerify[局部验证]
+        APackage[Delivery Package A]
+    end
+
+    subgraph AgentB[Agent B：专属局部工作]
+        BPaths[专属路径 B]
+        BVerify[局部验证]
+        BPackage[Delivery Package B]
+    end
+
+    Snapshot --> Contract
+    Contract --> APaths --> AVerify --> APackage
+    Contract --> BPaths --> BVerify --> BPackage
+    APackage --> Gate
+    BPackage --> Gate
+    Gate --> Shared
+
+    APaths -. 不直接写入 .-> Shared
+    BPaths -. 不直接写入 .-> Shared
+    AVerify -->|路径重叠、输入漂移或共享写入| Stop[停止局部推进<br/>记录冲突并交给集成者]
+    BVerify -->|路径重叠、输入漂移或共享写入| Stop
+    Stop --> Gate
+    Gate -->|缺证、冲突或范围变化| Contract

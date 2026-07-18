@@ -1,0 +1,21 @@
+%% 第 23 章：Skill、Hook、Workflow 与自动化检查的责任边界。
+%% 本图只表达本书教学模型，不表示真实 Hook、调度、CI、权限或外部效果。
+flowchart TB
+    Request[任务请求或仓库事件] --> Classify{先问：需要什么责任？}
+    Classify -->|可重复的窄任务方法| Skill[Skill<br/>任务说明、资源与验收]
+    Classify -->|一个生命周期点的机械约束| Hook[Hook<br/>事件、匹配范围、处理器]
+    Classify -->|多步状态、恢复或交接| Workflow[Workflow<br/>状态、检查点、停止条件]
+    Classify -->|外部事件触发可见检查| Automation[Automation<br/>触发器、命令、报告、失败策略]
+
+    Skill --> Select[记录选择与前置条件]
+    Hook --> EventGate[记录事件与失败路径]
+    Workflow --> StateGate[记录状态、证据与恢复线索]
+    Automation --> Report[报告通过、失败与未覆盖范围]
+
+    Select --> EffectGate{独立的权限与批准边界}
+    EventGate --> EffectGate
+    StateGate --> EffectGate
+    Report --> Review[人类或后续流程读取结果]
+    EffectGate -->|拒绝、缺证或范围变化| Stop[停止、补证或升级]
+    EffectGate -->|仅说明可请求的动作| Observation[独立观察与验收]
+    Observation --> Review

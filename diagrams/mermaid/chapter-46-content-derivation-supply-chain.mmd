@@ -1,0 +1,61 @@
+%% 第 46 章：规范书稿到派生内容预览、人工批准与反馈候选的责任链。
+%% 本图只表达本书工程模型，不读取仓库，不生成、预览、批准、上传或发布内容。
+flowchart TB
+    Source[规范事实源<br/>Source Snapshot]
+    Atom[Content Atom + Source Anchor<br/>身份、版本、证据、适用范围与许可]
+    SourceBoundary[source_reused<br/>≠ medium_ready]
+    Design[Learning Path Contract<br/>+ Derivative Content Manifest]
+    Rewrite[媒介重写<br/>目标、结构、练习、删减与刷新触发]
+    Adapter[Publication Adapter Profile<br/>无凭证、仅预览、含回滚入口]
+    Gate{Consistency Gate<br/>源、许可、目标、媒介与适配是否一致？}
+    SourceGap[needs_source_evidence / refresh_required<br/>补锚点、证据或版本]
+    LicenseGap[blocked_by_license_review<br/>交给许可责任者]
+    MediumGap[learning_alignment_failed / needs_medium_rewrite<br/>修正目标、重写或适配]
+    ConsistencyBoundary[consistency passed<br/>≠ content published]
+    Preview[ready_for_preview_review<br/>只形成预览审查候选]
+    PreviewBoundary[preview_validated<br/>≠ publication_approved]
+    Approval[publication_approval_required<br/>请求具名人工决定]
+    Human{人工是否批准<br/>当前候选与范围？}
+    Handoff[Approved Publication Handoff<br/>仅记录交接，图外执行]
+    Feedback[Channel Feedback Input<br/>外部注入的观察]
+    FeedbackBoundary[feedback_received<br/>≠ source_changed]
+    Candidate[Feedback Candidate Record<br/>位置、证据、影响、目标与责任者]
+    FeedbackClass{反馈候选应进入哪一层？}
+    Local[媒介局部修订候选<br/>回到导语、时间盒、短答案或格式]
+    Contract[派生契约修订候选<br/>回到受众、目标、删减或刷新条件]
+    SourceReview[规范事实候选审查<br/>Research -> Fact Check -> Technical Review]
+    FeedbackGap[needs_feedback_evidence<br/>补位置、复现、来源或范围]
+    Stop[blocked<br/>当前轮不生成、批准、上传或发布]
+
+    Source --> Atom
+    Atom --> SourceBoundary
+    SourceBoundary --> Design
+    Design --> Rewrite
+    Rewrite --> Adapter
+    Adapter --> Gate
+    Gate -->|锚点、证据或版本缺口| SourceGap
+    Gate -->|许可未决| LicenseGap
+    Gate -->|目标、重写或适配失败| MediumGap
+    Gate -->|当前证据通过| ConsistencyBoundary
+    SourceGap --> Stop
+    LicenseGap --> Stop
+    MediumGap --> Stop
+    ConsistencyBoundary --> Preview
+    Preview --> PreviewBoundary
+    PreviewBoundary --> Approval
+    Approval --> Human
+    Human -->|否或待定| Stop
+    Human -->|是，仅批准交接| Handoff
+    Handoff --> Stop
+
+    Feedback --> FeedbackBoundary
+    FeedbackBoundary --> Candidate
+    Candidate --> FeedbackClass
+    FeedbackClass -->|媒介局部| Local
+    FeedbackClass -->|派生契约| Contract
+    FeedbackClass -->|规范事实候选| SourceReview
+    FeedbackClass -->|证据不足| FeedbackGap
+    Local --> Stop
+    Contract --> Stop
+    SourceReview --> Stop
+    FeedbackGap --> Stop

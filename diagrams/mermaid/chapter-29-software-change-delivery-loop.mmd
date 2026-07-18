@@ -1,0 +1,23 @@
+flowchart TB
+    Brief[Change Brief<br/>目标、验收、非目标、范围]
+    Explore[Exploration Record<br/>已看路径、行为、未知项]
+    Plan[Implementation Plan<br/>步骤与计划路径]
+    Verify[Verification Plan<br/>命令、预期证据、效果边界]
+    Docs[Documentation Decision<br/>更新或不更新的理由]
+    Review[Review Package<br/>改动摘要、证据状态、审查状态]
+
+    Brief --> Gate[Software Change Delivery Gate]
+    Explore --> Gate
+    Plan --> Gate
+    Verify --> Gate
+    Docs --> Gate
+    Review --> Gate
+
+    Gate -->|范围、验证、文档与审查材料齐全| Ready[ready_for_review<br/>请求独立审查]
+    Gate -->|任一工件缺失或越界| Stop[stopped<br/>原因码与补充/升级]
+
+    Ready --> Execute[真实实现与验证<br/>不由本章示例执行]
+    Execute --> Evidence[运行证据与实际 diff]
+    Evidence --> Human[独立审查与合并决定]
+    Evidence -. 不能倒推 .-> Ready
+    Stop --> Revise[澄清、探索或收缩范围]

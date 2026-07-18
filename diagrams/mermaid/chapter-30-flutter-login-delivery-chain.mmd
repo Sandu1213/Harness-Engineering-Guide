@@ -1,0 +1,22 @@
+flowchart TB
+    Contract[Delivery Contract<br/>目标、范围、数据策略]
+    State[State Model<br/>成功、校验错误、网络失败]
+    Matrix[Test Matrix<br/>unit、widget、integration]
+    Gate[Flutter Login Delivery Gate<br/>检查合同、状态、矩阵和报告字段]
+    Ready[`ready`<br/>仅允许隔离实现]
+    Planned[报告保持 `planned`]
+    Approval[`requires_approval`<br/>设备、模拟器或网络请求]
+    Observation[Observation Record<br/>实际命令、目标、重新观察]
+    Report[Report Contract<br/>场景、层级、结论、限制]
+    Stop[保守停止或补充计划]
+
+    Contract --> State
+    State --> Matrix
+    Matrix --> Gate
+    Gate -->|计划完整| Ready
+    Matrix -->|只声明计划| Planned
+    Gate -->|环境执行请求| Approval
+    Approval -->|批准后才可实际运行| Observation
+    Observation --> Report
+    Gate -->|合同、状态、矩阵或报告字段缺失| Stop
+    Report -->|缺少 Observation 不得声称 executed| Stop

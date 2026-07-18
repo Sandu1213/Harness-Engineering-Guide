@@ -1,0 +1,23 @@
+%% 第 24 章：MCP 与外部工具集成的教学模型。
+%% 本图不表示真实 Client、Server、传输、OAuth、权限、调用或外部效果。
+flowchart TD
+    Candidate[候选 Server 与工具描述]
+    Profile[Server Profile<br/>来源、边界、目标与刷新]
+    Admission[Tool Admission Record<br/>任务、scope、效果、批准与观察]
+    Envelope[Invocation Envelope<br/>关联与输入摘要]
+    Result[Result Observation<br/>结果、错误与未知项]
+    Verify[独立效果验证<br/>回读、观察或人工确认]
+    Review[补证或人工审核]
+    Block[阻塞并记录原因]
+
+    Candidate --> Profile
+    Profile -->|来源与边界完整| Admission
+    Profile -->|未知或漂移| Review
+    Admission -->|准入满足| Envelope
+    Admission -->|缺批准或 annotations 不可信| Review
+    Admission -->|范围或 scope 不匹配| Block
+    Envelope --> Result
+    Result -->|观察足够| Verify
+    Result -->|效果未知或结果不足| Review
+    Verify -->|验证通过| Done[可记录为已验证结果]
+    Verify -->|验证失败或证据不足| Block

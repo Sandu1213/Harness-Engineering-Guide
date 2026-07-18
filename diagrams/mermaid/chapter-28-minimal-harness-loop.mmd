@@ -1,0 +1,18 @@
+flowchart TB
+    Task[Task Contract<br/>目标、状态、允许能力]
+    Stop[Stop Conditions<br/>缺失时保守停止]
+    Request[Tool Request<br/>能力、效果、目标]
+    Plan[Evidence Plan<br/>关联、观察、验收]
+
+    Task --> Gate[Minimal Harness Admission]
+    Stop --> Gate
+    Request --> Gate
+    Plan --> Gate
+
+    Gate -->|合同、状态、范围、效果与关联均满足| Ready[ready<br/>进入内存求值器]
+    Gate -->|任一条件不足| Stopped[stopped<br/>原因码与 stop]
+
+    Ready --> Evaluator[In-memory Evaluator<br/>本章不实现]
+    Evaluator --> Evidence[Result Evidence<br/>后续章节处理]
+    Evidence -. 不能倒推 .-> Ready
+    Stopped --> Revise[补充合同或升级]

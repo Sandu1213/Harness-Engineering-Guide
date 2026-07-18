@@ -1,0 +1,23 @@
+flowchart TB
+    Rules[共享规则<br/>阅读顺序、完成定义]
+    State[共享状态<br/>任务、阶段、阻塞]
+    Validation[共享验证契约<br/>命令、成功条件、范围]
+    Handoff[共享交接包<br/>输入、风险、下一任务]
+
+    Rules --> Contract[Shared Repository Contract]
+    State --> Contract
+    Validation --> Contract
+    Handoff --> Contract
+
+    Contract --> Codex[Codex 适配声明<br/>入口、来源日、边界]
+    Contract --> Claude[Claude Code 适配声明<br/>入口、来源日、边界]
+
+    Codex --> Claim[领取一个可验收任务]
+    Claude --> Claim
+    Claim --> Verify[运行约定验证]
+    Verify --> Evidence[记录实际结果与未覆盖范围]
+    Evidence --> State
+    Evidence --> Handoff
+
+    Permission[环境、Tool、批准边界<br/>独立于指令上下文] -. 准入条件 .-> Claim
+    Verify -. 证据不等于授权 .-> Permission
