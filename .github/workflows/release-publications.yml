@@ -71,6 +71,7 @@ jobs:
           gh release upload "${{ github.event.release.tag_name }}" \
             release-assets/harness-engineering-guide.pdf \
             release-assets/harness-engineering-guide.epub \
+            --repo "${{ github.repository }}" \
             --clobber
         env:
           GH_TOKEN: ${{ github.token }}
