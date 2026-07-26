@@ -6,7 +6,7 @@
 2. 12 个附录均已形成可直接使用的读者资产，并按 A–D、E–H、I–L 三组完成独立终审。
 3. 共享状态、最终全仓 Validation 与 47 章 + 12 附录完成审计已经收口；当前没有未完成的内容生产任务。
 4. VitePress 网站、Typst PDF 与 EPUB 3 已从共享出版清单本地生成，并通过网站产物爬链、浏览器 E2E、PDF 渲染目检和 EPUBCheck。
-5. GitHub Pages 已部署至 `https://sandu1213.github.io/Harness-Engineering-Guide/`；GitHub Release PDF/EPUB 归档工作流、Pages 子路径和 Linux 中文字体构建已纳入配置。
+5. GitHub Pages 已部署至 `https://sandu1213.github.io/Harness-Engineering-Guide/`；`v0.1.0` 中文首版已附带 PDF/EPUB 发布，Release 归档工作流、Pages 子路径和 Linux 中文字体构建已纳入配置。
 
 ## 中期
 
@@ -16,7 +16,7 @@
 
 ## 长期
 
-- 在许可证、版本号和发布权限确定后完成首个版本化 GitHub Release。
+- 先以首页、出版说明、目录和一章正文试点 English 版本，验证术语、引用、路由、语言切换与双语同步策略，再决定是否翻译全书并生成英文 PDF/EPUB。
 - 提取可独立复用的 Book Factory 模板、提示词和质量门禁。
 - 以版本化评估、来源刷新和读者反馈维护首版后的内容演进。
 

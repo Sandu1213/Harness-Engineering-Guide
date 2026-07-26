@@ -83,12 +83,12 @@ npm run publication:epub # 生成 output/epub/harness-engineering-guide.epub
 1. `.github/workflows/deploy-pages.yml` 在 `main` 更新后构建 VitePress、检查 308 个页面的站内链接并部署 [GitHub Pages 在线站点](https://sandu1213.github.io/Harness-Engineering-Guide/)。
 2. `.github/workflows/release-publications.yml` 在 GitHub Release 发布后检出该 Release 的标签提交，使用固定版本的 Pandoc 与 Typst 生成 PDF/EPUB，校验文件后上传到对应 Release。
 
-工作流不会自行创建标签或 Release，也不会决定书稿许可证。Pages 已通过 `Deploy reading site` 工作流上线；离线文件将在版本发布后从[仓库 Releases 页面](https://github.com/Sandu1213/Harness-Engineering-Guide/releases)下载。
+工作流不会自行创建标签或 Release。Pages 已通过 `Deploy reading site` 工作流上线；中文首版 [`v0.1.0`](https://github.com/Sandu1213/Harness-Engineering-Guide/releases/tag/v0.1.0) 已按 MIT 许可证发布，可下载 PDF 与 EPUB。
 
 ## 当前 Roadmap
 
 1. 47 章、12 个附录、共享状态、最终全仓 Validation、完成审计、网站/PDF/EPUB 本地构建，以及 Pages/Release 自动化均已完成。
-2. 版本标签、首个 GitHub Release 与书稿发布许可证仍需在实际发行时明确执行。
+2. 后续候选是先以首页、出版说明、目录和一章正文试点 English 版本与中英文切换，再决定是否扩展到全书和英文 PDF/EPUB。
 
 详见 [.context/ROADMAP.md](.context/ROADMAP.md)。
 

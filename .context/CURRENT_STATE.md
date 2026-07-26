@@ -5,11 +5,11 @@
 ### Release 归档与在线站点自动化（2026-07-26）
 
 - 新增 `.github/workflows/deploy-pages.yml`：`main` 更新后使用 GitHub Pages 官方 Actions 构建 VitePress、检查产物链接并部署站点。站点通过 `SITE_BASE` 适配 Pages 子路径；以 `/Harness-Engineering-Guide/` 生产构建时生成 308 个 HTML 页面，`npm run site:check` 得到 0 条缺失本地链接。
-- 新增 `.github/workflows/release-publications.yml`：GitHub Release 发布后检出其标签提交，以 Pandoc 3.10、Typst 0.15.1 和 Noto CJK 字体生成 PDF/EPUB；构建 Job 只有只读权限，独立上传 Job 才拥有 Release 写权限。两个工作流经 actionlint 1.7.12 检查，退出码 0；Pages 工作流已在 GitHub Actions runner 上成功执行，Release 工作流等待首个 Release 验证。
+- 新增 `.github/workflows/release-publications.yml`：GitHub Release 发布后检出其标签提交，以 Pandoc 3.10、Typst 0.15.1 和 Noto CJK 字体生成 PDF/EPUB；构建 Job 只有只读权限，独立上传 Job 才拥有 Release 写权限。首个 Release 的构建、PDF/EPUB 校验和 Actions artifact 均成功；上传 Job 首次因工作目录没有 `.git` 且命令未显式指定仓库而失败，已在 `8c7da37` 中加入 `--repo` 修复，首版附件使用同一命令和原始 CI artifact 补传成功。
 - GitHub Pages 已启用并部署至 `https://sandu1213.github.io/Harness-Engineering-Guide/`。线上站点已用 `playwright-cli` 完成“首页快照 → 点击开始阅读第一章 → 第一章快照”，最终 URL 保留 `/Harness-Engineering-Guide/` 前缀，浏览器控制台 0 错误、0 警告；`impeccable detect --json docs/.vitepress/dist/index.html` 返回 `[]`。
 - `npm run publication:all` 重新生成 A4 497 页 PDF 与 EPUB；PDF 由 Poppler 确认字体嵌入，并目检第 1、3、120、300、497 页无裁切、重叠或乱码；EPUB 的 `unzip -t` 与 EPUBCheck 5.3.0 均通过，后者为 0 fatal、0 error、0 warning、0 info。
 - `npm run validate` 最终以退出码 0 完成：629 个 Markdown 文件 lint 0 错误，全仓本地链接、4 项出版管线测试、47 组章节示例测试与 47/47 章节状态检查通过。首轮曾因首页 3 个 Pages 相对链接被 Markdown 文件检查器误判而失败，加入 3 条精确忽略规则后定向检查与全仓复验均通过。
-- 发布配置已提交为 `1bd3fe3` 并推送至 `main`；仓库已由 private 改为 public，Pages 工作流 `30192795987` 的构建与部署 Job 均成功。尚未创建版本标签或 GitHub Release，也未决定书稿许可证。
+- GitHub About 已设置在线阅读地址。`v0.1.0` 中文首版已发布，标签锁定 `8894896`，许可证为仓库既有 MIT；Release 中的 PDF 为 A4、505 页且字体全部嵌入，抽检第 1、253、505 页无裁切、重叠或乱码，EPUB 解压检查通过。两个附件的 GitHub digest 与下载自 CI 的原始 artifact SHA-256 一致。
 
 ### 本地出版工件收口（2026-07-18）
 

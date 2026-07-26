@@ -201,6 +201,7 @@
 
 ## 最近校验
 
+- 2026-07-26：`v0.1.0` 中文首版从 `8894896` 发布，GitHub About 已设置在线阅读地址。Release CI 成功生成并校验 PDF/EPUB；上传 Job 首次因无法从无 `.git` 的工作目录推断仓库而失败，`8c7da37` 已显式加入 `--repo`。同一 CI artifact 随后上传成功：PDF 为 A4、505 页、字体全部嵌入，抽检第 1、253、505 页通过；EPUB 解压检查通过，两个 GitHub asset digest 与本地 SHA-256 一致。
 - 2026-07-18：出版管线收口后，`npm run validate` 以退出码 0 完成：Markdown lint 检查 628 个源文件、0 个错误，全仓本地链接、47 组 Node.js 章节示例测试与章节状态检查均通过（47 章完成）；`npm run check:reference-links` 独立检查共享参考表的 132 个外部来源并通过，`node --test examples/agent/*.test.mjs` 汇总 421 项通过、0 项失败、0 项跳过。生成目录已从源文件校验范围排除，网站产物另由 `npm run site:check` 验证。
 - 2026-07-18：网站、PDF 与 EPUB 本地出版工件完成。`npm run site:build` 生成 308 个 HTML 页面，`npm run site:check` 检查后 0 条缺失本地链接；Playwright 完成首页快照、点击“开始阅读第一章”、章节快照及 PNG 图示点击，图示页自然宽度为 784 px，Impeccable 最终返回 `[]`。`npm run publication:all` 生成 A4 497 页 PDF 与 EPUB 3，PDF 字体嵌入且经 Poppler 抽页目检，EPUBCheck 5.3.0 得到 0 fatal、0 error、0 warning、0 info。正式部署、版本标签、发行页上传与书稿许可证决定未执行。
 - 2026-07-26：GitHub Pages 与 Release PDF/EPUB 归档自动化完成。发布配置已提交并推送，仓库已改为 public；Pages 工作流构建与部署成功，`https://sandu1213.github.io/Harness-Engineering-Guide/` 返回 HTTP 200。Playwright 在线点击首页主按钮后进入带 `/Harness-Engineering-Guide/` 前缀的第一章，控制台 0 错误、0 警告，Impeccable 返回 `[]`。PDF 重新生成 497 页并完成字体检查与 5 页目检，EPUB 解压和 EPUBCheck 均通过。最终 `npm run validate` 以退出码 0 检查 629 个 Markdown 文件、4 项出版测试、47 组章节示例和 47/47 状态。当前尚未创建标签或 Release，也未决定书稿许可证。

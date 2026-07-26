@@ -2,7 +2,7 @@
 
 ## 当前里程碑（2026-07-26）
 
-47 章与 12 个附录的 Markdown 内容、章节示例、图示、专属审查、共享状态同步、最终全仓 Validation、完成审计，以及 VitePress 网站、PDF、EPUB 的构建与验证均已齐备。GitHub Pages 已部署至 `https://sandu1213.github.io/Harness-Engineering-Guide/`，Release PDF/EPUB 归档工作流已经实现；版本标签、首个 Release 和书稿许可证仍是外部发布任务。
+47 章与 12 个附录的中文首版、GitHub Pages 在线站点，以及带 PDF/EPUB 附件的 `v0.1.0` Release 均已完成。后续候选里程碑是以小范围 English 内容验证中英文路由、语言切换、搜索、链接和同步治理，再决定是否扩展到全书与英文离线出版物。
 
 ## Phase 0：书籍工厂初始化
 

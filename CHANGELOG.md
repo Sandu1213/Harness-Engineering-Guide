@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- 修复 Release 附件上传 Job 在未检出仓库时无法推断目标仓库的问题；上传命令现在显式使用当前 GitHub 仓库。
+
+## [0.1.0] - 2026-07-26
+
 ### Added
 
 - 新增 GitHub Pages 与 Release 自动化：`main` 更新后构建并部署带仓库子路径的 VitePress 站点；GitHub Release 发布后从对应标签提交生成、校验并上传 PDF 与 EPUB。Linux 发行构建配置为使用固定 Pandoc/Typst 版本和 Noto CJK 字体，不改变本地默认字体。
