@@ -6,7 +6,7 @@
 
 全书 47 章和 12 个附录的内容生产已经完成。每章均完成 Research、Outline、原创 Draft、Technical Review、Example Implementation、Diagram Review、Fact Check、Language Editing 与 Final Review，并具有可追溯的来源、示例、图示和审查记录；附录 A–L 已按三组完成独立终审。47 组 Node.js 示例和 47 组 Mermaid/SVG/PNG 图示均已接入工程。出版管线收口后的全仓 Validation 以退出码 0 完成：628 个源 Markdown 文件、0 个 lint 错误，全部本地链接、47 组章节测试与 47/47 章节状态检查通过；共享参考表的 132 个外部来源和另行汇总的 421 项示例断言也全部通过。
 
-网站、PDF 与 EPUB 的本地构建管线也已实现：VitePress 站点生成 308 个 HTML 页面并通过产物级本地链接检查；PDF 为 A4、497 页且中文字体嵌入，已由 Poppler 渲染抽检；EPUB 3.3 通过 EPUBCheck，0 个错误或警告。三种形态共享同一份 47 章 + 12 附录内容清单。当前没有执行正式域名部署、版本标签、发行页上传或对外发布。
+网站、PDF 与 EPUB 的构建管线已经实现：VitePress 站点生成 308 个 HTML 页面并通过产物级本地链接检查；PDF 为 A4、497 页且中文字体嵌入，已由 Poppler 渲染抽检；EPUB 3.3 通过 EPUBCheck，0 个错误或警告。三种形态共享同一份 47 章 + 12 附录内容清单。GitHub Pages 会在 `main` 更新后部署在线阅读站，每次 GitHub Release 发布后会自动附加该标签对应的 PDF 与 EPUB。
 
 ## 为什么这是一个 Harness
 
@@ -76,10 +76,19 @@ npm run publication:epub # 生成 output/epub/harness-engineering-guide.epub
 
 `npm run publication:all` 同时生成 PDF 与 EPUB；`npm run release:build` 构建网站及两种离线版本。生成目录均已加入 `.gitignore`。
 
+## 在线站点与 Release 归档
+
+仓库包含两个独立的发布工作流：
+
+1. `.github/workflows/deploy-pages.yml` 在 `main` 更新后构建 VitePress、检查 308 个页面的站内链接并部署 GitHub Pages。首次使用时，需要在仓库 Settings → Pages 中将 Source 设为 **GitHub Actions**。
+2. `.github/workflows/release-publications.yml` 在 GitHub Release 发布后检出该 Release 的标签提交，使用固定版本的 Pandoc 与 Typst 生成 PDF/EPUB，校验文件后上传到对应 Release。
+
+工作流不会自行创建标签或 Release，也不会决定书稿许可证。Pages 的实际线上 URL 以 `Deploy reading site` 工作流的 deployment environment 为准；当前远端仓库是私有仓库，首次启用时还需确认账户计划支持私有仓库 Pages。离线文件从[仓库 Releases 页面](https://github.com/Sandu1213/Harness-Engineering-Guide/releases)下载，访问权限与仓库一致。
+
 ## 当前 Roadmap
 
-1. 47 章、12 个附录、共享状态、最终全仓 Validation、完成审计以及网站/PDF/EPUB 本地构建均已完成。
-2. 正式部署、版本化发行、书稿发布许可证与发行页上传仍是独立、需授权的发布任务。
+1. 47 章、12 个附录、共享状态、最终全仓 Validation、完成审计、网站/PDF/EPUB 本地构建，以及 Pages/Release 自动化均已完成。
+2. 首次 Pages 启用、版本标签、首个 GitHub Release 与书稿发布许可证仍需在实际发布时明确执行。
 
 详见 [.context/ROADMAP.md](.context/ROADMAP.md)。
 
@@ -89,4 +98,4 @@ npm run publication:epub # 生成 output/epub/harness-engineering-guide.epub
 
 ## 后续发布目标
 
-Markdown 是唯一源文件；VitePress 网站、Typst PDF 与 EPUB 3 已从同一份 47 章 + 12 附录清单生成并在本地验证。后续发布目标是确定书稿许可证、版本号和部署渠道，并在获得授权后完成正式发行。
+Markdown 是唯一源文件；VitePress 网站、Typst PDF 与 EPUB 3 已从同一份 47 章 + 12 附录清单生成并验证。后续发布目标是确定书稿许可证与版本号，启用 GitHub Pages，并发布首个带 PDF/EPUB 归档的 GitHub Release。

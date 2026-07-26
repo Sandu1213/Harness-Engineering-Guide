@@ -101,7 +101,7 @@
     "test:derived-content-package-assessment": "node --test examples/agent/derived-content-package-assessment.test.mjs",
     "example:agent-engineering-readiness-assessment": "node examples/agent/agent-engineering-readiness-assessment.mjs",
     "test:agent-engineering-readiness-assessment": "node --test examples/agent/agent-engineering-readiness-assessment.test.mjs",
-    "publication:test": "node --test publication/book-manifest.test.mjs",
+    "publication:test": "node --test publication/*.test.mjs",
     "site:dev": "node scripts/prepare-site-assets.mjs && vitepress dev docs --host 127.0.0.1",
     "site:build": "node scripts/prepare-site-assets.mjs && vitepress build docs",
     "site:check": "node scripts/check-site-links.mjs",
@@ -109,7 +109,7 @@
     "publication:pdf": "node scripts/build-publication.mjs pdf",
     "publication:epub": "node scripts/build-publication.mjs epub",
     "publication:all": "node scripts/build-publication.mjs all",
-    "release:build": "npm run site:build && npm run publication:all",
+    "release:build": "npm run site:build && npm run site:check && npm run publication:all",
     "validate": "./scripts/validate.sh"
   },
   "devDependencies": {

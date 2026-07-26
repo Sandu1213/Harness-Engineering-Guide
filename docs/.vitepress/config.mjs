@@ -2,9 +2,11 @@ import { defineConfig } from "vitepress";
 import { fileURLToPath } from "node:url";
 
 import { createBookManifest } from "../../publication/book-manifest.mjs";
+import { normalizeSiteBase } from "../../publication/site-base.mjs";
 
 const rootDir = new URL("../../", import.meta.url);
 const manifest = await createBookManifest(rootDir);
+const siteBase = normalizeSiteBase(process.env.SITE_BASE);
 
 const relativeRepositoryPath = /^(?:\.\/)?(?:\.\.\/)+/;
 const publicAssetPath = /^(diagrams|examples|templates)\//;
@@ -33,6 +35,7 @@ const sidebar = [
 ];
 
 export default defineConfig({
+  base: siteBase,
   lang: "zh-CN",
   title: "Harness Engineering",
   description: "构建可持续进化的 AI Agent",
@@ -48,7 +51,10 @@ export default defineConfig({
     /^(?:\.\/)?(?:\.\.\/)+(AGENTS|AI_BOOTSTRAP|BOOK_RULES|STYLE_GUIDE|CLAUDE)(?:\.md)?/,
   ],
   head: [
-    ["link", { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" }],
+    [
+      "link",
+      { rel: "icon", href: `${siteBase}favicon.svg`, type: "image/svg+xml" },
+    ],
     ["meta", { name: "theme-color", content: "#173f35" }],
     ["meta", { name: "color-scheme", content: "light dark" }],
   ],
@@ -106,7 +112,7 @@ export default defineConfig({
     darkModeSwitchLabel: "外观",
     footer: {
       message: "从同一套 Markdown 书稿生成。",
-      copyright: "本地构建版本，正式发布与许可证以仓库说明为准。",
+      copyright: "版本与许可证以仓库 Release 和出版说明为准。",
     },
   },
 });

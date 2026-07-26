@@ -3,5 +3,5 @@
 #show heading.where(level: 1): set text(size: 20pt, weight: "bold", fill: rgb("#173f35"))
 #show heading.where(level: 2): set text(size: 15pt, weight: "bold")
 #show heading.where(level: 3): set text(size: 12pt, weight: "bold")
-#show raw: set text(font: "Menlo", size: 8pt)
+#show raw: set text(size: 8pt)
 #show table: set text(size: 8.5pt)

@@ -16,6 +16,9 @@ npm run lint:md
 echo "Running Markdown link check..."
 npm run check:links
 
+echo "Running publication pipeline tests..."
+npm run publication:test
+
 echo "Running minimal Harness tests..."
 npm run test:harness
 

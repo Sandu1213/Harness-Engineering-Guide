@@ -107,3 +107,15 @@
 **后果：** 后续章节写作必须遵守 P0 依赖契约；如正文出现相邻章节重复，再以事实和读者任务为证据重开本决策，而不是继续扩写重复内容。
 
 **状态：** 已采纳。
+
+## D010：使用 GitHub Pages 与 GitHub Release 承载出版物
+
+**背景：** 网站、PDF 与 EPUB 已能从同一内容清单本地生成，但缺少与仓库版本绑定的在线入口和离线归档。仓库远端位于 GitHub，现有站点是静态 VitePress，不需要新增运行时服务。
+
+**决策：** `main` 更新后由 GitHub Actions 构建并部署 GitHub Pages；GitHub Release 发布后，从该 Release 的标签提交重新生成 PDF 与 EPUB，并上传到对应 Release。工作流不创建标签、Release 或书稿许可证。
+
+**原因：** Pages 直接承载现有静态构建，Release 资产天然按标签隔离；两者都能复用 `publication/book-manifest.mjs`，避免网站与离线版本产生第二套内容顺序。
+
+**后果：** VitePress 必须支持 Pages 子路径；Linux 发行构建需要显式安装中文字体并覆盖本地字体元数据。首次 Pages 启用、版本号、Release 创建和书稿许可证仍需维护者执行。
+
+**状态：** 已采纳，2026-07-26。

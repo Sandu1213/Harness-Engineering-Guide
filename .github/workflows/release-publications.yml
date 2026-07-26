@@ -1,0 +1,76 @@
+name: Attach books to release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  books:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.release.tag_name }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - uses: pandoc/actions/setup@v1.1.1
+        with:
+          version: "3.10"
+      - uses: typst-community/setup-typst@v5.1.0
+        with:
+          typst-version: "0.15.1"
+      - name: Install publication fonts and validators
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends --yes \
+            fonts-noto-cjk \
+            fonts-noto-cjk-extra \
+            poppler-utils \
+            unzip
+      - run: npm ci
+      - name: Build PDF and EPUB
+        run: npm run publication:all
+        env:
+          PUBLICATION_MAIN_FONT: Noto Serif CJK SC
+          PUBLICATION_CODE_FONT: Noto Sans Mono CJK SC
+      - name: Verify publication files
+        run: |
+          test -s output/pdf/harness-engineering-guide.pdf
+          test -s output/epub/harness-engineering-guide.epub
+          pdfinfo output/pdf/harness-engineering-guide.pdf
+          unzip -t output/epub/harness-engineering-guide.epub
+      - name: Stage release assets
+        run: |
+          mkdir release-assets
+          cp output/pdf/harness-engineering-guide.pdf release-assets/
+          cp output/epub/harness-engineering-guide.epub release-assets/
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-books
+          path: release-assets/
+          if-no-files-found: error
+          retention-days: 1
+
+  upload:
+    needs: books
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          name: release-books
+          path: release-assets
+      - name: Upload release assets
+        run: |
+          gh release upload "${{ github.event.release.tag_name }}" \
+            release-assets/harness-engineering-guide.pdf \
+            release-assets/harness-engineering-guide.epub \
+            --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}

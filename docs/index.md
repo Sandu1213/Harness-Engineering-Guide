@@ -13,9 +13,9 @@ outline: false
       <p class="lede">构建可持续进化的 AI Agent：把上下文、工具、权限、验证、恢复和学习组织成一个可运行、可审查的工程系统。</p>
     </div>
     <nav class="book-actions" aria-label="阅读入口">
-      <a class="primary" href="/part-01-foundations/01-prompt-to-harness">开始阅读第一章</a>
-      <a href="/SUMMARY">查看全书目录</a>
-      <a href="/publication-notes">了解出版版本</a>
+      <a class="primary" href="./part-01-foundations/01-prompt-to-harness">开始阅读第一章</a>
+      <a href="./SUMMARY">查看全书目录</a>
+      <a href="./publication-notes">了解出版版本</a>
     </nav>
   </section>
 

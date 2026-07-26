@@ -39,6 +39,12 @@ const manifest = await createBookManifest(rootDir);
 const combinedMarkdown = await renderPublicationMarkdown(rootDir, manifest);
 const temporaryDir = path.join(rootDir, "tmp", "pdfs");
 const combinedPath = path.join(temporaryDir, "harness-engineering-guide.md");
+const fontMetadata = [
+  ["mainfont", process.env.PUBLICATION_MAIN_FONT],
+  ["codefont", process.env.PUBLICATION_CODE_FONT],
+]
+  .filter(([, value]) => value?.trim())
+  .map(([key, value]) => `--metadata=${key}:${value.trim()}`);
 
 await mkdir(temporaryDir, { recursive: true });
 await writeFile(combinedPath, combinedMarkdown);
@@ -47,6 +53,7 @@ const commonArguments = [
   combinedPath,
   "--from=markdown+yaml_metadata_block+task_lists+strikeout+autolink_bare_uris+raw_html",
   `--metadata-file=${path.join(rootDir, "publication", "metadata.yaml")}`,
+  ...fontMetadata,
   `--resource-path=${rootDir}`,
   `--lua-filter=${path.join(rootDir, "publication", "publication-links.lua")}`,
   "--toc",

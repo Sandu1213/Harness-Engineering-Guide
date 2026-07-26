@@ -12,6 +12,15 @@
     },
     {
       "pattern": "^/publication-notes/?$"
+    },
+    {
+      "pattern": "^\\./part-01-foundations/01-prompt-to-harness/?$"
+    },
+    {
+      "pattern": "^\\./SUMMARY/?$"
+    },
+    {
+      "pattern": "^\\./publication-notes/?$"
     }
   ]
 }

@@ -2,6 +2,15 @@
 
 ## 当前状态
 
+### Release 归档与在线站点自动化（2026-07-26）
+
+- 新增 `.github/workflows/deploy-pages.yml`：`main` 更新后使用 GitHub Pages 官方 Actions 构建 VitePress、检查产物链接并部署站点。站点通过 `SITE_BASE` 适配 Pages 子路径；以 `/Harness-Engineering-Guide/` 生产构建时生成 308 个 HTML 页面，`npm run site:check` 得到 0 条缺失本地链接。
+- 新增 `.github/workflows/release-publications.yml`：GitHub Release 发布后检出其标签提交，以 Pandoc 3.10、Typst 0.15.1 和 Noto CJK 字体生成 PDF/EPUB；构建 Job 只有只读权限，独立上传 Job 才拥有 Release 写权限。两个工作流经 actionlint 1.7.12 检查，退出码 0；尚未在 GitHub Actions runner 上实际执行。
+- Pages 子路径站点已用 `playwright-cli` 完成“首页快照 → 点击开始阅读第一章 → 第一章快照”，最终 URL 保留 `/Harness-Engineering-Guide/` 前缀，浏览器控制台 0 错误；`impeccable detect --json docs/.vitepress/dist/index.html` 返回 `[]`。Chrome DevTools MCP 因已有浏览器实例无法启动，按工具优先级切换到 Playwright。
+- `npm run publication:all` 重新生成 A4 497 页 PDF 与 EPUB；PDF 由 Poppler 确认字体嵌入，并目检第 1、3、120、300、497 页无裁切、重叠或乱码；EPUB 的 `unzip -t` 与 EPUBCheck 5.3.0 均通过，后者为 0 fatal、0 error、0 warning、0 info。
+- `npm run validate` 最终以退出码 0 完成：629 个 Markdown 文件 lint 0 错误，全仓本地链接、4 项出版管线测试、47 组章节示例测试与 47/47 章节状态检查通过。首轮曾因首页 3 个 Pages 相对链接被 Markdown 文件检查器误判而失败，加入 3 条精确忽略规则后定向检查与全仓复验均通过。
+- 当前远端仓库为 private，尚未执行 Git 提交、推送、Pages 启用、版本标签或 GitHub Release，也未决定书稿许可证。Pages 的可用性与可见性需在首次启用时按当前账户计划确认；本地和工作流配置通过不等于外部发布完成。
+
 ### 本地出版工件收口（2026-07-18）
 
 - VitePress 网站已实现，共生成 308 个 HTML 页面；主导航严格展示 47 章与 12 附录，研究、提纲、事实核验等支持页保留可访问但不进入主导航。`npm run site:build` 退出码 0，`npm run site:check` 检查全部生成页后得到 0 条缺失本地链接。

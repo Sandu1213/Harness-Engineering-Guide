@@ -1,8 +1,14 @@
 import { access, readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
+import {
+  normalizeSiteBase,
+  removeSiteBase,
+} from "../publication/site-base.mjs";
+
 const rootDir = path.resolve(import.meta.dirname, "..");
 const distDir = path.join(rootDir, "docs", ".vitepress", "dist");
+const siteBase = normalizeSiteBase(process.env.SITE_BASE);
 const htmlFiles = (await readdir(distDir, { recursive: true }))
   .filter((file) => file.endsWith(".html"))
   .sort();
@@ -28,11 +34,12 @@ for (const htmlFile of htmlFiles) {
 
     const withoutFragment = reference.split(/[?#]/, 1)[0];
     if (!withoutFragment) continue;
-    const urlPath = decodeURIComponent(
+    const deployedUrlPath = decodeURIComponent(
       withoutFragment.startsWith("/")
         ? withoutFragment
         : path.posix.resolve(pageDirectory, withoutFragment),
     );
+    const urlPath = removeSiteBase(deployedUrlPath, siteBase);
     const relativeTarget = urlPath.replace(/^\//, "");
     const candidates = [
       relativeTarget,
