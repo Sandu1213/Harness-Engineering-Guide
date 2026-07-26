@@ -10,7 +10,8 @@
 - 逐章 Markdown 校验均为 0 error；11 章共 27 组 REF 在 front matter、正文、`.references.md`、`.fact-check.md` 与 `.ai/references.md` 分配区一致。`npm run validate` 退出码 0，检查 630 个 Markdown 文件、全仓链接、章节示例测试与 47/47 章节状态；`npm run site:build && npm run site:check` 退出码 0，308 个 HTML 页面无缺失本地链接。
 - 浏览器已对第 10、12 章新增小节和首轮复查后受影响的第 11、23、24、26、36 章完成“快照 → 点击小节永久链接 → 重新快照”，标题可见、URL 锚点正确；最终 Playwright 控制台 0 错误、0 警告。Impeccable 仅报告既有全章文本的破折号 warning 与编号 advisory，本轮新增 diff 未引入对应模式。
 - Claude Code 首轮复查给出 4 项 must_fix、6 项 should_fix 与 3 项 suggestion，均已修正；二次只读复查结论为 `PASS`，确认计划符合性、来源边界、作者主语、引用一致性和禁止事项均已收口。
-- 当前改动已整理为 `v0.2.0` 发布候选：项目版本、Changelog、README 与出版说明已同步。`npm run release:build` 已生成 308 页站点、A4 510 页 PDF 与 EPUB；PDF 字体全部嵌入，已目检第 1、93、94、118、510 页，未见裁切、重叠或乱码；EPUB 的 `unzip -t` 与 EPUBCheck 5.3.0 均通过，后者为 0 fatal、0 error、0 warning、0 info。最终 `npm run validate` 退出码 0，检查 630 个 Markdown 文件、全仓链接、章节示例测试与 47/47 章节状态。发布候选仍待推送 `main`、创建 `v0.2.0` 标签与 Release，并核对 Pages 和 Release 附件。
+- 项目版本、Changelog、README 与出版说明已同步为 `0.2.0`。`npm run release:build` 已生成 308 页站点、A4 510 页本地 PDF 与 EPUB；PDF 字体全部嵌入，目检第 1、93、94、118、510 页未见裁切、重叠或乱码；EPUB 的 `unzip -t` 与 EPUBCheck 5.3.0 均通过，后者为 0 fatal、0 error、0 warning、0 info。最终 `npm run validate` 退出码 0，检查 630 个 Markdown 文件、全仓链接、章节示例测试与 47/47 章节状态。
+- `v0.2.0` 已从提交 `8b43aa6` 发布为 Latest Release。`Deploy reading site`、`Attach books to release`、Markdown lint 与 link check 工作流均成功；线上站点已完成“首页快照 → 点击开始阅读第一章 → 第一章快照”，并在第 10 章完成“定位会话即树 → 点击永久链接 → 锚点 URL 与重新快照”验证。远端 PDF 为 A4 521 页，Noto CJK 字体全部嵌入，目检第 1、95、96、120、521 页通过；远端 EPUB 解压与 EPUBCheck 5.3.0 均通过。GitHub 附件 digest 分别为 PDF `sha256:2cec20c1896476ef3b6b34f1b0ef8db85b7e5adc379076e9ec96452b9fd075f2`、EPUB `sha256:689c80c0319336d1f82f49a9e959756386da46b67ca0b70f14d65ba18f1af7a2`，与独立下载文件一致。
 
 ### Release 归档与在线站点自动化（2026-07-26）
 
