@@ -2,7 +2,13 @@
 title: "第 19 章事实核验清单：Context Compaction 与长任务"
 chapter: "19-context-compaction-and-long-running-tasks"
 status: "fact-check-complete"
-updated_at: "2026-07-16"
+sources:
+  - "REF-068"
+  - "REF-023"
+  - "REF-069"
+  - "REF-148"
+  - "REF-152"
+updated_at: "2026-07-26"
 ---
 
 # 第 19 章事实核验清单：Context Compaction 与长任务
@@ -13,11 +19,13 @@ updated_at: "2026-07-16"
 
 ## 来源逐项核验
 
-| 临时键 | 2026-07-16 实际读取的材料 | 正文允许陈述 | 正文禁止陈述 | 结论 |
+| 临时键 | 写作日实际读取的材料 | 正文允许陈述 | 正文禁止陈述 | 结论 |
 | --- | --- | --- | --- | --- |
 | REF-068 | [Anthropic 官方工程文章](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) | 文章将上下文管理描述为推理时 token 的策展/维护，并在长任务部分讨论 compaction、结构化笔记和多 Agent 架构。 | “所有 Agent 都会自动压缩”“Claude Code 的具体实现适用于本书示例”“压缩一定提高性能”。 | 允许以“文章指出/讨论”归因；示例另行标为教学模型。 |
 | REF-023 | [MemGPT v2 原始论文摘要](https://arxiv.org/abs/2310.08560v2) | 论文提出借鉴分层记忆的数据移动来应对有限上下文的研究思路。 | 论文原型已经证明本书记录格式、权限、安全或实际恢复可靠。 | 只用作分层/外置思路的研究背景。 |
 | REF-069 | [Lost in the Middle v3 原始论文摘要](https://arxiv.org/abs/2307.03172v3) | 在该论文的多文档问答与键值检索实验中，相关信息位置变化会影响所测模型表现。 | 所有长上下文模型都会以相同方式退化，或某固定位置/长度必然失败。 | 只用来要求将位置与再水化纳入任务级验证。 |
+| REF-148 | [pi 仓库 README](https://github.com/earendil-works/pi) | pi 的项目背景、MIT 协议与官方文档入口。 | 动态统计、长期不变的仓库结构，或仅凭 README 推断 compaction 机制。 | 2026-07-26 已重读，仅作白盒参考的项目背景。 |
+| REF-152 | [pi 官方 compaction 文档](https://github.com/earendil-works/pi/tree/main/packages/coding-agent/docs) | 访问日文档中的触发条件、turn 边界、split-turn 双摘要、结构化摘要和扩展接管钩子。 | 其他 Harness 的行为、摘要无损、固定阈值、恢复正确或外部效果一致。 | 2026-07-26 已重读，正文逐项保留项目与版本限定。 |
 
 ## 本书工程模型核验
 
@@ -42,6 +50,7 @@ updated_at: "2026-07-16"
 - TODO(verify)：若正文将提及任一产品的自动压缩、会话或记忆 API，需要在发布当天查看该产品官方文档并记录版本与范围。
 - TODO(verify)：若示例升级为真实文件、数据库或工具读取，需要单独核验权限、隐私、保留期、并发、错误恢复和端到端结果。
 - [x] 主线程已登记 REF-068、REF-023 与 REF-069，并同步正文元数据和本章引用。
+- [x] REF-148 与 REF-152 已于 2026-07-26 复核；pi 的公开实现、本书 Compaction Record 与实际恢复证明保持分层。
 
 ## 结论
 

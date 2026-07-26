@@ -23,7 +23,10 @@ references:
   - "REF-077"
   - "REF-078"
   - "REF-079"
-updated_at: "2026-07-16"
+  - "REF-148"
+  - "REF-151"
+  - "REF-152"
+updated_at: "2026-07-26"
 ---
 
 # 23. Skills、Hooks 与自动化工作流
@@ -117,7 +120,46 @@ Codex 的 Hooks 文档把 Hook 定义为向 agentic loop 注入脚本的扩展�
 
 Codex 的官方 Plugin 资料说明，Plugin 必须以 `.codex-plugin/plugin.json` 为入口，并可打包 Skills、Hooks、MCP 配置、应用映射与资产。[REF-079](https://learn.chatgpt.com/docs/build-plugins) Plugin 的价值是安装与分发，而不是创造一种替代 Skill、Hook、Workflow 或权限的运行语义。
 
-所以，团队要共享“书稿审查 Skill + 连接文档服务的配置 + 一条可选 Hook”时，可以考虑 Plugin；但仍应分别审查 Skill 的任务边界、Hook 的事件与信任、MCP/Tool 的权限，以及工作流的状态。安装包存在不证明其中所有组件在当前环境已启用或被允许。
+所以，团队要共享“书稿审查 Skill + 连接文档服务的配置 + 一条可选 Hook”时，可以考虑 Plugin；但仍应分别审查 Skill 的任务边界、Hook 的事件与信任、MCP/Tool 的权限，以及工作流的状态。安装包存在不证明其中所有组件在当前环境已启用或被允许。Plugin 回答的是“人给人”的分发问题；下一小节用一个开源案例展示相反的方向——扩展机制的目标用户也可以是代理本身。
+
+### 自我扩展的 harness：pi 的扩展机制案例
+
+开源极简编码代理 pi（Mario Zechner 开发，MIT 协议，仓库现位于 earendil-works/pi）提供了与本章 Plugin 分发视角互补的一个样本：它的扩展机制首先服务的不是“把人写好的能力分发给人”，而是让代理在会话中为自己补能力。[REF-148](https://github.com/earendil-works/pi)
+
+按其官方扩展文档（本小节的动态产品细节——命令名、加载方式、API 形态——均以访问日 2026-07-26 的文档为准）：pi 扩展是进程内（in-process）TypeScript 模块，经 jiti 加载、无需编译；放入全局或项目级扩展目录即被自动发现；`/reload` 命令可热重载（hot reload）。[REF-152](https://github.com/earendil-works/pi/tree/main/packages/coding-agent/docs) 其扩展 API 覆盖四个面：
+
+| 扩展面 | 文档描述的能力（依访问日文档） |
+| --- | --- |
+| 生命周期事件 | 订阅事件，包括拦截 `tool_call` 并阻止执行，以及经 `session_before_compact` 接管上下文压缩。 |
+| 注册项 | 自定义工具（带 schema、AbortSignal 与流式更新）、命令、快捷键、标志与 provider。 |
+| UI 面 | 确认、选择、输入、状态栏与自绘组件。 |
+| 状态 | 经 `appendEntry` 写入会话文件持久化，随会话恢复。 |
+
+以上均见其扩展文档。[REF-152](https://github.com/earendil-works/pi/tree/main/packages/coding-agent/docs) 对照本章前文的分类：这一个机制同时覆盖了 Hook 的生命周期拦截面、Tool 的注册面和 Workflow 的状态持久化面——它是“进程内全能扩展”而非四类工件之一，这正是把它单独作为案例讨论的原因。
+
+值得注意的是该文档第一行的定位原话：“pi can create extensions. Ask it to build one for your use case.”[REF-152](https://github.com/earendil-works/pi/tree/main/packages/coding-agent/docs) 换言之，官方文档把“让代理自己写扩展”当作首选路径而非彩蛋。Armin Ronacher 对此的定性是（归属其个人观察）：用户不是去下载现成扩展，而是让代理给自己写一个。[REF-151](https://lucumr.pocoo.org/2026/1/31/pi/)
+
+分发并未因此消失：pi 的 packages 机制仍可打包 extensions、skills、提示词模板与主题，以 npm: 或 git: 来源分发。[REF-148](https://github.com/earendil-works/pi)[REF-152](https://github.com/earendil-works/pi/tree/main/packages/coding-agent/docs) 也就是说，“代理给自己写”与“打包分发给别人”在同一系统里并存，各管一段。
+
+本书由此延伸出一个工程判断：扩展机制的目标用户可以是代理本身。“代理写扩展 → 热重载 → 测试”这个闭环要成立，依赖三个使能条件（这是本书对上述来源事实的归纳，不是 pi 文档的原文分类）：
+
+1. **进程内加载。** 写完即可运行，不经过编译、打包或发布链路；缺少它，代理写出的代码要等一条人类主导的交付流水线。
+2. **热重载。** 不重启会话即可生效；缺少它，每次迭代都要付出重启和上下文重建的成本，闭环退化为离线开发。
+3. **扩展状态随会话持久化。** 新能力的状态不因恢复会话而丢失；缺少它，扩展只是无记忆的一次性脚本。
+
+三者缺一，闭环就退化为“代理写了一段没人加载的代码”。这也是本书把它与 Plugin 并列讨论的原因：两条路径回答的是不同问题。
+
+| 维度 | 分发视角（Plugin / Skill 包） | 自我扩展视角（pi 扩展） |
+| --- | --- | --- |
+| 目标用户 | 团队里的其他人与其他环境。 | 当前会话中的代理及其用户。 |
+| 能力来源 | 人编写、打包、发布。 | 代理按需为自己生成。 |
+| 生效路径 | 安装、信任、逐项启用。 | 写入扩展目录、热重载。 |
+| 典型失败 | 装了不等于启用或被授权。 | 生成了不等于正确或已被审查。 |
+| 治理挂点 | 安装前审查内容，安装后核对启用状态。 | 加载前审查代码，会话内保留证据。 |
+
+这张对照表是本书的工程扩展，不是任一产品的官方分类。两条路径最终都要回到本章反复强调的边界：能拦截工具调用、接管压缩的进程内扩展，运行在 harness 自身的信任层级上（这是本书的推论），因此“由谁审查这段代码、何时批准它加载”仍是第 12、14 章的权限与批准问题，不因作者是代理而豁免。
+
+> 边界：本小节转述的是 pi 在访问日（2026-07-26）公开文档中的设计与两位作者的自述或观察。本书没有运行 pi，不宣称其扩展机制在任何环境下已启用、安全或效果如文档所述，也不将其外推为其他 Agent 产品的通用行为。
 
 ## 架构图：选择正确的自动化边界
 
@@ -269,7 +311,7 @@ node examples/agent/automation-workflow-admission-assessment.mjs
 
 ## 章节总结
 
-Skill 保存“这类重复任务该怎样做”；Hook 在一个生命周期点施加受控约束；Workflow 保存“多步任务目前到了哪里、如何恢复”；Automation 把外部事件转成可见检查。它们组合时会更有用，但把其中任一个扩张成全部责任，反而会隐藏状态、权限或失败处理。
+Skill 保存“这类重复任务该怎样做”；Hook 在一个生命周期点施加受控约束；Workflow 保存“多步任务目前到了哪里、如何恢复”；Automation 把外部事件转成可见检查。它们组合时会更有用，但把其中任一个扩张成全部责任，反而会隐藏状态、权限或失败处理。当扩展的作者从人变成代理本身（见“自我扩展的 harness”小节），这些边界不是可以放松，而是更需要显式化。
 
 可靠自动化的最低标准不是“无人点击”，而是每一次触发、输入范围、失败、退出和人工接手都可解释。下一章将进一步讨论 MCP 与外部工具集成，届时“哪个任务该做什么”还必须与“当前环境允许哪个工具做什么”分开设计。
 
@@ -285,12 +327,16 @@ Skill 保存“这类重复任务该怎样做”；Hook 在一个生命周期点
 - [REF-077：Build skills](https://learn.chatgpt.com/docs/build-skills.md)，用于核对 Codex Skill 的目录、加载和触发语境；访问于 2026-07-16。
 - [REF-078：Hooks](https://learn.chatgpt.com/docs/hooks.md)，用于核对 Codex Hook 的事件、信任与配置语境；访问于 2026-07-16。
 - [REF-079：Build plugins](https://learn.chatgpt.com/docs/build-plugins)，用于核对 Codex Plugin 的打包边界；访问于 2026-07-16。
+- [REF-148：pi 仓库 README](https://github.com/earendil-works/pi)，用于核对项目定位与 packages 分发范围；访问于 2026-07-26。
+- [REF-151：Pi: The Minimal Agent Within OpenClaw](https://lucumr.pocoo.org/2026/1/31/pi/)，用于核对代理自写扩展的作者观察；访问于 2026-07-26。
+- [REF-152：pi 官方扩展文档](https://github.com/earendil-works/pi/tree/main/packages/coding-agent/docs)，用于核对扩展加载、事件、注册与状态持久化机制；访问于 2026-07-26。
 
 ## 参考资料
 
 - [REF-077](https://learn.chatgpt.com/docs/build-skills.md)：支持 Codex Skill 的 `SKILL.md`、显式或隐式激活、渐进加载与目录发现等产品特有陈述。
 - [REF-078](https://learn.chatgpt.com/docs/hooks.md)：支持 Codex Hook 的事件、匹配并发、信任审查、项目配置层与限制等产品特有陈述。
 - [REF-079](https://learn.chatgpt.com/docs/build-plugins)：支持 Codex Plugin 的 manifest、可打包组件与分发边界等产品特有陈述。
+- [REF-148、REF-151 与 REF-152 的用途、访问日和外推禁区](23-skills-hooks-and-automation-workflows.references.md)：支持 pi 自我扩展案例的限定陈述。
 
 ## 章节完成检查表
 

@@ -7,7 +7,8 @@ sources:
   - "REF-037"
   - "REF-038"
   - "REF-039"
-updated_at: "2026-07-16"
+  - "REF-149"
+updated_at: "2026-07-26"
 ---
 
 # 第 11 章事实核验：Tool Use 与工具协议
@@ -25,6 +26,7 @@ updated_at: "2026-07-16"
 | REF-037 | OpenAI Function Calling 文档将工具调用描述为应用和模型之间的多步流程：应用携带可调用工具请求模型，接收调用，在应用侧执行代码，再把工具输出回传给模型。文档的示例以 `call_id` 将函数调用和函数结果关联。 | 仅在该产品文档语境内说明“模型调用、应用侧执行、结果回传、调用关联”的流程。 | 其他模型、SDK 或协议的字段、并发/严格模式行为、权限或批准策略、外部效果和任务验收保证。 | 2026-07-16 已重读 [OpenAI Function calling](https://developers.openai.com/api/docs/guides/function-calling)。 |
 | REF-038 | Anthropic Define tools 文档以客户端工具定义中的 `name`、`description`、`input_schema` 和可选 `input_examples` 为例；输入样例必须满足 `input_schema`。文档还在该产品请求中定义 `tool_choice` 的 `auto`、`any`、`tool` 与 `none` 选项。 | 仅用于说明一个产品中工具描述、输入 Schema、样例和选择控制的限定形式。 | 通用命名规则、跨产品 Schema 行为、模型一定调用工具、系统已验证业务语义、获得权限或批准。 | 2026-07-16 已重读 [Anthropic Define tools](https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools)。 |
 | REF-039 | JSON Schema Specification 将规范拆分为 Core 与 Validation；Core 给出基础，Validation 定义验证关键字，Core/Validation dialect 用于纯验证。 | 说明 JSON Schema 处理结构和验证词汇的规范定位。 | 目标存在、业务语义、数据新鲜度、调用者授权、外部效果、幂等性或任务完成的自动证明。 | 2026-07-16 已重读 [JSON Schema Specification](https://json-schema.org/specification)。 |
+| REF-149 | Mario Zechner 在其博文中自述：pi（其开发的开源极简编码代理）的统一 LLM 层把工具结果拆成给模型的 `output`（文本）与给 UI 的 `details`（结构化数据），另支持附件（如原生格式图片）；他未在其他统一 LLM API 中见过这一抽象；工具调用参数在流式输出中做渐进 JSON 解析，UI 可实时渲染。 | 作为一个开源实现的作者自述案例，引出本书“模型观察投影/人类证据投影”的工程延伸；正文保持主语归属（作者自述），并注明实现细节以访问日（2026-07-26）资料为准。 | Terminal-Bench 具体名次或分数、GitHub stars 等动态数字、该抽象的行业普及度、其他统一 LLM API 的内部实现、pi 字段名与行为在访问日之后保持不变；两个投影模型不得归因给 pi。 | 2026-07-26 已通读原文（[博文](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/)）。 |
 
 ## 本书模型与非事实边界
 
@@ -45,6 +47,7 @@ updated_at: "2026-07-16"
 | OpenAI 的多步工具调用、应用侧执行、结果回传与 `call_id` 关联。 | REF-037。 | 与当前产品指南一致。 | 保留 OpenAI 产品主语；本书的调用关联、准入门和结果信封不得归因给该文档。 |
 | Anthropic 客户端工具的名称、描述、输入 Schema、样例和选择控制。 | REF-038。 | 与当前产品文档一致。 | 保留 Anthropic 产品主语；不把 `input_schema` 或 `tool_choice` 写成授权、业务验证或跨产品行为。 |
 | JSON Schema 的 Core、Validation 与纯验证 dialect。 | REF-039。 | 与当前规范页一致。 | 只说明结构和验证定位；不可由 Schema 通过推出目标、权限、效果或任务验收。 |
+| pi 工具结果的模型文本/UI 结构化细节分离与渐进参数解析。 | REF-149。 | 与作者自述一致。 | 保留作者主语与访问日；本书的两种投影是工程延伸。 |
 | 准入六道门、关联对象、效果不确定性、图示分支和教学案例。 | 本书模型。 | 正文、图示与示例已明确标注。 | 不归因给四项来源，也不表示真实 Tool、环境、批准、观察、验收或恢复已实现。 |
 
 ## 示例与图示复核

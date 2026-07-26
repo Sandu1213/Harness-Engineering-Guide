@@ -28,7 +28,9 @@ references:
   - "REF-068"
   - "REF-061"
   - "REF-124"
-updated_at: "2026-07-17"
+  - "REF-148"
+  - "REF-149"
+updated_at: "2026-07-26"
 ---
 
 # 40. 成本、延迟与 Token 管理
@@ -186,7 +188,7 @@ OpenAI API Pricing 页面在写作日可以访问 [REF-124]，但本章不摘录
 
 只有用量单位、费率单位、币种、有效时间与适用范围一致时，才有条件形成派生金额。缺少任一条件，应返回 `rate_missing`、`rate_stale` 或 `unit_mismatch`，并保留原始用量。
 
-访问日期也不能替代生效日期。今天看到的页面值不能被倒推为过去的费率；同样，一个过去保存的快照不能自动用于今天的新模型或新合同。Rate Snapshot 的价值不在于保存一个数字，而在于让后来的维护者知道“这个金额为何可以这样算，以及何时不再可以”。
+访问日期也不能替代生效日期。今天看到的页面值不能被倒推为过去的费率；同样，一个过去保存的快照不能自动用于今天的新模型或新合同。Rate Snapshot 的价值不在于保存一个数字，而在于让后来的维护者知道“这个金额为何可以这样算，以及何时不再可以”。这种把费率当作版本化输入而非代码常量的思想也有公开的真实实现可参照：见本章“模型与执行路径路由”末尾的开源案例（pi 的模型注册表）。
 
 ## Optimization Candidate：一次只改变一个主要变量
 
@@ -246,6 +248,47 @@ Prompt 前缀缓存、检索结果复用和摘要复用应分别处理。前缀�
 Anthropic 的 Agent 评估文章将 task、trial、grader、transcript 与 outcome 分开 [REF-061]，有助于提醒我们：比较模型或路径时，不能只看最终文本，也不能只看轨迹中的 Token 和步骤。候选必须在相同任务与结果标准下留下证据。
 
 若目标模型或接口改变，发送前 Token 估算也应针对新目标重新进行；旧配置的预估不能直接复用。正文不列出任何模型名称、上下文窗口、价格、速度或排行，也不声称某一类模型一定更合适。
+
+### 供应商抽象层的现实：一个开源统一层案例
+
+上文的可比性契约回答"两条路径何时可以比较"。这一小节补充它的运行时前提：候选路径要真的可替换，先要有一个把供应商差异吸收掉的统一抽象层。开源极简编码代理 pi 的作者 Mario Zechner 公开记录了构建这样一层的经验，是少见的白盒参照 [REF-148](https://github.com/earendil-works/pi)。
+
+他的总体归纳是 "There's really only four APIs"：OpenAI Completions、OpenAI Responses、Anthropic Messages 与 Google Generative AI——统一层的真实工作量在这四种线协议（wire protocol）之上展开 [REF-149](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/)。
+
+线协议只有四种，不代表兼容成本低。作者当时实测的 Completions 兼容层碎片化实例包括以下几类（均为作者归属的观察，随版本变化，以访问日 2026-07-26 的原文为准）[REF-149](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/)：
+
+| 碎片化点 | 作者观察到的差异 |
+| --- | --- |
+| `store` 字段 | 部分供应商不接受该字段。 |
+| 输出上限参数 | `max_tokens` 与 `max_completion_tokens` 不统一。 |
+| `developer` 角色 | 各供应商支持情况不一。 |
+| 推理内容字段 | `reasoning_content` 与 `reasoning` 两种字段名并存。 |
+
+对本章而言，这份清单的意义不在具体字段——那些细节随版本变化——而在它说明：路由候选之间的"同一接口"需要抽象层给出证据，而不是由配置文件里相同的参数名暗示。
+
+请求格式之外还有上下文交接。作者描述的处理是：思维块（thinking block）跨供应商时降级为带标签的文本块；需要原样回放的签名 blob 由转换管线处理；上下文对象可序列化，之后换任意模型继续 [REF-149](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/)。
+
+作者还点名两类在统一 API 层最常缺失的生产必需品：全管线的 AbortSignal 支持，以及中止后返回部分结果 [REF-149](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/)。
+
+在计量侧，他的经验是 token 与缓存计费只能 best-effort，因为各家上报用量的时机并不一致 [REF-149](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/)。pi 的模型注册表则从 OpenRouter 与 models.dev 的数据生成，携带价格与能力元数据（动态细节以访问日 2026-07-26 的仓库文档为准）[REF-148](https://github.com/earendil-works/pi) [REF-149](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/)。
+
+这些经验可以与本章工件逐条对应。下表左列是作者公开的实现现实，右列的解释是本书的工程扩展，不是原文表述：
+
+| pi 的实现现实（归属作者） | 本章工件视角下的解释 |
+| --- | --- |
+| 四种线协议之上的兼容层碎片化 | 可比性契约中"同一接口与配置版本"不是字符串相等，而是差异被吸收后的等价。 |
+| 上下文可序列化、可跨供应商交接 | "同一输入与配置版本"的运行时对应物；交接不可用或有损时，两条路径不再满足同一输入条件。 |
+| AbortSignal 与中止后部分结果最常缺失 | Latency Path 需要取消效果观察；该能力缺失时，并行候选检查中"取消后效果是否已知"恒为未知。 |
+| token 与缓存计费只能 best-effort | Resource Record 应保留 `unknown` 与 `unattributed`，而不是把缺失填成零。 |
+| 模型注册表由 OpenRouter 与 models.dev 数据生成 | Rate Snapshot 思想的一个真实实现：费率与能力是版本化外部输入，不是代码常量。 |
+
+本书由此延伸出一条工程判断：故障切换（failover）不是配置项，而是抽象层能力。路由与故障切换要成立，至少要求：
+
+- 消息格式与能力差异已被抽象层吸收，切换不引入未声明的请求语义变化；
+- 上下文交接可用，且交接本身不改变任务输入、不丢失必需证据；
+- 用量与计费的未知项被显式保留，切换后的资源比较不建立在填补值上。
+
+三者缺一，"切换模型"就只是改了一个字符串，随后的比较、派生金额与回退都建立在未声明的差异之上。本小节只转述一个开源实现的公开经验并给出与本章工件的对应；本书没有验证该实现的行为，也不推荐任何具体供应商组合。
 
 ## Quality Non-regression Gate：质量先于资源比较
 
@@ -507,6 +550,8 @@ Example Implementation 只完成纯内存教学路由、Node 测试与演示；D
 - REF-068 — Anthropic：Effective context engineering for AI agents。
 - REF-061 — Anthropic：Demystifying evals for AI agents。
 - REF-124 — OpenAI API：Pricing；仅作为动态价格入口，正文未摘录费率。
+
+2026-07-26 的编辑增补（“供应商抽象层的现实”小节）另引用 REF-148（pi 仓库 README）与 REF-149（Zechner 的构建札记），其允许陈述与外推禁区见同名候选参考资料与 Fact Check 文件。
 
 研究阶段局部键与上述全局编号的映射见[第 40 章参考资料](40-cost-latency-and-token-management.references.md)。本轮 Fact Check 已按 2026-07-17 重读全部动态页面；出版前仍须再次核验，不得用本次访问替代未来检查。
 

@@ -2,6 +2,16 @@
 
 ## 当前状态
 
+### Pi Agent 借鉴点专项增补（2026-07-26）
+
+- 已核对 REF-148 至 REF-152 及现有未提交书稿改动；当前证据已覆盖 pi 的 README、作者构建札记、MCP/CLI 文章、第三方实践观察和官方 extensions／sessions／compaction 文档，因此本轮未重复外部查询。
+- Pi 设计样本已落入第 5、10、11、12、19、23、24、26、36、40、42 章，覆盖最小 Prompt/工具面、会话树、工具结果双视图、安全架构对照、上下文压缩、自我扩展、工具交付 token 经济学、子代理边界、设计模式选型、供应商抽象和提示词版本治理。
+- 第 10 章新增“会话即树”，第 12 章新增“三种安全架构对照”；11 章的 front matter、正文内联 REF、`.references.md`、`.fact-check.md` 与 `.ai/references.md` 分配区已同步。第 36 章借鉴矩阵继续区分可直接借鉴、必须补充护栏与不应照搬的结论；这些内容不表示本仓库运行、移植或基准测试过 pi。
+- 逐章 Markdown 校验均为 0 error；11 章共 27 组 REF 在 front matter、正文、`.references.md`、`.fact-check.md` 与 `.ai/references.md` 分配区一致。`npm run validate` 退出码 0，检查 630 个 Markdown 文件、全仓链接、章节示例测试与 47/47 章节状态；`npm run site:build && npm run site:check` 退出码 0，308 个 HTML 页面无缺失本地链接。
+- 浏览器已对第 10、12 章新增小节和首轮复查后受影响的第 11、23、24、26、36 章完成“快照 → 点击小节永久链接 → 重新快照”，标题可见、URL 锚点正确；最终 Playwright 控制台 0 错误、0 警告。Impeccable 仅报告既有全章文本的破折号 warning 与编号 advisory，本轮新增 diff 未引入对应模式。
+- Claude Code 首轮复查给出 4 项 must_fix、6 项 should_fix 与 3 项 suggestion，均已修正；二次只读复查结论为 `PASS`，确认计划符合性、来源边界、作者主语、引用一致性和禁止事项均已收口。
+- 当前改动已整理为 `v0.2.0` 发布候选：项目版本、Changelog、README 与出版说明已同步。`npm run release:build` 已生成 308 页站点、A4 510 页 PDF 与 EPUB；PDF 字体全部嵌入，已目检第 1、93、94、118、510 页，未见裁切、重叠或乱码；EPUB 的 `unzip -t` 与 EPUBCheck 5.3.0 均通过，后者为 0 fatal、0 error、0 warning、0 info。最终 `npm run validate` 退出码 0，检查 630 个 Markdown 文件、全仓链接、章节示例测试与 47/47 章节状态。发布候选仍待推送 `main`、创建 `v0.2.0` 标签与 Release，并核对 Pages 和 Release 附件。
+
 ### Release 归档与在线站点自动化（2026-07-26）
 
 - 新增 `.github/workflows/deploy-pages.yml`：`main` 更新后使用 GitHub Pages 官方 Actions 构建 VitePress、检查产物链接并部署站点。站点通过 `SITE_BASE` 适配 Pages 子路径；以 `/Harness-Engineering-Guide/` 生产构建时生成 308 个 HTML 页面，`npm run site:check` 得到 0 条缺失本地链接。

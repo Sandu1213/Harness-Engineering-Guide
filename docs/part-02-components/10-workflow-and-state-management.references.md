@@ -2,7 +2,7 @@
 title: "第 10 章候选参考资料：Workflow 与状态管理"
 chapter: "10"
 status: "research-complete"
-updated_at: "2026-07-16"
+updated_at: "2026-07-26"
 ---
 
 # 第 10 章候选参考资料：Workflow 与状态管理
@@ -16,6 +16,9 @@ updated_at: "2026-07-16"
 | REF-033 | [LangGraph：Persistence](https://docs.langchain.com/oss/python/langgraph/persistence) | 官方框架文档 | 该框架将图状态按 thread 保存为 checkpoint，并说明历史、恢复、人工中断与 replay 的范围。 | 所有 Agent 的 checkpoint 格式、保存频率、存储、版本或安全行为。 | 2026-07-16 |
 | REF-034 | [LangGraph：Functional API](https://docs.langchain.com/oss/python/langgraph/functional-api) | 官方框架文档 | 该框架关于持久化任务结果、重入与副作用幂等性的限定建议。 | 跨系统的 exactly-once、任意副作用安全，或不经实际验证的幂等结论。 | 2026-07-16 |
 | REF-035 | [Temporal：Architecture overview](https://github.com/temporalio/temporal/blob/main/docs/architecture/README.md) | 官方项目架构文档 | Temporal 实现中的事件历史、确定性 Workflow 代码和 Activity 幂等/非重试边界。 | 本书通用状态格式、任意平台的事件溯源或确定性要求。 | 2026-07-16 |
+| REF-149 | [Zechner：What I learned building an opinionated and minimal coding agent](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/) | 作者构建札记 | 作者将可检查上下文与稳定 Harness 作为 pi 的设计目标。 | 通用会话保证、跨产品结论、Terminal-Bench 具体名次或分数。 | 2026-07-26 |
+| REF-151 | [Ronacher：Pi: The Minimal Agent Within OpenClaw](https://lucumr.pocoo.org/2026/1/31/pi/) | 作者观察文章 | Armin Ronacher 描述在支线处理工具问题、返回主线并注入分支摘要的工作流。 | 产品保证、外部效果回滚、所有分支工作流的共同语义或 OpenClaw 细节。 | 2026-07-26 |
+| REF-152 | [pi 官方 sessions 与 extensions 文档](https://github.com/earendil-works/pi/tree/main/packages/coding-agent/docs) | 开源项目官方文档 | 追加式 JSONL 会话树、`id`/`parentId`、活动叶节点、树内导航、fork/clone、分支摘要和扩展状态持久化。 | 其他 Harness 的会话格式、安全、存储耐久性、摘要无损或外部效果一致性。 | 2026-07-26 |
 
 ## 写作前复核事项
 
@@ -23,6 +26,7 @@ updated_at: "2026-07-16"
 - `TODO(verify)：` 重新访问 REF-033 与 REF-034，确认 checkpoint、thread、replay、重入和幂等性段落仍存在；框架行为不得换写为产品无关事实。
 - `TODO(verify)：` 若正文使用 REF-035 的架构细节，重新定位该仓库文档的当前版本与限定语境；不要把实现选择写成行业标准。
 - `TODO(verify)：` 真实案例若涉及数据库、文件、队列、Git、浏览器、审批或外部服务，分别补充对应的官方来源、环境前提与运行证据。
+- 已于 2026-07-26 通读 REF-149、REF-151、REF-152；新增小节只使用计划核定的会话树、分支摘要、扩展状态与作者观点，并保留动态实现和外部效果边界。
 
 ## 引用使用约束
 

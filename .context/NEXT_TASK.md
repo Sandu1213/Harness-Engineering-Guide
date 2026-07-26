@@ -1,6 +1,14 @@
 # Next Task
 
-47 章与 12 个附录的中文首版、GitHub Pages 在线站点，以及带 PDF/EPUB 附件的 `v0.1.0` Release 均已完成。
+47 章与 12 个附录的中文首版、GitHub Pages 在线站点、带 PDF/EPUB 附件的 `v0.1.0` Release 均已完成；Pi Agent 借鉴点增补已整理为 `v0.2.0` 发布候选。
+
+## 已完成：Pi Agent 借鉴点增补与 Claude Code 复查
+
+Pi Agent 借鉴点增补已完成。11 个目标章节的正文、front matter、`.references.md`、`.fact-check.md` 与 `.ai/references.md` 分配区已同步；第 10、12 章缺失正文分别补为“会话即树”和“三种安全架构对照”。Claude Code 首轮提出的 13 项修改均已处理，二次只读复查结论为 `PASS`。`npm run validate`、站点构建/链接检查，以及第 10、11、12、23、24、26、36 章的浏览器锚点交互验证均通过。
+
+## 当前执行：发布 v0.2.0
+
+`v0.2.0` 本地发布构建与全量校验已通过。下一步是提交并推送 `main`、创建并推送 `v0.2.0` 标签、发布 GitHub Release，再核对 Pages 和 PDF/EPUB 附件。
 
 ## 可选后续：English 版本与中英文切换
 

@@ -2,7 +2,7 @@
 title: "第 12 章候选参考资料：Environment、Sandbox 与权限"
 chapter: "12"
 status: "research-complete"
-updated_at: "2026-07-16"
+updated_at: "2026-07-26"
 ---
 
 # 第 12 章候选参考资料：Environment、Sandbox 与权限
@@ -16,12 +16,15 @@ updated_at: "2026-07-16"
 | C12-REF-003 | REF-042 | [Kubernetes RBAC API reference](https://kubernetes.io/docs/reference/kubernetes-api/rbac/) | 官方 API 参考 | Role、RoleBinding、ClusterRole、ClusterRoleBinding，以及 namespace 内 RoleBinding 的作用范围。 | 通用 RBAC 继承规则、应用业务授权或审计完整性。 | 2026-07-16 |
 | C12-REF-004 | REF-043 | [GitHub Actions workflow syntax：permissions](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax?apiVersion=2022-11-28) | 官方产品文档 | workflow/job 层权限设置、`read`/`write`/`none` 的配置语义，以及指定权限时未指定范围为 `none`。 | 任何仓库的默认权限、触发器行为、第三方 action 或其他 CI 的安全性。 | 2026-07-16 |
 | C12-REF-005 | REF-044 | [GitHub Actions secure use reference](https://docs.github.com/en/actions/reference/security/secure-use) | 官方安全建议 | 默认限制 `GITHUB_TOKEN` 并按 job 增加最小必要权限的建议。 | 足以解决供应链、提示注入、secret 泄漏或生产发布风险。 | 2026-07-16 |
+| C12-REF-006 | REF-148 | [pi 仓库 README](https://github.com/earendil-works/pi) | 开源项目 README | 访问日文档中无内置权限系统、默认完整执行能力，以及以容器或 micro-VM 实施外置隔离的运行模式。 | 容器或 micro-VM 天然安全、其他 Harness 应采用同一默认值，或任何隔离配置已经过本章验证。 | 2026-07-26 |
+| C12-REF-007 | REF-149 | [Zechner：What I learned building an opinionated and minimal coding agent](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/) | 作者构建札记 | 作者对内置权限提示可能造成虚假安全感，以及代码编写与执行能力使应用层批准不足的个人工程立场。 | 行业安全结论、取消批准机制的普遍建议、真实攻击验证或其他产品的权限行为。 | 2026-07-26 |
 
 ## 写作前复核事项
 
 - 每次修订 REF-040 至 REF-044 的限定陈述，均在同日重新读取官方页面，并记录页面范围而不是沿用搜索摘要。
 - 若正文要使用具体版本、默认 scope、平台实现、命令、API 字段、产品配置、计费或性能承诺，必须另行取证；本章不以候选资料推测这些细节。
 - 真正接入文件、网络、凭证、CI、容器、Kubernetes、云账户或生产环境时，需要独立的实现资料、审批记录、环境观察和回读证据。
+- 已于 2026-07-26 通读 REF-148 与 REF-149；正文把外置隔离写成 pi 的设计选择，把权限批评写成作者观点，并保留本书对批准审计价值的不同立场。
 
 ## 引用使用约束
 

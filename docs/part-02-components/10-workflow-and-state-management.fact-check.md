@@ -8,7 +8,10 @@ sources:
   - "REF-033"
   - "REF-034"
   - "REF-035"
-updated_at: "2026-07-16"
+  - "REF-149"
+  - "REF-151"
+  - "REF-152"
+updated_at: "2026-07-26"
 ---
 
 # 第 10 章事实核验：Workflow 与状态管理
@@ -26,6 +29,9 @@ updated_at: "2026-07-16"
 | REF-033 | LangGraph Persistence 文档将 checkpointer 描述为保存单一 thread 的图状态快照，将 store 描述为跨 thread 的应用定义数据；二者服务不同范围。 | 限定说明该框架中“当前 thread 的图状态”与“跨 thread 数据”的区别。 | 本书 State Record 字段、检查频率、存储后端、保留期、版本兼容、安全属性，或任何其他 Agent 的行为。 | 2026-07-16 已重读 [LangGraph Persistence](https://docs.langchain.com/oss/python/langgraph/persistence)。 |
 | REF-034 | LangGraph Functional API 文档说明：恢复特定 thread 时会复用检查点中已完成 task 的结果；已开始但未完成的 task 可能再次运行，并建议将 API 调用置于 task 中且设计幂等性。 | 限定说明该框架的恢复/重执行语境，以及副作用需被单独设计的理由。 | 跨框架 replay、任意副作用安全、自动去重、具体幂等键或 exactly-once 保证。 | 2026-07-16 已重读 [LangGraph Functional API](https://docs.langchain.com/oss/python/langgraph/functional-api)。 |
 | REF-035 | Temporal 官方架构文档把每个 workflow execution 的追加式事件历史、可由历史重建状态、确定性且无副作用的 Workflow 代码，以及幂等或非重试的 Activity 代码列为其架构设计决策。 | 作为一种实现背景，提醒读者共同审查历史、重放与副作用边界。 | 本书通用状态格式、任意平台的事件溯源/确定性要求、持久化能力、重试行为或结果保证。 | 2026-07-16 已重读 [Temporal Architecture](https://github.com/temporalio/temporal/blob/main/docs/architecture/README.md)。 |
+| REF-149 | pi 作者将可检查上下文和稳定 Harness 描述为其产品设计目标。 | 说明“会话即树”背后的作者工程立场。 | 通用会话标准、行为可复现保证、跨模型结论、Terminal-Bench 排名或分数。 | 2026-07-26 已重读[作者构建札记](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/)。 |
+| REF-151 | Armin Ronacher 描述了在会话支线修复工具问题，再回到主线注入分支摘要的使用方式。 | 作为树形会话工作流的一项作者观察。 | 产品保证、外部效果回滚、所有任务的最佳流程或 OpenClaw 实现细节。 | 2026-07-26 已重读[作者文章](https://lucumr.pocoo.org/2026/1/31/pi/)。 |
+| REF-152 | pi 官方文档说明会话为带 `id`/`parentId` 的追加式 JSONL 树，并描述活动叶节点、树内导航、fork/clone、分支摘要和扩展状态条目。 | 限定说明该开源项目在访问日公开的会话与扩展持久化机制。 | 其他 Harness 的格式、安全、存储耐久性、摘要无损、权限或外部效果一致性。 | 2026-07-26 已重读[项目官方文档](https://github.com/earendil-works/pi/tree/main/packages/coding-agent/docs)。 |
 
 ## 本书模型与非事实边界
 
@@ -46,6 +52,8 @@ updated_at: "2026-07-16"
 | 单 thread 图状态快照与跨 thread store 的区别。 | REF-033 | 与当前 LangGraph Persistence 文档一致。 | 不把框架的 checkpointer/store 名称或存储细节移植为本书模型。 |
 | 已完成 task 结果恢复、未完成 task 可能重跑与幂等性建议。 | REF-034 | 与当前 LangGraph Functional API 文档一致。 | 保留“该框架”的限定；不推导恰好一次或跨系统安全。 |
 | Temporal 的追加式历史、状态重建、Workflow/Activity 责任边界。 | REF-035 | 与当前官方仓库架构文档一致。 | 说明为 Temporal 的设计决策，不作为通用实现处方。 |
+| pi 的追加式会话树、分支导航、分支摘要与扩展状态恢复。 | REF-152 | 与 2026-07-26 的官方项目文档一致。 | 仅描述 pi；不把上下文导航写成外部效果回滚或默认安全。 |
+| 支线修复后回到主线的工作流与可检查上下文立场。 | REF-151、REF-149 | 分别作为作者观察与作者工程立场记录。 | 保留作者主语；不写成行业事实、性能证据或恢复保证。 |
 | Contract、Record、检查点新鲜度、效果身份、升级与停止规则。 | 本书模型。 | 正文、图示与示例均明确标注。 | 不归因给五项来源，也不表示真实平台已实现这些规则。 |
 
 ## 示例与图示复核

@@ -27,7 +27,9 @@ references:
   - "REF-030"
   - "REF-085"
   - "REF-001"
-updated_at: "2026-07-16"
+  - "REF-148"
+  - "REF-149"
+updated_at: "2026-07-26"
 ---
 
 # 26. 多 Agent 协作与任务隔离
@@ -161,7 +163,48 @@ Handoff 文档还说明该 SDK 的 handoff 位于一次 run 内，且可通过�
 | 外部效果未知 | 不把交付包写成成功。 | 尝试、观察、环境与批准记录。 | 按第 18 章补证、恢复或停止。 |
 | 局部验证通过 | 比对依赖与共享变更。 | 命令、结果、未覆盖范围。 | 接受进入全局校验，或要求补充。 |
 
-Lilian Weng 的文章把 Harness 概括为组织 prompts、tool calls、subagents、control flow、memory 与 workflow logic 的代码，并强调可编辑面与权限控制不应混在同一循环中。[Lilian Weng：Harness Engineering for Self-Improvement](https://lilianweng.github.io/posts/2026-07-04-harness/) 本章借用的是“协作需要可观察组件和外部边界”的问题意识；Task Contract、Ownership Claim 和 Integration Gate 均为本书原创工程模型。
+Lilian Weng 的文章把 Harness 概括为组织 prompts、tool calls、subagents、control flow、memory 与 workflow logic 的代码，并强调可编辑面与权限控制不应混在同一循环中。[Lilian Weng：Harness Engineering for Self-Improvement](https://lilianweng.github.io/posts/2026-07-04-harness/) 本章借用的是“协作需要可观察组件和外部边界”的问题意识；Task Contract、Ownership Claim 和 Integration Gate 均为本书原创工程模型。不过，“多 Agent 协作值得内建”这一前提并非共识——下一小节引入 pi 的子代理怀疑论作为反方对照。
+
+### 反方立场：pi 的子代理怀疑论
+
+本章模型有一个隐含前提：多 Agent 协作值得被设计。这个前提并非共识。pi 是 Mario Zechner 开发的开源极简编码代理 [REF-148](https://github.com/earendil-works/pi)，它没有内置任何子代理（sub-agent）工具；作者批评子代理是“a black box within a black box”。[REF-149](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/)
+
+作者的核心论点是：如果需要在会话中途临时生成子代理去收集上下文，这本身说明任务没有被提前规划。[REF-149](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/) 他给出的替代工作流分三步：
+
+- 上下文收集在一个独立会话中完成。
+- 结论固化为可复用的工件（artifact）。
+- 再开一个新会话，用干净上下文冷启动实现。
+
+对并行执行，作者的立场更直接：“Spawning multiple sub-agents to implement various features in parallel is an anti-pattern”（作者立场）。[REF-149](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/)
+
+当确实需要子代理时，pi 的出口不是内建机制，而是让代理经 bash 以非交互模式自我生成（`pi --print`，命令细节以访问日 2026-07-26 文档为准），并可放进 tmux 运行，从而保持完全可观测。[REF-149](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/) 本章未运行 pi，也未验证上述行为；相关陈述均为来源转述。
+
+本书由此延伸出一个拆解：被笼统称为“子代理需求”的东西，实际混合了两个正交问题，各自有更便宜的满足方式。
+
+| 正交问题 | 真正要解决什么 | 最低满足手段 | 需要更重机制的信号 |
+| --- | --- | --- | --- |
+| 上下文隔离 | 不让探索噪音污染主会话。 | 独立会话收集，结论固化为工件。 | 任务依赖无法落成工件的实时交互。 |
+| 并行执行 | 缩短互不依赖任务的总耗时。 | 先比较并行收益与集成成本，再决定。 | 收益明确超过契约、冲突与集成开销。 |
+
+这两个问题经常被捆绑出售：为了隔离上下文而引入子代理，顺带获得了未经论证的并行。场景引入里三份“完成”争夺同一份共享状态，正是把两者混为一谈的代价——需要的只是隔离，得到的却是竞争。
+
+在这个拆解下，本章的 Task Contract 与 Integration Gate 可以读作对上述批评的结构化回应：子代理的问题不在机制本身，而在无契约的黑盒委派。
+
+| 作者的批评点（归属作者） | 本章模型的对应设计（本书） | 双方一致之处 |
+| --- | --- | --- |
+| 子代理是黑盒套黑盒，出错难调试。 | Delivery Package 保存实际命令、结果与未覆盖范围。 | 拒绝无证据的“已完成”摘要。 |
+| 中途收集上下文说明规划缺失。 | Task Contract 在分派前冻结输入快照与验收。 | 上下文先固化为可审查工件。 |
+| 并行实现多个特性是反模式。 | Integration Gate 让并行收益与集成成本显式对账。 | 不把并行当作默认选择。 |
+| 黑盒内部过程不可观测。 | 停止条件与冲突记录把边界事件变成可见工件。 | 可观测性优先于执行速度。 |
+
+两条路线不是教义之争。选择信号可以直接来自“并行候选不等于独立任务”一节的四个依赖面：
+
+- 输入与输出都能提前冻结、成果能落成工件——独立会话路线成本最低，先不建并行机制。
+- 存在互不重叠的专属输出、且缩短耗时的收益可说明——并行候选成立，但必须配 Task Contract 与 Integration Gate。
+- 写不出验收与停止条件——两条路线都不安全，问题在任务定义而不在机制选择。
+- 外部效果未知或涉及不可逆动作——两条路线都必须先通过第 12、14 章的环境与批准边界。
+
+**边界：** 本小节转述的是一位作者对其自有 harness 的设计立场，本章未运行 pi，也未比较两条路线的实际耗时或质量；两张对照表呈现的是设计权衡，不构成任何一方的实证优势，也不裁定唯一正确答案。
 
 ## 架构图：专属工作与集中集成
 
@@ -355,7 +398,7 @@ node examples/agent/task-isolation-assessment.mjs
 
 可靠协作不是让更多 Agent 同时生成文本，而是让每个任务拥有可解释的输入、所有者、专属输出、验收与停止条件。局部工作通过 Delivery Package 交给集成者；共享真相只在 Integration Gate 中更新；冲突、漂移和未知效果则成为停止或升级的可见出口。
 
-这一设计让“并行”从一句速度承诺变成可审查的工程前提。下一章将把版本控制、worktree 与代码审查作为实现层展开：当专属输出需要真实隔离和合并时，仍必须用具体工具、环境和审查证据落实本章的责任模型。
+这一设计让“并行”从一句速度承诺变成可审查的工程前提。它同时回应了 pi 一类极简 harness 的子代理怀疑论：当上下文能固化为工件、任务能提前规划时，最便宜的隔离可能是独立会话，而不是更多机制。下一章将把版本控制、worktree 与代码审查作为实现层展开：当专属输出需要真实隔离和合并时，仍必须用具体工具、环境和审查证据落实本章的责任模型。
 
 ## 练习
 
@@ -374,13 +417,13 @@ node examples/agent/task-isolation-assessment.mjs
 
 ## 参考资料
 
-- [CH26-REF-01 至 CH26-REF-03 的用途、访问日和外推禁区](26-multi-agent-collaboration-and-task-isolation.references.md)。全书正式编号由主线程统一登记。
+- [CH26-REF-01 至 CH26-REF-05 的用途、访问日和外推禁区](26-multi-agent-collaboration-and-task-isolation.references.md)。全书正式编号由主线程统一登记。
 
 ## 章节完成检查表
 
 - [x] Front matter、学习目标、前置知识、章节依赖和相邻章节边界完整。
 - [x] 正文使用原创 Task Contract、Ownership Claim、Delivery Package 和 Integration Gate 解释协作。
-- [x] 动态 SDK 与作者文章的陈述均限于 CH26-REF-01 至 CH26-REF-03。
+- [x] 动态 SDK 与作者文章的陈述均限于 CH26-REF-01 至 CH26-REF-05。
 - [x] 纯内存示例先记录 `ERR_MODULE_NOT_FOUND` 红灯，再实际运行 10 项测试与演示；未把结果外推为真实协作或技术隔离。
 - [x] Mermaid 源、SVG/PNG、替代描述、图文一致性和 Diagram Review 已完成。
 - [x] Technical Review、Fact Check、Language Editing 与 Final Review 已记录。

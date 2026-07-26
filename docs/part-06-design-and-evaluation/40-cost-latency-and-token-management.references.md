@@ -2,7 +2,7 @@
 title: "第 40 章候选参考资料：成本、延迟与 Token 管理"
 chapter: "40"
 status: "completed"
-updated_at: "2026-07-17"
+updated_at: "2026-07-26"
 ---
 
 # 第 40 章候选参考资料：成本、延迟与 Token 管理
@@ -18,6 +18,8 @@ updated_at: "2026-07-17"
 | CH40-REF-05 | REF-068 | [Anthropic：Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) | 官方工程文章 | 2026-07-17 | 在有限上下文中维护高信号 Token、按需检索和长任务压缩的取舍背景。 | 产品实现、自动压缩、上下文能力、成本、质量结果或所有 Agent 的共同规律。页面未见稳定发布日期，后续阶段须重读。 |
 | CH40-REF-06 | REF-061 | [Anthropic：Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) | 官方工程文章 | 2026-07-17 | task、trial、grader、transcript、outcome 的限定定义，以及在固定任务上跟踪 Token、延迟、成本与错误率的评估背景。 | 客户案例、模型表现、阈值、指标优先级、跨产品标准或评估器可靠性。动态文章后续阶段须重读。 |
 | CH40-REF-07 | REF-124 | [OpenAI API：Pricing](https://developers.openai.com/api/docs/pricing) | 官方动态价格页 | 2026-07-17 | 只作为正式写作、事实核验和出版前按日期读取产品费率的入口；本阶段不摘录价格。 | 价格长期稳定、公开价等于合同结算、折扣、税费、汇率、其他平台或未来费率。每次使用数值前都须重读。 |
+| CH40-REF-08 | REF-148 | [pi 仓库 README（badlogic/pi-mono，现迁移至 earendil-works/pi）](https://github.com/earendil-works/pi) | 开源项目 README | 2026-07-26 | pi 是 Mario Zechner 开发的开源极简编码代理；其模型注册表从 OpenRouter 与 models.dev 数据生成，含价格与能力元数据。 | GitHub stars 等动态统计数字；默认值、命令名、包结构的长期稳定性——动态仓库内容以访问日为准，后续阶段须重读；不摘录任何价格或能力数值。 |
+| CH40-REF-09 | REF-149 | [Zechner, Mario. What I learned building an opinionated and minimal coding agent（2025-11-30）](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/) | 作者第一手构建札记 | 2026-07-26 | 作者归纳统一层之下只有四种 API（OpenAI Completions、OpenAI Responses、Anthropic Messages、Google Generative AI）；其当时实测的 Completions 兼容碎片化实例（`store`、`max_tokens`/`max_completion_tokens`、`developer` 角色、`reasoning_content`/`reasoning`）；跨供应商上下文交接处理（思维块降级为标签文本、签名 blob 回放、上下文可序列化）；AbortSignal 与中止后部分结果最常缺失；token 与缓存计费只能 best-effort。 | 把上述作者观察外推为行业普遍事实或各供应商当前行为；Terminal-Bench 具体名次或分数；任何无主语归属的转述。 |
 
 ## 使用规则
 
@@ -26,6 +28,7 @@ updated_at: "2026-07-17"
 - 预估 Token、实际用量、缓存记录、费率快照、任务结果和质量结论是不同证据；不得互相替代。
 - 产品资料的 URL、字段、模型范围、价格和行为都可能变化；First Draft、Technical Review、Fact Check 与出版前必须按写作日复核。
 - 若正式正文需要任何数字，必须记录产品/合同范围、单位、币种、有效日期、来源位置和适用限制；缺一项则保留为 `TODO(verify)：` 或删除。
+- 已于 2026-07-26 通读 REF-148 与 REF-149；新增正文保留作者主语、访问日与动态版本边界，不摘录价格或评测排名。
 
 ## 候选资料完成检查
 

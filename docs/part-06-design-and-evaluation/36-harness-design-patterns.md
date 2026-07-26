@@ -31,7 +31,12 @@ references:
   - "REF-031"
   - "REF-114"
   - "REF-115"
-updated_at: "2026-07-17"
+  - "REF-148"
+  - "REF-149"
+  - "REF-150"
+  - "REF-151"
+  - "REF-152"
+updated_at: "2026-07-26"
 ---
 
 # 36. Harness Design Patterns
@@ -158,6 +163,25 @@ AWS Step Functions 在其产品语境中描述事件驱动步骤的状态机，�
 
 来源并不提供这些升级阈值。它们是为了让“复杂度值得吗”变成可反驳问题的本书模型。若提出者不能为某一层写出新增责任和回退条件，就应删除该层或退回更简单的可观察结构。
 
+### Pi 借鉴矩阵：先吸收约束，再选择机制
+
+Pi 的价值不在于提供一套应当整包复制的“标准答案”，而在于把若干 Harness 选择做得足够小、足够白盒，因而可以逐项审查。项目 README、作者构建札记和官方文档共同展示了极小默认工具面、可见提示词、结构化会话与压缩、进程内扩展，以及有意不内置部分复杂能力的设计 [REF-148](https://github.com/earendil-works/pi) [REF-149](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/) [REF-152](https://github.com/earendil-works/pi/tree/main/packages/coding-agent/docs)。另两篇作者观察补充了 CLI 加文档的渐进披露路径，以及“最小内核加可持久扩展”的使用方式 [REF-150](https://mariozechner.at/posts/2025-11-02-what-if-you-dont-need-mcp/) [REF-151](https://lucumr.pocoo.org/2026/1/31/pi/)。
+
+把这些材料映射回本书，可得到下面这张采用矩阵。表中的“直接借鉴”是本书的工程建议，不表示已经移植 pi 的代码；“需加的护栏”和“不应照搬”则是选择模式时必须保留的责任断点。
+
+| Pi 暴露的设计选择 | 可直接借鉴 | 需加的护栏 | 不应照搬 | 本书落点 |
+| --- | --- | --- | --- | --- |
+| 极小系统提示词与默认工具面 | 给提示词和工具 schema 设置可测量预算；每项常驻内容都要证明价值。 | 用任务回归集比较删减前后的成功率、误用率与恢复成本。 | 把“更短”当作目标，或假设四个工具适合所有任务。 | [第 5 章](../part-02-components/05-instructions-and-prompt.md) |
+| 工具结果区分模型文本与 UI 结构化细节 | 从同一原始结果生成模型观察投影与人类证据投影。 | 保留共同关联 ID、原始证据指针和一致性检查。 | 维护两套互不关联的事实源。 | [第 11 章](../part-02-components/11-tool-use-and-tool-protocols.md) |
+| 会话树与结构化 compaction | 在轮次边界压缩，并保留目标、约束、进度、决定、下一步和文件清单。 | 为摘要设置丢失检查、恢复入口和人工复核点。 | 把摘要写入当作事实已保存，或默认压缩不会损失关键条件。 | [第 10 章：会话树](../part-02-components/10-workflow-and-state-management.md)、[第 19 章：compaction](../part-03-intelligence-loop/19-context-compaction-and-long-running-tasks.md) |
+| 最小内核加进程内扩展 | 将非通用能力移出核心，通过显式事件和注册契约按需加载。 | 代理生成的扩展也要经过代码审查、权限检查、测试和可撤销加载。 | 因为扩展可热重载，就允许它绕过审批、审计或信任边界。 | [第 23 章](../part-04-engineering-practice/23-skills-hooks-and-automation-workflows.md) |
+| CLI 加文档的渐进披露 | 对低频、已有成熟 CLI 的能力，先暴露简短入口，需要时再读帮助和专门文档。 | 记录版本、退出码、结构化输出约定、权限与可重试边界。 | 把作者特定环境中的 token 对比外推为“MCP 总是更差”。 | [第 24 章](../part-04-engineering-practice/24-mcp-and-external-tool-integration.md) |
+| 先用独立会话与工件隔离复杂任务 | 在引入子代理前，先尝试可检查的会话分支、独立上下文和显式交接工件。 | 定义 Task Contract、集成所有者、冲突处理与 Integration Gate。 | 把对内置子代理的怀疑升级为禁止并行或委派的普遍规则。 | [第 26 章](../part-04-engineering-practice/26-multi-agent-collaboration-and-task-isolation.md) |
+| 统一模型层显式吸收供应商差异 | 将线协议、上下文转换、中止、部分结果和用量计量分别建模。 | 能力矩阵标记未知与 best-effort，并对每个 provider 做契约测试。 | 把“统一 API”宣传成供应商可无差异替换。 | [第 40 章](40-cost-latency-and-token-management.md) |
+| 把提示词与工具描述视为行为接口 | 对 instruction、tool schema 和模型兼容性生成摘要、差异与回滚入口。 | 版本变更必须配套回归评测和实际行为观察。 | 只靠语义版本号推断兼容，或把作者评测结果当成本项目结果。 | [第 42 章](42-harness-versioning-rollback-and-ab-testing.md) |
+
+采用顺序也应保持最小：先选一个当前可量化的成本或失败，例如常驻工具 schema 占用、压缩后约束丢失或扩展不可撤销；再只引入一项对应机制；最后用本书的证据链验证它是否改善目标，同时没有越过权限、审计和恢复边界。无法写出基线、回退条件和结果所有者时，Pi 的设计只能作为观察样本，不能进入本章的 `ready`。
+
 ## 架构图：模式选择如何保留责任断点
 
 下图回答：同一虚构只读请求怎样先经过模式卡的契约检查，再在受控单循环、计划—执行、监督者—工作者、流水线和事件驱动之间比较受限选择，同时把缺口保留在停止或人工复核出口？可编辑源为 [Mermaid 源](../../diagrams/mermaid/chapter-36-control-flow-pattern-selection.mmd)；Diagram Review 已导出并查看 [SVG](../../diagrams/exported/chapter-36-control-flow-pattern-selection.svg) 与 [PNG](../../diagrams/exported/chapter-36-control-flow-pattern-selection.png)。图只表达本书的控制流选择模型，不表示真实 Agent、模型、工作者、队列、事件、调度、并发、工具、Git、浏览器、CI、网络或外部系统已存在、运行或产生效果。
@@ -271,11 +295,12 @@ flowchart TB
 
 ## 测试与验证
 
-下表的验证状态对应不同阶段；本次 Fact Check 重读来源并复跑纯内存示例，图示一行仍以 Diagram Review 的独立记录为准。
+下表的验证状态对应不同阶段；2026-07-26 的 Pi 专项增补复核了引用映射、全仓文档、站点构建与读者跳转，图示一行仍以 Diagram Review 的独立记录为准。
 
 | 层级 | 验证对象 | 命令或方法 | 成功标准 | 实际状态 |
 | --- | --- | --- | --- |
-| 文档 | 正文、引用映射和交叉链接。 | 共享集成运行 `npm run validate`。 | Markdown、链接和章节状态通过。 | 2026-07-16 已运行：退出码 0，检查 499 个 Markdown 文件、0 个 lint 错误；链接、示例测试与章节状态检查通过。 |
+| 文档 | 正文、引用映射和交叉链接。 | 共享集成运行 `npm run validate`。 | Markdown、链接和章节状态通过。 | 2026-07-26 已运行：退出码 0，检查 629 个 Markdown 文件、0 个 lint 错误；链接、47 组示例测试与 47/47 章节状态检查通过。 |
+| 在线阅读 | 第 36 章 Pi 借鉴矩阵及其章节落点。 | `npm run site:build`、`npm run site:check`，再用 Playwright 打开第 36 章并点击矩阵中的“第 5 章”。 | 矩阵可见，链接进入对应正文，浏览器控制台无错误。 | 2026-07-26 已运行：构建成功，308 个 HTML 页面无缺失本地链接；点击后进入第 5 章，0 条控制台错误。 |
 | 单元 | 纯内存模式提案评估器。 | `node --test examples/agent/harness-pattern-selection-assessment.test.mjs`。 | 公开返回结构能保守路由完整与缺失卡。 | 2026-07-16 已运行：8 项通过、0 项失败。 |
 | 演示 | 纯内存评估器。 | `node examples/agent/harness-pattern-selection-assessment.mjs`。 | 明确保留 `executionPerformed: false`。 | 2026-07-16 已运行：输出 `ready`、`controlled_single_loop_ready`、`continue_controlled_single_loop` 与 `executionPerformed: false`。 |
 | 图示 | 模式选择责任图。 | Mermaid 图源、SVG／PNG、正文 Mermaid 块与替代说明。 | 图文术语、停止箭头和边界一致。 | 已导出 SVG／PNG，PNG 已目视检查；正文 Mermaid 块与图源逐字一致。 |
@@ -334,6 +359,11 @@ Harness Design Patterns 不提供一个“最先进”的控制流答案。它�
 - REF-031：AWS Step Functions 对状态机、事件驱动步骤和流控制状态的产品语境。
 - REF-114：CloudEvents 对 event、producer、consumer 与 intermediary 的规范背景。
 - REF-115：Node.js `EventEmitter` 的命名事件和同步监听器顺序语义。
+- REF-148：pi 项目 README，用于项目定位、默认工具面与明确的安全边界。
+- REF-149：pi 作者的构建札记，用于极小提示词、能力取舍、供应商抽象与版本稳定立场。
+- REF-150：pi 作者关于 MCP 与 CLI 加文档的对比实验和渐进披露主张。
+- REF-151：Armin Ronacher 对 pi 最小内核、扩展和会话工作流的个人观察。
+- REF-152：pi 官方 extensions、sessions 与 compaction 文档；实现细节以访问日版本为准。
 
 ## 参考资料
 

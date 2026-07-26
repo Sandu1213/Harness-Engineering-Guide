@@ -1,6 +1,6 @@
 {
   "name": "harness-engineering-guide",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "《Harness Engineering：构建可持续进化的 AI Agent》的书籍工程与 AI Technical Book Factory。",
   "scripts": {

@@ -2,7 +2,7 @@
 title: "第 36 章候选参考资料：Harness Design Patterns"
 chapter: "36"
 status: "research-complete"
-updated_at: "2026-07-16"
+updated_at: "2026-07-26"
 ---
 
 # 第 36 章候选参考资料：Harness Design Patterns
@@ -16,6 +16,11 @@ updated_at: "2026-07-16"
 | CH36-REF-03 | REF-031 | [AWS Step Functions：Learn about state machines](https://docs.aws.amazon.com/step-functions/latest/dg/concepts-statemachines.html) | 官方产品文档 | 2026-07-16 | 该产品把 workflow 描述为事件驱动步骤的状态机，说明 Choice、Wait、Map、Parallel 等流控制状态，以及执行、数据传递和错误处理概念。 | 本书模式卡 schema、ASL/JSON 字段作为通用协议、redrive/恢复/持久化保证、任意并行或事件系统语义。 |
 | CH36-REF-04 | REF-114 | [CloudEvents Specification（canonical）](https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md)；[写作日读取的原始规范](https://raw.githubusercontent.com/cloudevents/spec/main/cloudevents/spec.md) | 开放规范 | 2026-07-16 | 当前读取页面标示为 `1.0.3-wip`；其将 event 定义为发生事实与上下文的数据记录，并区分 producer、consumer、intermediary 与可互操作的事件格式。 | 投递顺序、至少一次/恰好一次、去重、重试、访问控制、事件总线可用性、任何具体协议绑定或生产实现。 |
 | CH36-REF-05 | REF-115 | [Node.js：Events](https://nodejs.org/api/events.html) | 官方运行时文档 | 2026-07-16 | Node.js `EventEmitter` 使用命名事件与监听器；该实现按注册顺序同步调用监听器。 | 消息队列、浏览器事件、CloudEvents、云服务或任何其他运行时的监听顺序、异步、可靠性与错误传播行为。 |
+| CH36-REF-06 | REF-148 | [pi 仓库 README](https://github.com/earendil-works/pi) | 开源项目 README | 2026-07-26 | pi 的项目定位、默认工具面、可选只读工具、无内置权限系统及外置隔离边界。 | 长期不变的默认值、通用安全保证、其他 Agent 的工具配置或任何本书环境已经采用 pi。 |
+| CH36-REF-07 | REF-149 | [Zechner：What I learned building an opinionated and minimal coding agent](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/) | 作者第一手构建札记 | 2026-07-26 | 作者对极小提示词、四工具取舍、刻意省略项、供应商协议差异、上下文可检查性与提示词稳定性的自述。 | 行业共识、跨模型效果保证、作者基准结果等于本书结果，或“越小越好”的普遍规律。 |
+| CH36-REF-08 | REF-150 | [Zechner：What if you don't need MCP at all?](https://mariozechner.at/posts/2025-11-02-what-if-you-dont-need-mcp/) | 作者实验与观点 | 2026-07-26 | 作者在特定环境中的 MCP 工具定义 token 测量，以及 CLI 加文档的渐进披露替代路径。 | 所有 MCP Server 的长期 token 数、CLI 天然更安全，或 MCP 总是劣于 CLI。 |
+| CH36-REF-09 | REF-151 | [Ronacher：Pi: The Minimal Agent Within OpenClaw](https://lucumr.pocoo.org/2026/1/31/pi/) | 第三方作者观察 | 2026-07-26 | 最小内核加可持久扩展、代理为自己编写扩展、会话分支工作流的个人观察。 | pi 官方产品保证、任意用户的实际工作流，或自生成扩展已经安全有效。 |
+| CH36-REF-10 | REF-152 | [pi 官方文档：extensions、sessions、compaction](https://github.com/earendil-works/pi/tree/main/packages/coding-agent/docs) | 项目官方文档 | 2026-07-26 | 扩展事件与注册面、JSONL 会话树、分支/恢复和结构化 compaction 的访问日实现说明。 | 访问日之后保持不变的 API、其他 Harness 的实现，或压缩与恢复不会丢失信息。 |
 
 ## 写作日核验记录
 
@@ -24,6 +29,7 @@ updated_at: "2026-07-16"
 - CH36-REF-03：已读取 AWS 官方页面，确认该产品的状态机、事件驱动步骤、流控制状态、执行和状态数据语境；不把其产品字段带入本书模型。
 - CH36-REF-04：canonical GitHub 页面在读取时受匿名访问限制；通过同一规范的 `raw.githubusercontent.com` 原始文件读取到 `1.0.3-wip` 内容。后续正文必须重新确认正式版本和 canonical 页面可访问性；无法确认时仅保留 `TODO(verify)：`，不把草案细节写成事实。
 - CH36-REF-05：已读取 Node.js v26.5.0 官方 API 页面；该版本和运行时语义只用来说明“必须核验具体事件运行时”，不构成模式选择的性能或可靠性证据。
+- CH36-REF-06 至 CH36-REF-10：2026-07-26 已分别读取 pi README、两篇作者文章、第三方作者观察和官方文档。正文采用矩阵只负责“借鉴／加护栏／不照搬”的选型映射；动态实现细节、个人立场与实验数字保留来源归属，不改写成通用保证。
 
 ## 引用使用约束
 
@@ -31,12 +37,14 @@ updated_at: "2026-07-16"
 - “监督者”只说明本书中拥有最终结果、合并和升级责任的角色；它不等同于 OpenAI Agents SDK 的 manager、Anthropic 的 orchestrator，或任何产品级 API。
 - “事件驱动”只表示本书模式卡中的触发与责任结构；它不暗示 CloudEvents 合规、消息投递、顺序、重试、去重或事件总线。
 - “并行”只在独立子任务、结果聚合、状态隔离、预算和失败责任均已定义时才可作为候选设计；本研究没有真实并行运行记录。
+- “Pi 借鉴矩阵”是本书将来源事实映射到既有章节责任的工程建议；它不表示本仓库运行、移植或基准测试过 pi。
 - 后续正文若出现动态产品/规范细节、版本、字段、权限、成本、延迟或性能，必须在当日重新读取官方资料，并把未核验项保留为 `TODO(verify)：`。
 
 ## 主线程登记提示
 
 - 可复用全局引用：CH36-REF-01 → REF-029，CH36-REF-02 → REF-030，CH36-REF-03 → REF-031。
 - CH36-REF-04（CloudEvents 规范）与 CH36-REF-05（Node.js Events）已分别登记为 REF-114、REF-115，并在“第 36 章已分配引用”表保留受限用途与访问日期。
+- CH36-REF-06 至 CH36-REF-10 已分别复用全局 REF-148 至 REF-152。
 - 不需要为本章登记框架实现、真实队列、云账户、性能测试或工具调用记录；这些均未发生。
 
 ## 候选资料完成检查

@@ -2,7 +2,7 @@
 title: "第 11 章候选参考资料：Tool Use 与工具协议"
 chapter: "11"
 status: "research-complete"
-updated_at: "2026-07-16"
+updated_at: "2026-07-26"
 ---
 
 # 第 11 章候选参考资料：Tool Use 与工具协议
@@ -15,6 +15,7 @@ updated_at: "2026-07-16"
 | REF-037 | [OpenAI：Function calling](https://developers.openai.com/api/docs/guides/function-calling) | 官方产品文档 | 该产品的多步工具调用流程、应用侧执行与回传、名称/JSON 参数/`call_id` 关联。 | 其他模型、SDK 或协议的字段、执行顺序、严格模式、并发行为或安全保证。 | 2026-07-16 |
 | REF-038 | [Anthropic：Define tools](https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools) | 官方产品文档 | 该产品客户端工具的名称、说明、`input_schema`、有效输入样例与工具选择选项。 | 通用命名规则、描述长度、默认选择策略、模型行为或跨产品严格校验。 | 2026-07-16 |
 | REF-039 | [JSON Schema：Specification](https://json-schema.org/specification) | 官方规范 | JSON Schema 的 Core、Validation 和针对纯验证的 Core/Validation dialect 的定位。 | 业务语义、授权、外部效果、结果可信度、幂等性或任务完成的自动证明。 | 2026-07-16 |
+| REF-149 | [Zechner, Mario：What I learned building an opinionated and minimal coding agent（2025-11-30）](https://mariozechner.at/posts/2025-11-30-pi-coding-agent/) | 作者博文（一手自述） | pi（Mario Zechner 开发的开源极简编码代理）的统一 LLM 层把工具结果拆成给模型的 `output`（文本）与给 UI 的 `details`（结构化数据），另支持附件（如原生格式图片）；作者自述未在其他统一 LLM API 中见过该抽象；工具调用参数在流式输出中做渐进 JSON 解析，UI 可实时渲染。 | Terminal-Bench 具体名次或分数、GitHub stars 等动态数字、其他统一 LLM API 的内部实现、该抽象已成行业标准、pi 字段名与行为在访问日之后保持不变；本书的“模型观察投影/人类证据投影”是本书工程延伸，不得归因给该文。 | 2026-07-26 |
 
 ## 写作前复核事项
 
@@ -22,6 +23,7 @@ updated_at: "2026-07-16"
 - 已于 2026-07-16 Fact Check 重读 REF-037：确认 Function Calling 的调用/结果关联流程；不将应用侧参数校验写成该产品的跨系统安全保证，也不沿用模型名称、SDK 代码或严格模式选项。
 - 已于 2026-07-16 Fact Check 重读 REF-038：确认客户端工具定义、输入样例和工具选择说明；不得把产品行为扩展为行业标准，后续修改仍须重读。
 - 已于 2026-07-16 Fact Check 重读 REF-039：Core、Validation 与纯验证 dialect 的定位只支持结构和验证词汇边界，不支持业务语义、授权、效果或验收结论。
+- 已于 2026-07-26 通读 REF-149：仅采用“工具结果拆分为模型 `output` 与 UI `details`、附件支持、流式渐进参数解析”的作者自述陈述，并保持主语归属；实现细节以访问日（2026-07-26）资料为准，后续修改须重读原文，不得补充该文之外的 pi 引语或数字。
 - `TODO(verify)：` 若采用 JSON Schema 的特定 draft、关键字或校验器，记录版本、实现和实际验证命令；不得从 Schema 通过推导出已授权或已执行。
 - `TODO(verify)：` 真实案例若触及文件、Git、浏览器、数据库、MCP、网络或密钥，补充环境、权限、批准、执行和回读的独立证据。
 
