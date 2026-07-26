@@ -1,11 +1,11 @@
 # Next Task
 
-47 章与 12 个附录的内容生产、专属终审、共享状态同步、最终全仓 Validation、完成审计、网站/PDF/EPUB 本地构建，以及 GitHub Pages/Release 自动化均已完成。当前没有未完成的内容生产或本地出版构建任务。
+47 章与 12 个附录的内容生产、专属终审、共享状态同步、最终全仓 Validation、完成审计、网站/PDF/EPUB 本地构建，以及 GitHub Pages 部署均已完成。在线站点为 `https://sandu1213.github.io/Harness-Engineering-Guide/`。
 
-## 可选后续：正式发行
+## 可选后续：首个版本化 Release
 
-**触发条件：** 只有用户明确授权 Git 提交与推送，并指定首个版本号和书稿许可证后，才执行外部发布。
+**触发条件：** 只有用户指定首个版本号和书稿许可证，并明确授权创建标签与 GitHub Release 后，才执行版本化发行。
 
-**起始要求：** 推送当前发布配置后，先确认当前账户计划支持 private 仓库 Pages，再在 GitHub Settings → Pages 把 Source 设为 GitHub Actions，确认 `Deploy reading site` 成功并记录实际 URL；随后创建版本标签与 GitHub Release，确认 PDF/EPUB 出现在对应 Release，再记录许可证、回滚方式和最终验收证据。
+**起始要求：** 核对版本号与许可证，创建对应标签和 GitHub Release，等待 `Build release PDF and EPUB` 工作流完成，确认 PDF/EPUB 出现在对应 Release，再记录回滚方式和最终验收证据。
 
-**边界：** 当前没有执行 Git 提交或推送，没有启用 Pages、创建版本标签或 Release，也没有决定书稿许可证。工作流和本地产物通过不等于外部发布完成。
+**边界：** Pages 已真实上线；当前仍没有创建版本标签或 Release，也没有决定书稿许可证。Pages 成功不等于版本化离线发行完成。

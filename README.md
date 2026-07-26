@@ -80,15 +80,15 @@ npm run publication:epub # 生成 output/epub/harness-engineering-guide.epub
 
 仓库包含两个独立的发布工作流：
 
-1. `.github/workflows/deploy-pages.yml` 在 `main` 更新后构建 VitePress、检查 308 个页面的站内链接并部署 GitHub Pages。首次使用时，需要在仓库 Settings → Pages 中将 Source 设为 **GitHub Actions**。
+1. `.github/workflows/deploy-pages.yml` 在 `main` 更新后构建 VitePress、检查 308 个页面的站内链接并部署 [GitHub Pages 在线站点](https://sandu1213.github.io/Harness-Engineering-Guide/)。
 2. `.github/workflows/release-publications.yml` 在 GitHub Release 发布后检出该 Release 的标签提交，使用固定版本的 Pandoc 与 Typst 生成 PDF/EPUB，校验文件后上传到对应 Release。
 
-工作流不会自行创建标签或 Release，也不会决定书稿许可证。Pages 的实际线上 URL 以 `Deploy reading site` 工作流的 deployment environment 为准；当前远端仓库是私有仓库，首次启用时还需确认账户计划支持私有仓库 Pages。离线文件从[仓库 Releases 页面](https://github.com/Sandu1213/Harness-Engineering-Guide/releases)下载，访问权限与仓库一致。
+工作流不会自行创建标签或 Release，也不会决定书稿许可证。Pages 已通过 `Deploy reading site` 工作流上线；离线文件将在版本发布后从[仓库 Releases 页面](https://github.com/Sandu1213/Harness-Engineering-Guide/releases)下载。
 
 ## 当前 Roadmap
 
 1. 47 章、12 个附录、共享状态、最终全仓 Validation、完成审计、网站/PDF/EPUB 本地构建，以及 Pages/Release 自动化均已完成。
-2. 首次 Pages 启用、版本标签、首个 GitHub Release 与书稿发布许可证仍需在实际发布时明确执行。
+2. 版本标签、首个 GitHub Release 与书稿发布许可证仍需在实际发行时明确执行。
 
 详见 [.context/ROADMAP.md](.context/ROADMAP.md)。
 

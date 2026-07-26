@@ -16,7 +16,7 @@ Markdown 是唯一源；GitHub、Obsidian、VitePress、PDF 和 EPUB 是不同�
 
 - GitHub：默认阅读与协作入口。
 - Obsidian：直接打开 Markdown 与 Mermaid 源码。
-- VitePress：`main` 更新后由 `.github/workflows/deploy-pages.yml` 构建、检查并部署 GitHub Pages；首次发布需启用 Pages，并确认 private 仓库的账户计划与站点可见性。
+- VitePress：`main` 更新后由 `.github/workflows/deploy-pages.yml` 构建、检查并部署至 `https://sandu1213.github.io/Harness-Engineering-Guide/`。
 - PDF/EPUB：GitHub Release 发布后由 `.github/workflows/release-publications.yml` 从对应标签提交重新生成、校验并上传到该 Release。
 
 工作流不会创建标签、Release 或许可证决定。正式发布必须以 Pages deployment environment 的实际 URL 和 Release 页面中的实际附件为验收证据。

@@ -12,7 +12,7 @@ Harness Engineering Guide 是以 Markdown 维护的中文技术书项目，书�
 
 - 本书不是 Lilian Weng《Harness Engineering for Self-Improvement》的中文翻译或逐段改写。
 - 该文章是思想来源之一；书稿以原创结构、案例和工程扩展呈现，且每个归因事实都需独立引用。
-- 第 1 至 47 章均已完成 Research Brief、Outline、原创正文、Technical Review、Example Implementation、Diagram Review、Fact Check、Language Editing 与 Final Review；附录 A 至 L 已完成内容生产和分组独立终审。共享状态、最终全仓 Validation 与完成审计也已收口。网站、PDF、EPUB 本地管线与 GitHub Pages/Release 自动化已经实现；外部部署、版本标签、首个 Release 和书稿许可证仍需明确授权与真实验证。
+- 第 1 至 47 章均已完成 Research Brief、Outline、原创正文、Technical Review、Example Implementation、Diagram Review、Fact Check、Language Editing 与 Final Review；附录 A 至 L 已完成内容生产和分组独立终审。共享状态、最终全仓 Validation 与完成审计也已收口。网站、PDF、EPUB 本地管线与 GitHub Pages/Release 自动化已经实现，Pages 已真实部署并完成线上交互验证；版本标签、首个 Release 和书稿许可证仍需明确授权与真实验证。
 - 动态的产品能力、API、版本、价格和策略在正式写作时必须查阅官方资料。
 
 ## 读者与交付格式

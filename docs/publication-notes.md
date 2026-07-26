@@ -9,9 +9,9 @@ description: 网站、PDF 与 EPUB 的内容边界和构建说明
 
 ## 在线阅读与离线版本
 
-仓库使用 GitHub Pages 托管本网站：`main` 分支更新后，部署工作流会重新构建并检查全部站内链接，再发布当前网站。实际线上地址以 GitHub Pages 部署环境显示的 URL 为准。
+仓库使用 GitHub Pages 托管本网站：`main` 分支更新后，部署工作流会重新构建并检查全部站内链接，再发布至 [Harness Engineering 在线站点](https://sandu1213.github.io/Harness-Engineering-Guide/)。
 
-每次 GitHub Release 发布后，发行工作流会从该 Release 的标签提交重新生成 `harness-engineering-guide.pdf` 与 `harness-engineering-guide.epub`，完成基础文件校验后附加到对应 Release。发布完成后，有仓库访问权限的读者可从[仓库 Releases 页面](https://github.com/Sandu1213/Harness-Engineering-Guide/releases)下载离线版本。
+每次 GitHub Release 发布后，发行工作流会从该 Release 的标签提交重新生成 `harness-engineering-guide.pdf` 与 `harness-engineering-guide.epub`，完成基础文件校验后附加到对应 Release。发布完成后，读者可从[仓库 Releases 页面](https://github.com/Sandu1213/Harness-Engineering-Guide/releases)下载离线版本。
 
 ## Repository assets
 

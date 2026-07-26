@@ -2,7 +2,7 @@
 
 ## 当前交接点
 
-**Release 归档与在线站点自动化交接（2026-07-26）：** 已新增 GitHub Pages 部署与 GitHub Release PDF/EPUB 附件工作流；VitePress 支持 `SITE_BASE` 子路径，Release Linux 构建使用固定 Pandoc 3.10、Typst 0.15.1 和 Noto CJK 字体，写权限隔离到独立上传 Job。Pages 子路径生产构建生成 308 个 HTML 页面并通过产物爬链；Playwright 完成首页主按钮点击与章节快照，控制台 0 错误，Impeccable 返回 `[]`。重新生成的 497 页 PDF 经字体检查和 5 页 Poppler 目检，EPUB 经解压与 EPUBCheck 0 错误/警告；最终 `npm run validate` 检查 629 个 Markdown 文件、4 项出版测试、47 组示例与 47/47 状态，退出码 0。当前远端为 private；未提交、推送、启用 Pages、创建标签或 Release，也未决定书稿许可证。下一步需先获得 Git 写操作授权，推送后确认私有仓库 Pages 资格和实际 URL，再创建带明确许可证与版本号的首个 Release。
+**Release 归档与在线站点自动化交接（2026-07-26）：** 已新增 GitHub Pages 部署与 GitHub Release PDF/EPUB 附件工作流；VitePress 支持 `SITE_BASE` 子路径，Release Linux 构建使用固定 Pandoc 3.10、Typst 0.15.1 和 Noto CJK 字体，写权限隔离到独立上传 Job。发布配置已提交并推送，仓库已改为 public；Pages 工作流 `30192795987` 的构建与部署 Job 均成功，线上地址为 `https://sandu1213.github.io/Harness-Engineering-Guide/`。Playwright 在线完成首页主按钮点击与章节快照，控制台 0 错误、0 警告，Impeccable 返回 `[]`。重新生成的 497 页 PDF 经字体检查和 5 页 Poppler 目检，EPUB 经解压与 EPUBCheck 0 错误/警告；最终 `npm run validate` 检查 629 个 Markdown 文件、4 项出版测试、47 组示例与 47/47 状态，退出码 0。下一步只剩在明确版本号、许可证和授权后创建首个 GitHub Release，并验证 PDF/EPUB 附件。
 
 **本地出版工件交接（2026-07-18）：** 网站、PDF 与 EPUB 已从同一份 47 章 + 12 附录清单实现并在本地验证。复现入口为 `npm run release:build`；网站构建位于 `docs/.vitepress/dist/`，PDF 位于 `output/pdf/harness-engineering-guide.pdf`，EPUB 位于 `output/epub/harness-engineering-guide.epub`。PDF/EPUB 需要 Pandoc，PDF 另需 Typst；完整验收使用 Poppler 与 EPUBCheck。网站生产构建生成 308 个 HTML 页面并通过本地链接爬检，Playwright 完成首页主按钮与图示点击链，Impeccable 检查为 0 项；PDF 为 A4 497 页且字体已嵌入，抽页目检通过；EPUBCheck 为 0 错误/警告。构建产物未提交。正式部署、版本标签、发行页上传和书稿许可证决定均未执行。
 
